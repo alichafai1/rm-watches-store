@@ -15,10 +15,10 @@ export function ProductAboutSection({ about }: ProductAboutSectionProps) {
         {about.title}
       </h2>
 
-      <div className="relative order-1 mx-auto aspect-[4/3] w-full max-w-md overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-100 lg:order-2 lg:mx-0 lg:max-w-none">
+      <div className="relative order-1 mx-auto aspect-[4/3] w-full max-w-md overflow-hidden lg:order-2 lg:mx-0 lg:max-w-none">
         <Image
           alt={about.image.alt}
-          className="object-contain p-5 sm:p-6"
+          className="object-contain p-1 sm:p-2"
           fill
           sizes="(min-width: 1024px) 28vw, 100vw"
           src={about.image.url}
