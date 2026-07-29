@@ -3,8 +3,42 @@ import { createCmsReadSupabaseClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
+function inspectUrl(raw: string | undefined) {
+  const value = (raw ?? "")
+    .trim()
+    .replace(/^['"]+|['"]+$/g, "")
+    .trim();
+
+  if (!value) {
+    return {
+      present: false,
+      length: 0,
+      looksLikeSupabase: false,
+      startsWithHttp: false,
+      preview: null as string | null,
+    };
+  }
+
+  const startsWithHttp = /^https?:\/\//i.test(value);
+  const normalized = startsWithHttp ? value : `https://${value}`;
+  let host = "";
+  try {
+    host = new URL(normalized.replace(/\/+$/, "")).host;
+  } catch {
+    host = "";
+  }
+
+  return {
+    present: true,
+    length: value.length,
+    looksLikeSupabase: value.includes("supabase.co"),
+    startsWithHttp,
+    preview: host || value.slice(0, 24),
+  };
+}
+
 export async function GET() {
-  const hasUrl = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL?.trim());
+  const urlInfo = inspectUrl(process.env.NEXT_PUBLIC_SUPABASE_URL);
   const hasPublishableKey = Boolean(
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim(),
   );
@@ -24,7 +58,7 @@ export async function GET() {
     return NextResponse.json({
       ok: !error,
       env: {
-        hasUrl,
+        url: urlInfo,
         hasPublishableKey,
         hasAnonKey,
         hasServiceRole,
@@ -44,7 +78,7 @@ export async function GET() {
       {
         ok: false,
         env: {
-          hasUrl,
+          url: urlInfo,
           hasPublishableKey,
           hasAnonKey,
           hasServiceRole,
