@@ -95,23 +95,23 @@ export function ProductPurchasePanel({
           >
             Buy Now
           </button>
-          <p className="text-center text-[11px] leading-relaxed text-neutral-500">
+          <p className="text-center text-xs leading-relaxed text-neutral-500 sm:text-[13px]">
             Express checkout — skip the cart and pay securely
           </p>
         </div>
 
         <div className="mt-4 select-none [-webkit-user-drag:none] touch-pan-y">
-          <div className="flex items-center justify-center gap-1.5 text-[11px] font-medium tracking-[0.04em] text-neutral-600">
+          <div className="flex items-center justify-center gap-1.5 text-xs font-medium tracking-[0.04em] text-neutral-600 sm:text-[13px]">
             <LockIcon />
             <span>Guaranteed safe &amp; secure checkout</span>
           </div>
           <ul
             aria-label="Accepted payment methods"
-            className="mt-2.5 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 overflow-hidden overscroll-none touch-pan-y"
+            className="mt-3 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-2 overflow-hidden overscroll-none touch-pan-y"
           >
             {paymentMethods.map((method) => (
               <li
-                className="relative flex h-6 items-center justify-center overflow-hidden sm:h-8"
+                className="relative flex h-7 items-center justify-center overflow-hidden sm:h-9"
                 key={method.name}
                 title={method.name}
               >
@@ -119,10 +119,10 @@ export function ProductPurchasePanel({
                   alt={method.name}
                   className="pointer-events-none select-none object-contain [-webkit-user-drag:none]"
                   draggable={false}
-                  height={24}
+                  height={28}
                   src={paymentIconUrl(method.path)}
                   unoptimized
-                  width={40}
+                  width={48}
                 />
               </li>
             ))}
@@ -137,7 +137,7 @@ function LockIcon() {
   return (
     <svg
       aria-hidden="true"
-      className="size-3 text-[#9a752e]"
+      className="size-3.5 text-[#9a752e]"
       fill="none"
       stroke="currentColor"
       strokeLinecap="round"
