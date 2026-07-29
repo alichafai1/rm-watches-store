@@ -84,7 +84,7 @@ export function ProductReviews({ reviews }: ProductReviewsProps) {
       </h2>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:items-start lg:gap-12">
-        <aside className="lg:sticky lg:top-24">
+        <aside className="self-start lg:sticky lg:top-20 lg:z-[5]">
           <p className="text-4xl font-semibold tracking-tight text-neutral-950">
             {averageRating.toFixed(1)}
           </p>
