@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ProductGallery } from "@/components/ecommerce/product-page/ProductGallery";
 import { ProductPurchasePanel } from "@/components/ecommerce/product-page/ProductPurchasePanel";
+import { ProductRatingStars } from "@/components/ecommerce/ProductRatingStars";
 import { formatPrice } from "@/lib/utils/format-price";
 import type { BreadcrumbItem } from "@/types/seo";
 import type {
@@ -39,13 +40,6 @@ export function ProductMainSection({
           ),
         )
       : undefined;
-  const reviewCount = product.reviews.length;
-  const averageRating =
-    reviewCount > 0
-      ? product.reviews.reduce((total, review) => total + review.rating, 0) /
-        reviewCount
-      : null;
-  const filledStars = averageRating ? Math.round(averageRating) : 0;
 
   return (
     <section aria-labelledby="product-title" className="grid gap-6">
@@ -68,28 +62,11 @@ export function ProductMainSection({
             >
               {product.title}
             </h1>
-            {averageRating ? (
-              <div
-                aria-label={`${averageRating.toFixed(1)} out of 5 from ${reviewCount} reviews`}
-                className="mt-4 flex flex-wrap items-center gap-2 text-sm text-neutral-700"
-              >
-                <span aria-hidden="true" className="flex gap-0.5 text-[#b08a3c]">
-                  {Array.from({ length: 5 }, (_, index) => (
-                    <svg
-                      className={`size-4 ${index < filledStars ? "fill-current" : "fill-none stroke-current"}`}
-                      key={index}
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="m10 1.5 2.6 5.3 5.9.8-4.2 4.1 1 5.8-5.3-2.8-5.3 2.8 1-5.8-4.2-4.1 5.9-.8L10 1.5Z" />
-                    </svg>
-                  ))}
-                </span>
-                <span>
-                  {averageRating.toFixed(1)} · {reviewCount} review
-                  {reviewCount === 1 ? "" : "s"}
-                </span>
-              </div>
-            ) : null}
+            <ProductRatingStars
+              className="mt-3"
+              reviews={product.reviews}
+              size="md"
+            />
             <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2">
               <p className="text-2xl font-semibold tracking-tight text-neutral-950">
                 {formatPrice(displayPrice, product.currency)}

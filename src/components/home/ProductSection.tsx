@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { HomeSectionHeader } from "@/components/home/HomeSectionHeader";
+import { ProductRatingStars } from "@/components/ecommerce/ProductRatingStars";
 import { Container } from "@/components/ui/Container";
 import { ResponsiveGrid } from "@/components/ui/ResponsiveGrid";
 import { Section } from "@/components/ui/Section";
@@ -63,6 +64,7 @@ export function ProductSection({
                     <h3 className="text-base font-semibold tracking-tight text-neutral-950">
                       {product.title}
                     </h3>
+                    <ProductRatingStars reviews={product.reviews} />
                     <p className="text-sm text-neutral-600">
                       {formatPrice(product.price, product.currency)}
                     </p>

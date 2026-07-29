@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LinkButton } from "@/components/ui/LinkButton";
+import { ProductRatingStars } from "@/components/ecommerce/ProductRatingStars";
 import { formatPrice } from "@/lib/utils/format-price";
 import { cn } from "@/lib/utils/cn";
 import type { Product } from "@/types/product";
@@ -45,6 +46,7 @@ export function ProductCard({
           <Heading className="text-base font-semibold tracking-tight text-neutral-950">
             {product.title}
           </Heading>
+          <ProductRatingStars reviews={product.reviews} />
           <p className="text-sm text-neutral-600">
             {formatPrice(product.price, product.currency)}
           </p>
