@@ -128,20 +128,14 @@ export function ProductReviews({ reviews }: ProductReviewsProps) {
         Customer Reviews
       </h2>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-12">
-        {/*
-          Left column must stretch with the reviews column (default grid stretch).
-          Do not use items-start on the grid — that shrinks the sticky parent and breaks sticky.
-        */}
-        <div className="relative hidden lg:block">
-          <aside className="sticky top-20 z-[5] bg-white">
-            <RatingSummary
-              averageRating={averageRating}
-              ratingRows={ratingRows}
-              reviewCount={reviews.length}
-            />
-          </aside>
-        </div>
+      <div className="mt-8 grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:items-start lg:gap-12">
+        <aside className="hidden lg:block">
+          <RatingSummary
+            averageRating={averageRating}
+            ratingRows={ratingRows}
+            reviewCount={reviews.length}
+          />
+        </aside>
 
         <div className="lg:hidden">
           <RatingSummary
