@@ -47,9 +47,17 @@ export function ProductCard({
             {product.title}
           </Heading>
           <ProductRatingStars reviews={product.reviews} />
-          <p className="text-sm text-neutral-600">
-            {formatPrice(product.price, product.currency)}
-          </p>
+          <div className="flex flex-wrap items-baseline gap-2">
+            <p className="text-sm font-semibold text-neutral-950">
+              {formatPrice(product.price, product.currency)}
+            </p>
+            {product.compareAtPrice &&
+            product.compareAtPrice > product.price ? (
+              <p className="text-sm text-neutral-400 line-through">
+                {formatPrice(product.compareAtPrice, product.currency)}
+              </p>
+            ) : null}
+          </div>
         </div>
       </Link>
       {showAction ? (
