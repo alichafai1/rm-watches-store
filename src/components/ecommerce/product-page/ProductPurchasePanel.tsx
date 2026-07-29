@@ -60,7 +60,7 @@ export function ProductPurchasePanel({
           Quantity
         </p>
         <div className="mt-3 grid gap-3">
-          <div className="grid gap-3 sm:grid-cols-[150px_1fr_48px]">
+          <div className="grid gap-3 sm:grid-cols-[150px_1fr]">
             <div className="flex min-h-12 items-center justify-between rounded-md border border-neutral-300 bg-white">
               <button
                 aria-label="Decrease quantity"
@@ -86,24 +86,6 @@ export function ProductPurchasePanel({
             </div>
             <Button className="min-h-12 uppercase tracking-wide" disabled>
               Add To Cart
-            </Button>
-            <Button
-              aria-label="Wishlist placeholder"
-              className="min-h-12"
-              variant="outline"
-            >
-              <svg
-                aria-hidden="true"
-                className="size-4"
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.75}
-                viewBox="0 0 24 24"
-              >
-                <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z" />
-              </svg>
             </Button>
           </div>
 
