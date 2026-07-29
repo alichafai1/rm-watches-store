@@ -59,49 +59,63 @@ export function ProductPurchasePanel({
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
           Quantity
         </p>
-        <div className="mt-3 grid gap-3 sm:grid-cols-[150px_1fr_48px]">
-          <div className="flex min-h-12 items-center justify-between rounded-md border border-neutral-300 bg-white">
-            <button
-              aria-label="Decrease quantity"
-              className="h-full px-4 text-lg text-neutral-700"
-              onClick={() => setQuantity((current) => Math.max(1, current - 1))}
-              type="button"
+        <div className="mt-3 grid gap-3">
+          <div className="grid gap-3 sm:grid-cols-[150px_1fr_48px]">
+            <div className="flex min-h-12 items-center justify-between rounded-md border border-neutral-300 bg-white">
+              <button
+                aria-label="Decrease quantity"
+                className="h-full px-4 text-lg text-neutral-700"
+                onClick={() =>
+                  setQuantity((current) => Math.max(1, current - 1))
+                }
+                type="button"
+              >
+                -
+              </button>
+              <span className="text-sm font-medium text-neutral-950">
+                {quantity}
+              </span>
+              <button
+                aria-label="Increase quantity"
+                className="h-full px-4 text-lg text-neutral-700"
+                onClick={() => setQuantity((current) => current + 1)}
+                type="button"
+              >
+                +
+              </button>
+            </div>
+            <Button className="min-h-12 uppercase tracking-wide" disabled>
+              Add To Cart
+            </Button>
+            <Button
+              aria-label="Wishlist placeholder"
+              className="min-h-12"
+              variant="outline"
             >
-              -
-            </button>
-            <span className="text-sm font-medium text-neutral-950">
-              {quantity}
-            </span>
-            <button
-              aria-label="Increase quantity"
-              className="h-full px-4 text-lg text-neutral-700"
-              onClick={() => setQuantity((current) => current + 1)}
-              type="button"
-            >
-              +
-            </button>
+              <svg
+                aria-hidden="true"
+                className="size-4"
+                fill="none"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.75}
+                viewBox="0 0 24 24"
+              >
+                <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z" />
+              </svg>
+            </Button>
           </div>
-          <Button className="min-h-12 uppercase tracking-wide" disabled>
-            Add To Cart
-          </Button>
-          <Button
-            aria-label="Wishlist placeholder"
-            className="min-h-12"
-            variant="outline"
+
+          <button
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-[#9a752e] bg-[#9a752e] px-5 text-sm font-semibold uppercase tracking-[0.14em] text-white transition duration-200 hover:border-[#866432] hover:bg-[#866432] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9a752e] focus-visible:ring-offset-2"
+            type="button"
           >
-            <svg
-              aria-hidden="true"
-              className="size-4"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.75}
-              viewBox="0 0 24 24"
-            >
-              <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z" />
-            </svg>
-          </Button>
+            Buy Now
+          </button>
+          <p className="text-center text-[11px] leading-relaxed text-neutral-500">
+            Express checkout — skip the cart and pay securely
+          </p>
         </div>
 
         <div className="mt-4">
