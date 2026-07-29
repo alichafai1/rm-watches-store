@@ -16,16 +16,38 @@ export default async function AdminProductsPage() {
   return (
     <AdminShell title="Products">
       <div className="grid gap-4">
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-neutral-600">
-            Create drafts, then publish when ready.
+            Create drafts, then publish when ready. Export your full catalog to
+            reuse products on another website.
           </p>
-          <Link
-            className="rounded-md bg-neutral-950 px-3 py-2 text-sm font-medium text-white"
-            href="/admin/products/new"
-          >
-            New product
-          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            <a
+              className="rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm font-medium hover:bg-neutral-50"
+              href="/api/admin/catalog/export?format=json"
+            >
+              Export JSON
+            </a>
+            <a
+              className="rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm font-medium hover:bg-neutral-50"
+              href="/api/admin/catalog/export?format=csv"
+            >
+              Export CSV
+            </a>
+            <a
+              className="rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm font-medium hover:bg-neutral-50"
+              href="/api/admin/catalog/export?format=json&published=1"
+              title="Published products only"
+            >
+              Export published JSON
+            </a>
+            <Link
+              className="rounded-md bg-neutral-950 px-3 py-2 text-sm font-medium text-white"
+              href="/admin/products/new"
+            >
+              New product
+            </Link>
+          </div>
         </div>
 
         {errorMessage ? (

@@ -26,6 +26,7 @@ create table if not exists public.cms_products (
   is_new_arrival boolean not null default false,
   is_best_seller boolean not null default false,
   images jsonb not null default '[]'::jsonb,
+  description_image jsonb,
   specification_details jsonb not null default '{}'::jsonb,
   variants jsonb not null default '[]'::jsonb,
   features jsonb not null default '[]'::jsonb,

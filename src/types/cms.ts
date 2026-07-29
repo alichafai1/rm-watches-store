@@ -34,6 +34,8 @@ export type CmsProductRecord = {
   is_new_arrival: boolean;
   is_best_seller: boolean;
   images: ProductImage[];
+  /** Image shown in the product description / about section. */
+  description_image?: ProductImage | null;
   specification_details: ProductSpecification[] | Record<string, string>;
   variants: ProductVariant[];
   features: string[];

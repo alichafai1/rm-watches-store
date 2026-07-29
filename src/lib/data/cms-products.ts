@@ -51,13 +51,36 @@ export function mapCmsProductToProduct(record: CmsProductRecord): Product {
   const images = Array.isArray(record.images) ? record.images : [];
   const specifications = coerceSpecificationRows(record.specification_details);
   const price = Number(record.price) || 0;
-  const about =
+  const descriptionImage =
+    record.description_image &&
+    typeof record.description_image === "object" &&
+    "url" in record.description_image
+      ? record.description_image
+      : record.about &&
+          typeof record.about === "object" &&
+          "image" in record.about
+        ? record.about.image
+        : images[0];
+
+  const aboutBase =
     record.about &&
     typeof record.about === "object" &&
     "title" in record.about &&
     record.about.title
       ? record.about
-      : defaultAbout(record.title, record.description || "", images[0]);
+      : defaultAbout(record.title, record.description || "", descriptionImage);
+
+  const about = {
+    ...aboutBase,
+    image:
+      descriptionImage ??
+      aboutBase.image ?? {
+        url: "/images/placeholders/watch-placeholder.svg",
+        alt: record.title,
+        width: 800,
+        height: 800,
+      },
+  };
 
   return {
     id: record.id,

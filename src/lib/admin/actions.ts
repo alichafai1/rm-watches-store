@@ -76,6 +76,43 @@ export async function adminLogoutAction() {
   redirect("/admin/login");
 }
 
+function parseProductImage(
+  value: FormDataEntryValue | null,
+): CmsProductRecord["description_image"] {
+  if (typeof value !== "string" || !value.trim()) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(value) as unknown;
+    if (Array.isArray(parsed)) {
+      const first = parsed[0];
+      if (
+        first &&
+        typeof first === "object" &&
+        "url" in first &&
+        typeof (first as { url: unknown }).url === "string"
+      ) {
+        return first as NonNullable<CmsProductRecord["description_image"]>;
+      }
+      return null;
+    }
+
+    if (
+      parsed &&
+      typeof parsed === "object" &&
+      "url" in parsed &&
+      typeof (parsed as { url: unknown }).url === "string"
+    ) {
+      return parsed as NonNullable<CmsProductRecord["description_image"]>;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
 export async function saveProductAction(formData: FormData) {
   const { supabase } = await requireAdminDb();
 
@@ -91,6 +128,10 @@ export async function saveProductAction(formData: FormData) {
       ? compareAtParsed
       : null;
   const images = parseJsonArray(formData.get("images")) as CmsProductRecord["images"];
+  const description_image =
+    parseProductImage(formData.get("description_image")) ??
+    images[0] ??
+    null;
   const features = parseLines(formData.get("features"));
   const specifications = parseSpecificationRows(
     parseJsonArray(formData.get("specifications")),
@@ -188,13 +229,14 @@ export async function saveProductAction(formData: FormData) {
     is_new_arrival: formData.get("is_new_arrival") === "on",
     is_best_seller: formData.get("is_best_seller") === "on",
     images,
+    description_image,
     specification_details: specifications,
     variants: resolvedVariants,
     features,
     about: {
       title: String(formData.get("about_title") ?? title),
       description: String(formData.get("about_description") ?? ""),
-      image: images[0] ?? {
+      image: description_image ?? {
         url: "/images/placeholders/watch-placeholder.svg",
         alt: title,
         width: 800,
