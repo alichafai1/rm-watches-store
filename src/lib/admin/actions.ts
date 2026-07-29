@@ -252,34 +252,54 @@ export async function saveProductAction(formData: FormData) {
       status === "published" ? new Date().toISOString() : null,
   };
 
-  if (id) {
-    const { error } = await supabase
+  async function writeProduct(fullPayload: typeof payload) {
+    if (id) {
+      let { error } = await supabase
+        .from("cms_products")
+        .update(fullPayload)
+        .eq("id", id);
+
+      if (error && /description_image/i.test(error.message)) {
+        const { description_image: _ignored, ...legacyPayload } = fullPayload;
+        ({ error } = await supabase
+          .from("cms_products")
+          .update(legacyPayload)
+          .eq("id", id));
+      }
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      return id;
+    }
+
+    let insertResult = await supabase
       .from("cms_products")
-      .update(payload)
-      .eq("id", id);
-    if (error) {
-      throw new Error(error.message);
+      .insert(fullPayload)
+      .select("id")
+      .single();
+
+    if (
+      insertResult.error &&
+      /description_image/i.test(insertResult.error.message)
+    ) {
+      const { description_image: _ignored, ...legacyPayload } = fullPayload;
+      insertResult = await supabase
+        .from("cms_products")
+        .insert(legacyPayload)
+        .select("id")
+        .single();
     }
-    revalidatePath("/", "layout");
-    revalidatePath("/shop", "page");
-    revalidatePath(`/products/${slug}`, "page");
-    revalidatePath("/admin/products");
-    if (collection_slug) {
-      revalidatePath(`/collections/${collection_slug}`, "page");
-      revalidatePath(`/new-arrival-collections/${collection_slug}`, "page");
+
+    if (insertResult.error) {
+      throw new Error(insertResult.error.message);
     }
-    redirect(`/admin/products/${id}?saved=1`);
+
+    return insertResult.data.id as string;
   }
 
-  const { data, error } = await supabase
-    .from("cms_products")
-    .insert(payload)
-    .select("id")
-    .single();
-
-  if (error) {
-    throw new Error(error.message);
-  }
+  const savedId = await writeProduct(payload);
 
   revalidatePath("/", "layout");
   revalidatePath("/shop", "page");
@@ -289,7 +309,7 @@ export async function saveProductAction(formData: FormData) {
     revalidatePath(`/collections/${collection_slug}`, "page");
     revalidatePath(`/new-arrival-collections/${collection_slug}`, "page");
   }
-  redirect(`/admin/products/${data.id}?saved=1`);
+  redirect(`/admin/products/${savedId}?saved=1`);
 }
 
 export async function deleteProductAction(formData: FormData) {
