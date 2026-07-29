@@ -44,7 +44,7 @@ export function ProductMainSection({
   return (
     <section aria-labelledby="product-title" className="grid gap-6">
       <Breadcrumbs className="mb-0" items={breadcrumbs} />
-      <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+      <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
         <ProductGallery
           discountPercent={discountPercent}
           images={product.images}

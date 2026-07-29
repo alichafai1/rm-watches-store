@@ -44,7 +44,7 @@ export function ProductGallery({
 
   if (!activeImage) {
     return (
-      <div className="flex aspect-square items-center justify-center bg-white text-sm text-neutral-500">
+      <div className="flex aspect-[5/4] items-center justify-center bg-white text-sm text-neutral-500">
         {productTitle} image placeholder
       </div>
     );
@@ -59,7 +59,7 @@ export function ProductGallery({
       <div className="relative">
         <ImageZoomTrigger
           alt={activeImage.alt || productTitle}
-          className="aspect-square w-full rounded-[20px] bg-white shadow-none ring-0"
+          className="aspect-[5/4] w-full rounded-[20px] bg-white shadow-none ring-0"
           imageClassName="object-contain"
           priority
           sizes="(min-width: 1024px) 48vw, 100vw"
