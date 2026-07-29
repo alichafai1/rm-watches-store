@@ -5,6 +5,8 @@ import { getProductsByGender } from "@/lib/data/products";
 import { createBreadcrumbs } from "@/lib/seo/breadcrumbs";
 import { createPageMetadata } from "@/lib/seo/metadata";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = createPageMetadata({
   title: "Women's Watches",
   description: "Temporary women's watches route for future product listings.",

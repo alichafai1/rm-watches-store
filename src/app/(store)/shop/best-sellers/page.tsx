@@ -5,6 +5,8 @@ import { getBestSellerProducts } from "@/lib/data/products";
 import { createBreadcrumbs } from "@/lib/seo/breadcrumbs";
 import { createPageMetadata } from "@/lib/seo/metadata";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = createPageMetadata({
   title: "Best Sellers",
   description: "Temporary best sellers route for future product merchandising.",

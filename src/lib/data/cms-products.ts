@@ -118,12 +118,18 @@ export async function getPublishedCmsProducts(): Promise<Product[]> {
       .eq("status", "published")
       .order("published_at", { ascending: false });
 
-    if (error || !data) {
+    if (error) {
+      console.error("[cms_products] Failed to load published products:", error.message);
+      return [];
+    }
+
+    if (!data) {
       return [];
     }
 
     return (data as CmsProductRecord[]).map(mapCmsProductToProduct);
-  } catch {
+  } catch (error) {
+    console.error("[cms_products] Unexpected error loading products:", error);
     return [];
   }
 }
@@ -140,12 +146,24 @@ export async function getPublishedCmsProductBySlug(
       .eq("slug", slug)
       .maybeSingle();
 
-    if (error || !data) {
+    if (error) {
+      console.error(
+        `[cms_products] Failed to load product "${slug}":`,
+        error.message,
+      );
+      return null;
+    }
+
+    if (!data) {
       return null;
     }
 
     return mapCmsProductToProduct(data as CmsProductRecord);
-  } catch {
+  } catch (error) {
+    console.error(
+      `[cms_products] Unexpected error loading product "${slug}":`,
+      error,
+    );
     return null;
   }
 }

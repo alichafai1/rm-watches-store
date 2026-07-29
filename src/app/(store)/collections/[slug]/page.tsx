@@ -23,6 +23,8 @@ type CollectionPageProps = {
   }>;
 };
 
+export const revalidate = 60;
+
 export function generateStaticParams() {
   return getCollections().map((collection) => ({
     slug: collection.slug,

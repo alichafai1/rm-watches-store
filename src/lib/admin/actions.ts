@@ -218,13 +218,13 @@ export async function saveProductAction(formData: FormData) {
     if (error) {
       throw new Error(error.message);
     }
+    revalidatePath("/", "layout");
+    revalidatePath("/shop", "page");
+    revalidatePath(`/products/${slug}`, "page");
     revalidatePath("/admin/products");
-    revalidatePath("/shop");
-    revalidatePath("/");
-    revalidatePath(`/products/${slug}`);
     if (collection_slug) {
-      revalidatePath(`/collections/${collection_slug}`);
-      revalidatePath(`/new-arrival-collections/${collection_slug}`);
+      revalidatePath(`/collections/${collection_slug}`, "page");
+      revalidatePath(`/new-arrival-collections/${collection_slug}`, "page");
     }
     redirect(`/admin/products/${id}?saved=1`);
   }
@@ -239,13 +239,13 @@ export async function saveProductAction(formData: FormData) {
     throw new Error(error.message);
   }
 
+  revalidatePath("/", "layout");
+  revalidatePath("/shop", "page");
+  revalidatePath(`/products/${slug}`, "page");
   revalidatePath("/admin/products");
-  revalidatePath("/shop");
-  revalidatePath("/");
-  revalidatePath(`/products/${slug}`);
   if (collection_slug) {
-    revalidatePath(`/collections/${collection_slug}`);
-    revalidatePath(`/new-arrival-collections/${collection_slug}`);
+    revalidatePath(`/collections/${collection_slug}`, "page");
+    revalidatePath(`/new-arrival-collections/${collection_slug}`, "page");
   }
   redirect(`/admin/products/${data.id}?saved=1`);
 }

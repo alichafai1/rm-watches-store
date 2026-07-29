@@ -5,6 +5,8 @@ import { getNewArrivalProducts } from "@/lib/data/products";
 import { createBreadcrumbs } from "@/lib/seo/breadcrumbs";
 import { createPageMetadata } from "@/lib/seo/metadata";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = createPageMetadata({
   title: "New Arrivals",
   description: "Temporary new arrivals route for future product merchandising.",
