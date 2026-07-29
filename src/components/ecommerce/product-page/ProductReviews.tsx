@@ -76,87 +76,94 @@ export function ProductReviews({ reviews }: ProductReviewsProps) {
       className="border-t border-neutral-200 pt-10"
       id="customer-reviews"
     >
-      <div className="mx-auto w-full max-w-3xl">
-        <div className="text-center">
-          <h2
-            className="text-2xl font-semibold tracking-tight text-neutral-950"
-            id="product-reviews-heading"
-          >
-            Customer Reviews
-          </h2>
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
-            <p className="text-3xl font-semibold tracking-tight text-neutral-950">
-              {averageRating.toFixed(1)}
-            </p>
+      <h2
+        className="text-2xl font-semibold tracking-tight text-neutral-950"
+        id="product-reviews-heading"
+      >
+        Customer Reviews
+      </h2>
+
+      <div className="mt-8 grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:items-start lg:gap-12">
+        <aside className="lg:sticky lg:top-24">
+          <p className="text-4xl font-semibold tracking-tight text-neutral-950">
+            {averageRating.toFixed(1)}
+          </p>
+          <div className="mt-2 flex items-center gap-2">
             <StarRow rating={averageRating} />
-            <p className="text-sm text-neutral-500">
-              Based on {reviews.length} review{reviews.length === 1 ? "" : "s"}
-            </p>
+            <span className="text-sm text-neutral-500">out of 5</span>
           </div>
-        </div>
+          <p className="mt-2 text-sm text-neutral-600">
+            Based on {reviews.length} review{reviews.length === 1 ? "" : "s"}
+          </p>
 
-        <div className="mt-6 grid gap-1.5">
-          {ratingRows.map((row) => (
-            <div
-              className="grid grid-cols-[2.5rem_1fr_2rem] items-center gap-2 text-xs text-neutral-600"
-              key={row.label}
-            >
-              <span className="tabular-nums">{row.label} ★</span>
-              <div className="h-1.5 overflow-hidden rounded-full bg-neutral-200">
-                <div
-                  className="h-full rounded-full bg-[#b08a3c]"
-                  style={{ width: `${row.percent}%` }}
-                />
-              </div>
-              <span className="text-right tabular-nums text-neutral-500">
-                {row.count}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-8 divide-y divide-neutral-200 border-y border-neutral-200">
-          {visibleReviews.map((review) => (
-            <article className="py-5" key={review.id}>
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                <StarRow rating={review.rating} />
-                <h3 className="text-sm font-semibold text-neutral-950">
-                  {review.author}
-                </h3>
-                <time className="text-xs text-neutral-500" dateTime={review.date}>
-                  {review.date}
-                </time>
-              </div>
-              {review.title ? (
-                <p className="mt-2 text-sm font-semibold text-neutral-950">
-                  {review.title}
-                </p>
-              ) : null}
-              <p
-                className={`text-sm leading-6 text-neutral-600 ${
-                  review.title ? "mt-1.5" : "mt-2"
-                }`}
+          <div className="mt-5 grid gap-1.5">
+            {ratingRows.map((row) => (
+              <div
+                className="grid grid-cols-[2.75rem_1fr_1.25rem] items-center gap-2 text-xs text-neutral-600"
+                key={row.label}
               >
-                {review.body}
-              </p>
-            </article>
-          ))}
-        </div>
-
-        {hiddenCount > 0 ? (
-          <div className="mt-5 flex justify-center">
-            <button
-              aria-expanded={expanded}
-              className="rounded-md border border-neutral-300 bg-white px-4 py-2.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950"
-              onClick={() => setExpanded((current) => !current)}
-              type="button"
-            >
-              {expanded
-                ? "Show fewer reviews"
-                : `Show all ${reviews.length} reviews`}
-            </button>
+                <span className="tabular-nums">{row.label} star</span>
+                <div className="h-1.5 overflow-hidden rounded-full bg-neutral-200">
+                  <div
+                    className="h-full rounded-full bg-[#b08a3c]"
+                    style={{ width: `${row.percent}%` }}
+                  />
+                </div>
+                <span className="text-right tabular-nums text-neutral-500">
+                  {row.count}
+                </span>
+              </div>
+            ))}
           </div>
-        ) : null}
+        </aside>
+
+        <div>
+          <div className="divide-y divide-neutral-200 border-y border-neutral-200">
+            {visibleReviews.map((review) => (
+              <article className="py-5" key={review.id}>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <StarRow rating={review.rating} />
+                  <h3 className="text-sm font-semibold text-neutral-950">
+                    {review.author}
+                  </h3>
+                  <time
+                    className="text-xs text-neutral-500"
+                    dateTime={review.date}
+                  >
+                    {review.date}
+                  </time>
+                </div>
+                {review.title ? (
+                  <p className="mt-2 text-sm font-semibold text-neutral-950">
+                    {review.title}
+                  </p>
+                ) : null}
+                <p
+                  className={`text-sm leading-6 text-neutral-600 ${
+                    review.title ? "mt-1.5" : "mt-2"
+                  }`}
+                >
+                  {review.body}
+                </p>
+              </article>
+            ))}
+          </div>
+
+          {hiddenCount > 0 ? (
+            <div className="mt-5">
+              <button
+                aria-expanded={expanded}
+                className="rounded-md border border-neutral-300 bg-white px-4 py-2.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950"
+                onClick={() => setExpanded((current) => !current)}
+                type="button"
+              >
+                {expanded
+                  ? "Show fewer reviews"
+                  : `Show all ${reviews.length} reviews`}
+              </button>
+            </div>
+          ) : null}
+        </div>
       </div>
     </section>
   );
