@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { createCmsReadSupabaseClient } from "@/lib/supabase/server";
 import type { CmsProductRecord } from "@/types/cms";
 import type {
   Product,
@@ -111,7 +111,7 @@ export function mapCmsProductToProduct(record: CmsProductRecord): Product {
 
 export async function getPublishedCmsProducts(): Promise<Product[]> {
   try {
-    const supabase = createServerSupabaseClient();
+    const supabase = createCmsReadSupabaseClient();
     const { data, error } = await supabase
       .from("cms_products")
       .select("*")
@@ -138,7 +138,7 @@ export async function getPublishedCmsProductBySlug(
   slug: string,
 ): Promise<Product | null> {
   try {
-    const supabase = createServerSupabaseClient();
+    const supabase = createCmsReadSupabaseClient();
     const { data, error } = await supabase
       .from("cms_products")
       .select("*")

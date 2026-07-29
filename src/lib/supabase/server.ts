@@ -1,34 +1,36 @@
 import { createClient } from "@supabase/supabase-js";
+import {
+  getSupabasePublishableKey,
+  getSupabaseServiceRoleKey,
+  getSupabaseUrl,
+} from "@/lib/supabase/env";
 
-function getSupabasePublicConfig() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabasePublishableKey =
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!supabaseUrl) {
-    throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL environment variable.");
-  }
-
-  if (!supabasePublishableKey) {
-    throw new Error(
-      "Missing NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY (or NEXT_PUBLIC_SUPABASE_ANON_KEY) environment variable.",
-    );
-  }
-
-  return {
-    supabasePublishableKey,
-    supabaseUrl,
-  };
-}
-
+/** Public/anon client for general server reads. */
 export function createServerSupabaseClient() {
-  const config = getSupabasePublicConfig();
-
-  return createClient(config.supabaseUrl, config.supabasePublishableKey, {
+  return createClient(getSupabaseUrl(), getSupabasePublishableKey(), {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
     },
   });
+}
+
+/**
+ * Preferred for storefront CMS reads on Vercel.
+ * Uses service role when available (server-only) so published products still
+ * load even if the public key/RLS setup is incomplete.
+ */
+export function createCmsReadSupabaseClient() {
+  const serviceRoleKey = getSupabaseServiceRoleKey();
+
+  if (serviceRoleKey) {
+    return createClient(getSupabaseUrl(), serviceRoleKey, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
+  }
+
+  return createServerSupabaseClient();
 }

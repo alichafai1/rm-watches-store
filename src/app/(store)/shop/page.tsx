@@ -5,7 +5,8 @@ import { getProducts } from "@/lib/data/products";
 import { createBreadcrumbs } from "@/lib/seo/breadcrumbs";
 import { createPageMetadata } from "@/lib/seo/metadata";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = createPageMetadata({
   title: "Shop",

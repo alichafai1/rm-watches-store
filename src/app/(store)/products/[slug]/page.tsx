@@ -28,13 +28,11 @@ type ProductPageProps = {
   }>;
 };
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateStaticParams() {
-  const products = await getProducts();
-  return products.map((product) => ({
-    slug: product.slug,
-  }));
+  return [];
 }
 
 export async function generateMetadata({
