@@ -1,0 +1,35 @@
+import type { MetadataRoute } from "next";
+import { staticRoutes } from "@/constants/routes";
+import { siteConfig } from "@/constants/site";
+import { getCollections } from "@/lib/data/collections";
+import { getNewArrivalCollections } from "@/lib/data/new-arrival-collections";
+import { getPublishedCmsProducts } from "@/lib/data/cms-products";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const now = new Date();
+  const collectionRoutes = getCollections().map((collection) => ({
+    href: `/collections/${collection.slug}`,
+  }));
+  const newArrivalCollectionRoutes = getNewArrivalCollections().map(
+    (collection) => ({
+      href: `/new-arrival-collections/${collection.slug}`,
+    }),
+  );
+  const cmsProducts = await getPublishedCmsProducts();
+  const productRoutes = cmsProducts.map((product) => ({
+    href: `/products/${product.slug}`,
+  }));
+  const routes = [
+    ...staticRoutes,
+    ...collectionRoutes,
+    ...newArrivalCollectionRoutes,
+    ...productRoutes,
+  ];
+
+  return routes.map((route) => ({
+    url: new URL(route.href, siteConfig.url).toString(),
+    lastModified: now,
+    changeFrequency: route.href === "/" ? "weekly" : "monthly",
+    priority: route.href === "/" ? 1 : 0.7,
+  }));
+}

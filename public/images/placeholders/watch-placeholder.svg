@@ -1,0 +1,8 @@
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title description">
+  <title id="title">Watch placeholder</title>
+  <desc id="description">Neutral placeholder illustration for temporary watch product cards.</desc>
+  <rect width="800" height="800" fill="white"/>
+  <rect x="250" y="80" width="300" height="640" rx="80" stroke="currentColor" stroke-width="24"/>
+  <circle cx="400" cy="400" r="150" stroke="currentColor" stroke-width="24"/>
+  <path d="M400 310V410L470 455" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
