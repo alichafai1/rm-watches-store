@@ -16,8 +16,10 @@ const trustAssurances: TrustAssurance[] = [
     id: "free-shipping",
     title: "Free Shipping",
     description: "Expected delivery between 2–3 days",
-    iconSrc: "/images/trust-icons/free-shipping.png",
+    iconSrc:
+      "https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/free%20shipping%20icon.webp",
     iconAlt: "Free shipping",
+    iconClassName: "scale-[1]",
   },
   {
     id: "returns",
@@ -33,8 +35,10 @@ const trustAssurances: TrustAssurance[] = [
     id: "secure-checkout",
     title: "Secure checkout powered by Stripe",
     description: "Payments are processed securely",
-    iconSrc: "/images/trust-icons/secure-checkout.png",
+    iconSrc:
+      "https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/secure%20checkout%20icon.webp",
     iconAlt: "Secure checkout",
+    iconClassName: "scale-[1]",
   },
 ];
 
