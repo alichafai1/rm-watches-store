@@ -1,4 +1,8 @@
 import { NextResponse } from "next/server";
+import {
+  hasUsableCmsEnv,
+  isLikelySupabaseProjectUrl,
+} from "@/lib/supabase/env";
 import { createCmsReadSupabaseClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -31,7 +35,7 @@ function inspectUrl(raw: string | undefined) {
   return {
     present: true,
     length: value.length,
-    looksLikeSupabase: value.includes("supabase.co"),
+    looksLikeSupabase: isLikelySupabaseProjectUrl(value),
     startsWithHttp,
     preview: host || value.slice(0, 24),
   };
@@ -45,6 +49,30 @@ export async function GET() {
   const hasAnonKey = Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim());
   const hasServiceRole = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY?.trim());
   const hasAdminIds = Boolean(process.env.ADMIN_USER_IDS?.trim());
+
+  const fixHint = !urlInfo.looksLikeSupabase
+    ? "Set NEXT_PUBLIC_SUPABASE_URL on Vercel to https://YOUR_PROJECT.supabase.co (from Supabase → Project Settings → API). Current value is wrong (preview shows what Vercel has). Then Redeploy."
+    : null;
+
+  if (!hasUsableCmsEnv()) {
+    return NextResponse.json(
+      {
+        ok: false,
+        env: {
+          url: urlInfo,
+          hasPublishableKey,
+          hasAnonKey,
+          hasServiceRole,
+          hasAdminIds,
+        },
+        error: "Supabase env is not usable for CMS reads.",
+        fixHint,
+        publishedCount: 0,
+        products: [],
+      },
+      { status: 500 },
+    );
+  }
 
   try {
     const supabase = createCmsReadSupabaseClient();
@@ -65,6 +93,7 @@ export async function GET() {
         hasAdminIds,
       },
       error: error?.message ?? null,
+      fixHint: error ? fixHint : null,
       publishedCount: data?.length ?? 0,
       products:
         data?.map((row) => ({
@@ -85,6 +114,7 @@ export async function GET() {
           hasAdminIds,
         },
         error: error instanceof Error ? error.message : "Unknown error",
+        fixHint,
         publishedCount: 0,
         products: [],
       },

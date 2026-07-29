@@ -18,6 +18,25 @@ function required(name: string, value: string | undefined) {
   return cleaned;
 }
 
+/** True when the value looks like a real Supabase project URL (not a typo like "public123"). */
+export function isLikelySupabaseProjectUrl(raw: string | undefined) {
+  const cleaned = cleanEnv(raw);
+  if (!cleaned) {
+    return false;
+  }
+
+  const withProtocol = /^https?:\/\//i.test(cleaned)
+    ? cleaned
+    : `https://${cleaned}`;
+
+  try {
+    const host = new URL(withProtocol.replace(/\/+$/, "")).hostname.toLowerCase();
+    return host.endsWith(".supabase.co") || host === "supabase.co";
+  } catch {
+    return false;
+  }
+}
+
 export function getSupabaseUrl() {
   let url = required(
     "NEXT_PUBLIC_SUPABASE_URL",
@@ -40,6 +59,12 @@ export function getSupabaseUrl() {
     );
   }
 
+  if (!isLikelySupabaseProjectUrl(url)) {
+    throw new Error(
+      `NEXT_PUBLIC_SUPABASE_URL must be your Supabase project URL (https://xxxx.supabase.co). Got host that is not *.supabase.co (length ${url.length}).`,
+    );
+  }
+
   return url;
 }
 
@@ -58,8 +83,20 @@ export function getSupabaseServiceRoleKey() {
 
 export function hasSupabasePublicEnv() {
   return Boolean(
-    cleanEnv(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+    isLikelySupabaseProjectUrl(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
       (cleanEnv(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) ||
         cleanEnv(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)),
+  );
+}
+
+/** Storefront CMS reads only when URL + at least one usable key look configured. */
+export function hasUsableCmsEnv() {
+  return (
+    isLikelySupabaseProjectUrl(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+    Boolean(
+      cleanEnv(process.env.SUPABASE_SERVICE_ROLE_KEY) ||
+        cleanEnv(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) ||
+        cleanEnv(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
+    )
   );
 }

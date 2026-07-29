@@ -13,7 +13,12 @@ export async function updateSession(request: NextRequest) {
     ""
   ).trim();
 
-  if (!url || !key) {
+  // Skip auth refresh when URL is a typo (e.g. "public123") — avoids hanging fetches.
+  const looksLikeSupabase =
+    Boolean(url) &&
+    (url!.includes(".supabase.co") || url!.includes("supabase.co"));
+
+  if (!url || !key || !looksLikeSupabase) {
     return response;
   }
 

@@ -1,3 +1,4 @@
+import { hasUsableCmsEnv } from "@/lib/supabase/env";
 import { createCmsReadSupabaseClient } from "@/lib/supabase/server";
 import type { CmsProductRecord } from "@/types/cms";
 import type {
@@ -110,6 +111,10 @@ export function mapCmsProductToProduct(record: CmsProductRecord): Product {
 }
 
 export async function getPublishedCmsProducts(): Promise<Product[]> {
+  if (!hasUsableCmsEnv()) {
+    return [];
+  }
+
   try {
     const supabase = createCmsReadSupabaseClient();
     const { data, error } = await supabase
@@ -137,6 +142,10 @@ export async function getPublishedCmsProducts(): Promise<Product[]> {
 export async function getPublishedCmsProductBySlug(
   slug: string,
 ): Promise<Product | null> {
+  if (!hasUsableCmsEnv()) {
+    return null;
+  }
+
   try {
     const supabase = createCmsReadSupabaseClient();
     const { data, error } = await supabase
