@@ -31,7 +31,13 @@ export function ProductMainSection({
   const displayPrice = selectedVariant?.price ?? product.price;
   const discountPercent =
     product.compareAtPrice && product.compareAtPrice > displayPrice
-      ? 20
+      ? Math.max(
+          1,
+          Math.round(
+            ((product.compareAtPrice - displayPrice) / product.compareAtPrice) *
+              100,
+          ),
+        )
       : undefined;
   const reviewCount = product.reviews.length;
   const averageRating =
@@ -84,15 +90,21 @@ export function ProductMainSection({
                 </span>
               </div>
             ) : null}
-            <div className="mt-5 flex flex-wrap items-baseline gap-3">
-              <p className="text-2xl font-semibold text-neutral-950">
+            <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2">
+              <p className="text-2xl font-semibold tracking-tight text-neutral-950">
                 {formatPrice(displayPrice, product.currency)}
               </p>
               {product.compareAtPrice &&
-              product.compareAtPrice > displayPrice ? (
-                <p className="text-lg text-neutral-500 line-through">
-                  {formatPrice(product.compareAtPrice, product.currency)}
-                </p>
+              product.compareAtPrice > displayPrice &&
+              discountPercent ? (
+                <>
+                  <p className="text-base text-neutral-400 line-through decoration-neutral-400">
+                    {formatPrice(product.compareAtPrice, product.currency)}
+                  </p>
+                  <span className="inline-flex items-center rounded-full bg-[#c45c4a] px-3 py-1 text-[11px] font-bold tracking-[0.08em] text-white uppercase">
+                    Save {discountPercent}%
+                  </span>
+                </>
               ) : null}
             </div>
             <div className="mt-5 grid gap-3">
