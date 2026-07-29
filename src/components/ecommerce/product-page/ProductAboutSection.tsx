@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState, type MouseEvent } from "react";
 import { createPortal } from "react-dom";
+import { ImageZoomTrigger } from "@/components/ecommerce/product-page/ImageZoomTrigger";
 import type { ProductAbout } from "@/types/product";
 
 type ProductAboutSectionProps = {
@@ -26,28 +27,14 @@ export function ProductAboutSection({ about }: ProductAboutSectionProps) {
         {about.title}
       </h2>
 
-      <button
-        aria-label="Zoom about image"
-        className="group relative order-1 mx-auto aspect-[4/3] w-full max-w-md overflow-hidden border-0 bg-transparent p-0 outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 lg:order-2 lg:mx-0 lg:max-w-none"
-        onClick={() => setLightboxOpen(true)}
-        type="button"
-      >
-        <Image
-          alt={about.image.alt}
-          className="object-contain p-1 sm:p-2 transition duration-200 group-hover:scale-[1.02]"
-          fill
-          sizes="(min-width: 1024px) 28vw, 100vw"
-          src={about.image.url}
-        />
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition duration-200 group-hover:bg-black/15 group-hover:opacity-100"
-        >
-          <span className="flex size-11 items-center justify-center rounded-full bg-white/95 text-neutral-900 shadow-md">
-            <ZoomInIcon />
-          </span>
-        </span>
-      </button>
+      <ImageZoomTrigger
+        alt={about.image.alt}
+        className="order-1 mx-auto aspect-[4/3] w-full max-w-md lg:order-2 lg:mx-0 lg:max-w-none"
+        imageClassName="object-contain p-1 sm:p-2"
+        onOpen={() => setLightboxOpen(true)}
+        sizes="(min-width: 1024px) 28vw, 100vw"
+        src={about.image.url}
+      />
 
       <p className="order-3 text-sm leading-7 text-neutral-700">
         {about.description}
@@ -166,25 +153,6 @@ function AboutImageLightbox({ alt, onClose, src }: AboutImageLightboxProps) {
         </button>
       </div>
     </div>
-  );
-}
-
-function ZoomInIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      className="size-5"
-      fill="none"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="1.75"
-      viewBox="0 0 24 24"
-    >
-      <circle cx="11" cy="11" r="7" />
-      <path d="m20 20-3.5-3.5" />
-      <path d="M11 8v6M8 11h6" />
-    </svg>
   );
 }
 

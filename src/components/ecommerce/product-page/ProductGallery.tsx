@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useId, useState, type MouseEvent } from "react";
 import { createPortal } from "react-dom";
+import { ImageZoomTrigger } from "@/components/ecommerce/product-page/ImageZoomTrigger";
 import type { ProductImage } from "@/types/product";
 
 type ProductGalleryProps = {
@@ -63,29 +64,15 @@ export function ProductGallery({
       </p>
 
       <div className="relative">
-        <button
-          aria-label="Open larger product image view"
-          className="group relative aspect-square w-full overflow-hidden rounded-[20px] border-0 bg-white shadow-none outline-none ring-0 focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
-          onClick={() => setLightboxOpen(true)}
-          type="button"
-        >
-          <Image
-            alt={activeImage.alt || productTitle}
-            className="object-contain transition duration-200 group-hover:scale-[1.015]"
-            fill
-            priority
-            sizes="(min-width: 1024px) 48vw, 100vw"
-            src={activeImage.url}
-          />
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition duration-200 group-hover:bg-black/15 group-hover:opacity-100"
-          >
-            <span className="flex size-11 items-center justify-center rounded-full bg-white/95 text-neutral-900 shadow-md">
-              <ZoomInIcon />
-            </span>
-          </span>
-        </button>
+        <ImageZoomTrigger
+          alt={activeImage.alt || productTitle}
+          className="aspect-square w-full rounded-[20px] bg-white shadow-none ring-0"
+          imageClassName="object-contain"
+          onOpen={() => setLightboxOpen(true)}
+          priority
+          sizes="(min-width: 1024px) 48vw, 100vw"
+          src={activeImage.url}
+        />
 
         {discountPercent || showHot ? (
           <div className="pointer-events-none absolute top-3 right-3 z-10 flex flex-col items-end gap-1.5">
@@ -362,25 +349,6 @@ function CloseIcon() {
       viewBox="0 0 24 24"
     >
       <path d="M6 6l12 12M18 6 6 18" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function ZoomInIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      className="size-5"
-      fill="none"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="1.75"
-      viewBox="0 0 24 24"
-    >
-      <circle cx="11" cy="11" r="7" />
-      <path d="m20 20-3.5-3.5" />
-      <path d="M11 8v6M8 11h6" />
     </svg>
   );
 }
