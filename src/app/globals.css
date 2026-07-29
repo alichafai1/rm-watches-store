@@ -48,10 +48,6 @@
   box-sizing: border-box;
 }
 
-html {
-  overflow-x: clip;
-}
-
 body {
   margin: 0;
   background: var(--color-background);

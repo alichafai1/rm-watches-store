@@ -83,39 +83,42 @@ export function ProductReviews({ reviews }: ProductReviewsProps) {
         Customer Reviews
       </h2>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:items-start lg:gap-12">
-        <aside className="self-start lg:sticky lg:top-20 lg:z-[5]">
-          <p className="text-4xl font-semibold tracking-tight text-neutral-950">
-            {averageRating.toFixed(1)}
-          </p>
-          <div className="mt-2 flex items-center gap-2">
-            <StarRow rating={averageRating} />
-            <span className="text-sm text-neutral-500">out of 5</span>
-          </div>
-          <p className="mt-2 text-sm text-neutral-600">
-            Based on {reviews.length} review{reviews.length === 1 ? "" : "s"}
-          </p>
+      <div className="mt-8 grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-12">
+        <div className="min-h-0">
+          <aside className="lg:sticky lg:top-20 lg:z-[5]">
+            <p className="text-4xl font-semibold tracking-tight text-neutral-950">
+              {averageRating.toFixed(1)}
+            </p>
+            <div className="mt-2 flex items-center gap-2">
+              <StarRow rating={averageRating} />
+              <span className="text-sm text-neutral-500">out of 5</span>
+            </div>
+            <p className="mt-2 text-sm text-neutral-600">
+              Based on {reviews.length} review
+              {reviews.length === 1 ? "" : "s"}
+            </p>
 
-          <div className="mt-5 grid gap-1.5">
-            {ratingRows.map((row) => (
-              <div
-                className="grid grid-cols-[2.75rem_1fr_1.25rem] items-center gap-2 text-xs text-neutral-600"
-                key={row.label}
-              >
-                <span className="tabular-nums">{row.label} star</span>
-                <div className="h-1.5 overflow-hidden rounded-full bg-neutral-200">
-                  <div
-                    className="h-full rounded-full bg-[#b08a3c]"
-                    style={{ width: `${row.percent}%` }}
-                  />
+            <div className="mt-5 grid gap-1.5">
+              {ratingRows.map((row) => (
+                <div
+                  className="grid grid-cols-[2.75rem_1fr_1.25rem] items-center gap-2 text-xs text-neutral-600"
+                  key={row.label}
+                >
+                  <span className="tabular-nums">{row.label} star</span>
+                  <div className="h-1.5 overflow-hidden rounded-full bg-neutral-200">
+                    <div
+                      className="h-full rounded-full bg-[#b08a3c]"
+                      style={{ width: `${row.percent}%` }}
+                    />
+                  </div>
+                  <span className="text-right tabular-nums text-neutral-500">
+                    {row.count}
+                  </span>
                 </div>
-                <span className="text-right tabular-nums text-neutral-500">
-                  {row.count}
-                </span>
-              </div>
-            ))}
-          </div>
-        </aside>
+              ))}
+            </div>
+          </aside>
+        </div>
 
         <div>
           <div className="divide-y divide-neutral-200 border-y border-neutral-200">
