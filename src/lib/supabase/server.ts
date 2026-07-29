@@ -32,7 +32,11 @@ function timedFetch(
 
 /** Public/anon client for general server reads. */
 export function createServerSupabaseClient() {
-  return createClient(getSupabaseUrl(), getSupabasePublishableKey(), {
+  return createTimedClient(getSupabaseUrl(), getSupabasePublishableKey());
+}
+
+function createTimedClient(url: string, key: string) {
+  return createClient(url, key, {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
@@ -49,19 +53,31 @@ export function createServerSupabaseClient() {
  * load even if the public key/RLS setup is incomplete.
  */
 export function createCmsReadSupabaseClient() {
+  const url = getSupabaseUrl();
   const serviceRoleKey = getSupabaseServiceRoleKey();
 
   if (serviceRoleKey) {
-    return createClient(getSupabaseUrl(), serviceRoleKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-      },
-      global: {
-        fetch: timedFetch,
-      },
-    });
+    return createTimedClient(url, serviceRoleKey);
   }
 
   return createServerSupabaseClient();
+}
+
+/** Candidates for CMS reads: service role first, then publishable/anon. */
+export function createCmsReadSupabaseClients() {
+  const url = getSupabaseUrl();
+  const clients = [];
+  const serviceRoleKey = getSupabaseServiceRoleKey();
+
+  if (serviceRoleKey) {
+    clients.push(createTimedClient(url, serviceRoleKey));
+  }
+
+  try {
+    clients.push(createTimedClient(url, getSupabasePublishableKey()));
+  } catch {
+    // Publishable key missing — service role alone may still work.
+  }
+
+  return clients;
 }

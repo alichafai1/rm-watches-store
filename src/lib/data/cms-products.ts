@@ -1,5 +1,5 @@
 import { hasUsableCmsEnv } from "@/lib/supabase/env";
-import { createCmsReadSupabaseClient } from "@/lib/supabase/server";
+import { createCmsReadSupabaseClients } from "@/lib/supabase/server";
 import type { CmsProductRecord } from "@/types/cms";
 import type {
   Product,
@@ -116,23 +116,29 @@ export async function getPublishedCmsProducts(): Promise<Product[]> {
   }
 
   try {
-    const supabase = createCmsReadSupabaseClient();
-    const { data, error } = await supabase
-      .from("cms_products")
-      .select("*")
-      .eq("status", "published")
-      .order("published_at", { ascending: false });
+    const clients = createCmsReadSupabaseClients();
+    let lastError: string | null = null;
 
-    if (error) {
-      console.error("[cms_products] Failed to load published products:", error.message);
-      return [];
+    for (const supabase of clients) {
+      const { data, error } = await supabase
+        .from("cms_products")
+        .select("*")
+        .eq("status", "published")
+        .order("published_at", { ascending: false });
+
+      if (!error) {
+        return data
+          ? (data as CmsProductRecord[]).map(mapCmsProductToProduct)
+          : [];
+      }
+
+      lastError = error.message;
     }
 
-    if (!data) {
-      return [];
+    if (lastError) {
+      console.error("[cms_products] Failed to load published products:", lastError);
     }
-
-    return (data as CmsProductRecord[]).map(mapCmsProductToProduct);
+    return [];
   } catch (error) {
     console.error("[cms_products] Unexpected error loading products:", error);
     return [];
@@ -147,27 +153,31 @@ export async function getPublishedCmsProductBySlug(
   }
 
   try {
-    const supabase = createCmsReadSupabaseClient();
-    const { data, error } = await supabase
-      .from("cms_products")
-      .select("*")
-      .eq("status", "published")
-      .eq("slug", slug)
-      .maybeSingle();
+    const clients = createCmsReadSupabaseClients();
+    let lastError: string | null = null;
 
-    if (error) {
+    for (const supabase of clients) {
+      const { data, error } = await supabase
+        .from("cms_products")
+        .select("*")
+        .eq("status", "published")
+        .eq("slug", slug)
+        .maybeSingle();
+
+      if (!error) {
+        return data ? mapCmsProductToProduct(data as CmsProductRecord) : null;
+      }
+
+      lastError = error.message;
+    }
+
+    if (lastError) {
       console.error(
         `[cms_products] Failed to load product "${slug}":`,
-        error.message,
+        lastError,
       );
-      return null;
     }
-
-    if (!data) {
-      return null;
-    }
-
-    return mapCmsProductToProduct(data as CmsProductRecord);
+    return null;
   } catch (error) {
     console.error(
       `[cms_products] Unexpected error loading product "${slug}":`,

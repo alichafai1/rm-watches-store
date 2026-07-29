@@ -1,17 +1,24 @@
+import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import {
+  getSupabasePublishableKey,
+  getSupabaseServiceRoleKey,
+  getSupabaseUrl,
   hasUsableCmsEnv,
   isLikelySupabaseProjectUrl,
 } from "@/lib/supabase/env";
-import { createCmsReadSupabaseClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
-function inspectUrl(raw: string | undefined) {
-  const value = (raw ?? "")
+function clean(raw: string | undefined) {
+  return (raw ?? "")
     .trim()
     .replace(/^['"]+|['"]+$/g, "")
     .trim();
+}
+
+function inspectUrl(raw: string | undefined) {
+  const value = clean(raw);
 
   if (!value) {
     return {
@@ -41,18 +48,73 @@ function inspectUrl(raw: string | undefined) {
   };
 }
 
+/** Safe fingerprint — never returns the full secret. */
+function inspectKey(raw: string | undefined) {
+  const value = clean(raw);
+  if (!value) {
+    return { present: false, length: 0, prefix: null as string | null };
+  }
+
+  return {
+    present: true,
+    length: value.length,
+    prefix: value.slice(0, 12),
+  };
+}
+
+async function probeKey(label: string, key: string | null) {
+  if (!key) {
+    return { label, ok: false, error: "missing", count: 0 };
+  }
+
+  try {
+    const supabase = createClient(getSupabaseUrl(), key, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const { data, error } = await supabase
+      .from("cms_products")
+      .select("id, title, slug, status")
+      .eq("status", "published")
+      .order("published_at", { ascending: false })
+      .limit(10);
+
+    return {
+      label,
+      ok: !error,
+      error: error?.message ?? null,
+      count: data?.length ?? 0,
+      products:
+        data?.map((row) => ({
+          title: row.title,
+          slug: row.slug,
+          status: row.status,
+        })) ?? [],
+    };
+  } catch (error) {
+    return {
+      label,
+      ok: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+      count: 0,
+      products: [],
+    };
+  }
+}
+
 export async function GET() {
   const urlInfo = inspectUrl(process.env.NEXT_PUBLIC_SUPABASE_URL);
-  const hasPublishableKey = Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim(),
+  const publishableInfo = inspectKey(
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   );
-  const hasAnonKey = Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim());
-  const hasServiceRole = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY?.trim());
-  const hasAdminIds = Boolean(process.env.ADMIN_USER_IDS?.trim());
+  const serviceRoleInfo = inspectKey(process.env.SUPABASE_SERVICE_ROLE_KEY);
+  const hasAdminIds = Boolean(clean(process.env.ADMIN_USER_IDS));
 
-  const fixHint = !urlInfo.looksLikeSupabase
-    ? "Set NEXT_PUBLIC_SUPABASE_URL on Vercel to https://YOUR_PROJECT.supabase.co (from Supabase → Project Settings → API). Current value is wrong (preview shows what Vercel has). Then Redeploy."
-    : null;
+  let fixHint: string | null = null;
+  if (!urlInfo.looksLikeSupabase) {
+    fixHint =
+      "Set NEXT_PUBLIC_SUPABASE_URL on Vercel to https://YOUR_PROJECT.supabase.co, then Redeploy.";
+  }
 
   if (!hasUsableCmsEnv()) {
     return NextResponse.json(
@@ -60,9 +122,8 @@ export async function GET() {
         ok: false,
         env: {
           url: urlInfo,
-          hasPublishableKey,
-          hasAnonKey,
-          hasServiceRole,
+          publishableKey: publishableInfo,
+          serviceRoleKey: serviceRoleInfo,
           hasAdminIds,
         },
         error: "Supabase env is not usable for CMS reads.",
@@ -74,51 +135,43 @@ export async function GET() {
     );
   }
 
+  const serviceRole = getSupabaseServiceRoleKey();
+  let publishable: string | null = null;
   try {
-    const supabase = createCmsReadSupabaseClient();
-    const { data, error } = await supabase
-      .from("cms_products")
-      .select("id, title, slug, status")
-      .eq("status", "published")
-      .order("published_at", { ascending: false })
-      .limit(10);
-
-    return NextResponse.json({
-      ok: !error,
-      env: {
-        url: urlInfo,
-        hasPublishableKey,
-        hasAnonKey,
-        hasServiceRole,
-        hasAdminIds,
-      },
-      error: error?.message ?? null,
-      fixHint: error ? fixHint : null,
-      publishedCount: data?.length ?? 0,
-      products:
-        data?.map((row) => ({
-          title: row.title,
-          slug: row.slug,
-          status: row.status,
-        })) ?? [],
-    });
-  } catch (error) {
-    return NextResponse.json(
-      {
-        ok: false,
-        env: {
-          url: urlInfo,
-          hasPublishableKey,
-          hasAnonKey,
-          hasServiceRole,
-          hasAdminIds,
-        },
-        error: error instanceof Error ? error.message : "Unknown error",
-        fixHint,
-        publishedCount: 0,
-        products: [],
-      },
-      { status: 500 },
-    );
+    publishable = getSupabasePublishableKey();
+  } catch {
+    publishable = null;
   }
+
+  const probes = await Promise.all([
+    probeKey("service_role", serviceRole),
+    probeKey("publishable", publishable),
+  ]);
+
+  const working = probes.find((probe) => probe.ok);
+
+  if (!working) {
+    fixHint =
+      "URL is OK, but API keys are invalid for this Supabase project. In Vercel, replace SUPABASE_SERVICE_ROLE_KEY and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY with keys from Supabase → Project Settings → API (same project as the URL). Then Redeploy.";
+  }
+
+  return NextResponse.json({
+    ok: Boolean(working),
+    env: {
+      url: urlInfo,
+      publishableKey: publishableInfo,
+      serviceRoleKey: serviceRoleInfo,
+      hasAdminIds,
+    },
+    probes: probes.map(({ label, ok, error, count }) => ({
+      label,
+      ok,
+      error,
+      count,
+    })),
+    error: working ? null : probes.map((p) => `${p.label}: ${p.error}`).join(" | "),
+    fixHint,
+    publishedCount: working?.count ?? 0,
+    products: working?.products ?? [],
+  });
 }
