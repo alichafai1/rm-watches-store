@@ -48,7 +48,7 @@ export function ProductCard({
           </Heading>
           <ProductRatingStars reviews={product.reviews} />
           <div className="flex flex-wrap items-baseline gap-2">
-            <p className="text-sm font-semibold text-neutral-950">
+            <p className="text-base font-semibold text-neutral-950">
               {formatPrice(product.price, product.currency)}
             </p>
             {product.compareAtPrice &&
