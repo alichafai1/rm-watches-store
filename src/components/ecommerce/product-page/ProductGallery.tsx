@@ -61,10 +61,36 @@ export function ProductGallery({
           alt={activeImage.alt || productTitle}
           className="aspect-[5/4] w-full rounded-[20px] bg-white shadow-none ring-0"
           imageClassName="object-contain"
+          onSwipeNext={
+            hasMultiple
+              ? () => selectImage(activeIndex + 1)
+              : undefined
+          }
+          onSwipePrevious={
+            hasMultiple
+              ? () => selectImage(activeIndex - 1)
+              : undefined
+          }
           priority
           sizes="(min-width: 1024px) 48vw, 100vw"
           src={activeImage.url}
         />
+
+        {hasMultiple ? (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 lg:hidden"
+          >
+            {galleryImages.map((image, index) => (
+              <span
+                className={`size-1.5 rounded-full transition ${
+                  index === activeIndex ? "bg-neutral-900" : "bg-neutral-300"
+                }`}
+                key={`${image.url}-dot-${index}`}
+              />
+            ))}
+          </div>
+        ) : null}
 
         {discountPercent || showHot ? (
           <div className="pointer-events-none absolute top-3 right-3 z-10 flex flex-col items-end gap-1.5">
