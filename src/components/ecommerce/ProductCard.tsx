@@ -53,7 +53,7 @@ export function ProductCard({
             </p>
             {product.compareAtPrice &&
             product.compareAtPrice > product.price ? (
-              <p className="text-sm text-neutral-400 line-through">
+              <p className="text-xs text-neutral-400 line-through">
                 {formatPrice(product.compareAtPrice, product.currency)}
               </p>
             ) : null}
