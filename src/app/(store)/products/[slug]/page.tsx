@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ProductAboutSection, ProductAboutImage } from "@/components/ecommerce/product-page/ProductAboutSection";
+import { ProductAboutSection } from "@/components/ecommerce/product-page/ProductAboutSection";
 import { ProductFaq } from "@/components/ecommerce/product-page/ProductFaq";
 import { ProductFeatures } from "@/components/ecommerce/product-page/ProductFeatures";
 import { ProductMainSection } from "@/components/ecommerce/product-page/ProductMainSection";
@@ -78,18 +78,15 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             collection={collection}
             product={product}
           />
-          <div className="mt-5 sm:mt-10 grid gap-10">
-            <ProductAboutImage about={product.about} />
-            <div className="grid gap-10 lg:grid-cols-[0.85fr_1fr_0.85fr] lg:items-start">
-              <ProductSpecifications
-                items={normalizeProductSpecifications({
-                  specifications: product.specifications,
-                  specificationDetails: product.specificationDetails,
-                })}
-              />
-              <ProductAboutSection about={product.about} textOnly />
-              <ProductFeatures features={product.features} />
-            </div>
+          <div className="mt-5 sm:mt-10 grid gap-10 lg:grid-cols-[0.85fr_1fr_0.85fr] lg:items-start">
+            <ProductSpecifications
+              items={normalizeProductSpecifications({
+                specifications: product.specifications,
+                specificationDetails: product.specificationDetails,
+              })}
+            />
+            <ProductAboutSection about={product.about} />
+            <ProductFeatures features={product.features} />
           </div>
           <div className="mt-10 grid gap-10">
             <ProductReviews reviews={product.reviews} />
