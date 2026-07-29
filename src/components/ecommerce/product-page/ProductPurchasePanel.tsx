@@ -100,24 +100,24 @@ export function ProductPurchasePanel({
           </p>
         </div>
 
-        <div className="mt-4 select-none">
+        <div className="mt-4 select-none [-webkit-user-drag:none] touch-pan-y">
           <div className="flex items-center justify-center gap-1.5 text-[11px] font-medium tracking-[0.04em] text-neutral-600">
             <LockIcon />
             <span>Guaranteed safe &amp; secure checkout</span>
           </div>
           <ul
             aria-label="Accepted payment methods"
-            className="mt-2.5 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 overscroll-none touch-manipulation"
+            className="mt-2.5 flex flex-wrap items-center justify-center gap-x-2 gap-y-2 overflow-hidden overscroll-none touch-pan-y"
           >
             {paymentMethods.map((method) => (
               <li
-                className="relative flex h-6 items-center justify-center sm:h-8"
+                className="relative flex h-6 items-center justify-center overflow-hidden sm:h-8"
                 key={method.name}
                 title={method.name}
               >
                 <Image
                   alt={method.name}
-                  className="pointer-events-none object-contain"
+                  className="pointer-events-none select-none object-contain [-webkit-user-drag:none]"
                   draggable={false}
                   height={24}
                   src={paymentIconUrl(method.path)}
