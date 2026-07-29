@@ -15,11 +15,11 @@ const sizeClassName: Record<NonNullable<ContainerProps["size"]>, string> = {
   "2xl": "max-w-[var(--container-2xl)]",
 };
 
-export function Container({ children, className, size = "xl" }: ContainerProps) {
+export function Container({ children, className, size = "2xl" }: ContainerProps) {
   return (
     <div
       className={cn(
-        "mx-auto w-full px-4 sm:px-6",
+        "mx-auto w-full px-4 sm:px-6 lg:px-8 xl:px-10",
         sizeClassName[size],
         className,
       )}

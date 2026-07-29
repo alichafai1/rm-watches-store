@@ -27,10 +27,10 @@
   --space-20: 5rem;
   --space-page-y: clamp(2rem, 5vw, 4rem);
   --container-sm: 40rem;
-  --container-md: 48rem;
-  --container-lg: 64rem;
-  --container-xl: 72rem;
-  --container-2xl: 80rem;
+  --container-md: 56rem;
+  --container-lg: 72rem;
+  --container-xl: 90rem;
+  --container-2xl: 100rem;
   --radius-xs: 0.125rem;
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
