@@ -22,20 +22,12 @@ export function ProductAboutSection({ about }: ProductAboutSectionProps) {
           className={[
             "max-w-prose text-[15px] leading-7 text-neutral-700",
             "[&_p]:mb-4 [&_p:last-child]:mb-0",
-            "[&_strong]:font-semibold [&_strong]:text-neutral-950",
-            "[&_b]:font-semibold [&_b]:text-neutral-950",
+            "[&_strong]:font-semibold [&_strong]:text-neutral-800",
+            "[&_b]:font-semibold [&_b]:text-neutral-800",
             "[&_em]:italic",
             "[&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-5",
             "[&_ol]:mb-4 [&_ol]:list-decimal [&_ol]:pl-5",
             "[&_li]:mb-1",
-            // Drop cap on the first paragraph
-            "[&_p:first-of-type]:first-letter:float-left",
-            "[&_p:first-of-type]:first-letter:mr-2",
-            "[&_p:first-of-type]:first-letter:mt-1",
-            "[&_p:first-of-type]:first-letter:font-semibold",
-            "[&_p:first-of-type]:first-letter:text-5xl",
-            "[&_p:first-of-type]:first-letter:leading-none",
-            "[&_p:first-of-type]:first-letter:text-neutral-950",
           ].join(" ")}
           dangerouslySetInnerHTML={{ __html: descriptionHtml }}
         />
