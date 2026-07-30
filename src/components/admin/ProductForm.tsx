@@ -13,6 +13,7 @@ import { SpecRowsEditor } from "@/components/admin/SpecRowsEditor";
 import { VariantRowsEditor } from "@/components/admin/VariantRowsEditor";
 import { FaqRowsEditor } from "@/components/admin/FaqRowsEditor";
 import { ReviewRowsEditor } from "@/components/admin/ReviewRowsEditor";
+import { RichTextField } from "@/components/admin/RichTextField";
 import {
   deleteProductAction,
   saveProductAction,
@@ -216,13 +217,17 @@ export function ProductForm({ product, collections }: ProductFormProps) {
             name="about_title"
           />
         </Field>
-        <Field label="About description">
-          <textarea
-            className={textareaClassName}
+        <div className="grid gap-1.5 text-sm">
+          <span className="font-medium text-neutral-800">About description</span>
+          <RichTextField
             defaultValue={product?.about?.description ?? ""}
             name="about_description"
           />
-        </Field>
+          <span className="text-xs text-neutral-500">
+            Paste your formatted text here. Bold text and paragraph breaks are
+            kept. Use Bold for important points.
+          </span>
+        </div>
       </section>
 
       <section className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-5">

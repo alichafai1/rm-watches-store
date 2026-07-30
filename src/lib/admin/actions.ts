@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAdmin, requireAdminDb } from "@/lib/auth/admin";
 import { parseSpecificationRows } from "@/lib/utils/specifications";
+import { sanitizeAboutHtml } from "@/lib/utils/rich-text";
 import type { CmsArticleRecord, CmsProductRecord } from "@/types/cms";
 
 const statusSchema = z.enum(["draft", "published", "archived"]);
@@ -211,11 +212,14 @@ export async function saveProductAction(formData: FormData) {
   }
 
   const slug = slugify(slugInput || title);
+  const aboutDescription = sanitizeAboutHtml(
+    String(formData.get("about_description") ?? ""),
+  );
   const payload = {
     title,
     slug,
     short_description: "",
-    description: String(formData.get("about_description") ?? ""),
+    description: aboutDescription,
     price: resolvedPrice,
     compare_at_price,
     currency: String(formData.get("currency") ?? "USD"),
@@ -235,7 +239,7 @@ export async function saveProductAction(formData: FormData) {
     features,
     about: {
       title: String(formData.get("about_title") ?? title),
-      description: String(formData.get("about_description") ?? ""),
+      description: aboutDescription,
       image: description_image ?? {
         url: "/images/placeholders/watch-placeholder.svg",
         alt: title,
