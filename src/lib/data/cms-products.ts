@@ -1,5 +1,7 @@
 import { hasUsableCmsEnv } from "@/lib/supabase/env";
 import { createCmsReadSupabaseClients } from "@/lib/supabase/server";
+import { mockCollections } from "@/mock/collections";
+import { mockNewArrivalCollections } from "@/mock/new-arrival-collections";
 import type { CmsProductRecord } from "@/types/cms";
 import type {
   Product,
@@ -44,6 +46,20 @@ function defaultAbout(
       width: 800,
       height: 800,
     },
+  };
+}
+
+function resolveCollectionReference(record: CmsProductRecord) {
+  const matched =
+    mockCollections.find((collection) => collection.id === record.collection_id) ??
+    mockNewArrivalCollections.find(
+      (collection) => collection.id === record.collection_id,
+    );
+
+  return {
+    id: record.collection_id,
+    name: matched?.name || record.collection_name || "Collection",
+    slug: matched?.slug || record.collection_slug || "collection",
   };
 }
 
@@ -107,11 +123,7 @@ export function mapCmsProductToProduct(record: CmsProductRecord): Product {
             },
           ],
     collectionId: record.collection_id,
-    collection: {
-      id: record.collection_id,
-      name: record.collection_name || "Collection",
-      slug: record.collection_slug || "collection",
-    },
+    collection: resolveCollectionReference(record),
     gender: record.gender || "unisex",
     movement: record.movement || "automatic",
     style: record.style || "sport",

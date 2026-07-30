@@ -1,5 +1,6 @@
 import type { Collection } from "@/types/collection";
 import { createDefaultCollectionFaq } from "@/lib/data/collection-faq";
+import { slugifyText } from "@/lib/utils/text";
 
 const rm0701CollectionImage = {
   url: "https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/richard-mille-rm-07-01-black-ceramic-diamond-watch.webp",
@@ -991,5 +992,6 @@ export const mockNewArrivalCollections: Collection[] = newArrivalNumbers.map(
   },
 ).map((collection) => ({
   ...collection,
+  slug: slugifyText(collection.name),
   faq: collection.faq ?? createDefaultCollectionFaq(collection.name),
 }));

@@ -1,3 +1,4 @@
+import { mockCollections } from "@/mock/collections";
 import type { Product, ProductCollectionReference } from "@/types/product";
 
 const placeholderImage = {
@@ -100,10 +101,14 @@ function createProductPageData(
 }
 
 function createCollectionReference(collectionNumber: number): ProductCollectionReference {
+  const collection = mockCollections.find(
+    (item) => item.id === String(collectionNumber),
+  );
+
   return {
     id: String(collectionNumber),
-    name: `Collection ${collectionNumber}`,
-    slug: `collection-${collectionNumber}`,
+    name: collection?.name ?? `Collection ${collectionNumber}`,
+    slug: collection?.slug ?? `collection-${collectionNumber}`,
   };
 }
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { CollectionFaq } from "@/components/collections/CollectionFaq";
 import { CollectionHeader } from "@/components/collections/CollectionHeader";
 import { CollectionProductGrid } from "@/components/collections/CollectionProductGrid";
@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import {
+  getCollectionByLegacySlug,
   getCollectionBySlug,
   getCollectionProducts,
   getCollections,
@@ -35,13 +36,14 @@ export async function generateMetadata({
   params,
 }: CollectionPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const collection = getCollectionBySlug(slug);
+  const collection =
+    getCollectionBySlug(slug) ?? getCollectionByLegacySlug(slug);
   const title = collection?.seoTitle ?? titleFromSlug(slug);
 
   return createPageMetadata({
     title,
     description: collection?.seoDescription ?? collection?.description,
-    pathname: `/collections/${slug}`,
+    pathname: `/collections/${collection?.slug ?? slug}`,
   });
 }
 
@@ -49,6 +51,11 @@ export default async function CollectionDetailPage({
   params,
 }: CollectionPageProps) {
   const { slug } = await params;
+  const legacyCollection = getCollectionByLegacySlug(slug);
+  if (legacyCollection) {
+    permanentRedirect(`/collections/${legacyCollection.slug}`);
+  }
+
   const collection = getCollectionBySlug(slug);
 
   if (!collection) {

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { CollectionFaq } from "@/components/collections/CollectionFaq";
 import { CollectionHeader } from "@/components/collections/CollectionHeader";
 import { CollectionProductGrid } from "@/components/collections/CollectionProductGrid";
@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import {
+  getNewArrivalCollectionByLegacySlug,
   getNewArrivalCollectionBySlug,
   getNewArrivalCollectionProducts,
   getNewArrivalCollections,
@@ -35,13 +36,15 @@ export async function generateMetadata({
   params,
 }: NewArrivalCollectionPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const collection = getNewArrivalCollectionBySlug(slug);
+  const collection =
+    getNewArrivalCollectionBySlug(slug) ??
+    getNewArrivalCollectionByLegacySlug(slug);
   const title = collection?.seoTitle ?? titleFromSlug(slug);
 
   return createPageMetadata({
     title,
     description: collection?.seoDescription ?? collection?.description,
-    pathname: `/new-arrival-collections/${slug}`,
+    pathname: `/new-arrival-collections/${collection?.slug ?? slug}`,
   });
 }
 
@@ -49,6 +52,11 @@ export default async function NewArrivalCollectionDetailPage({
   params,
 }: NewArrivalCollectionPageProps) {
   const { slug } = await params;
+  const legacyCollection = getNewArrivalCollectionByLegacySlug(slug);
+  if (legacyCollection) {
+    permanentRedirect(`/new-arrival-collections/${legacyCollection.slug}`);
+  }
+
   const collection = getNewArrivalCollectionBySlug(slug);
 
   if (!collection) {

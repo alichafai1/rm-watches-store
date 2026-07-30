@@ -13,6 +13,18 @@ export function getNewArrivalCollectionBySlug(slug: string) {
   );
 }
 
+/** Old URLs like /new-arrival-collections/new-arrival-1 still resolve for redirects. */
+export function getNewArrivalCollectionByLegacySlug(slug: string) {
+  const match = /^new-arrival-(\d+)$/.exec(slug);
+  if (!match) {
+    return undefined;
+  }
+
+  return mockNewArrivalCollections.find(
+    (collection) => collection.id === `na-${match[1]}`,
+  );
+}
+
 export function getFeaturedNewArrivalCollections(limit = 23) {
   return mockNewArrivalCollections.slice(0, limit);
 }
