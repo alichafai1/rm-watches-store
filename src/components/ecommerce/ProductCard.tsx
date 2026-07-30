@@ -21,6 +21,14 @@ export function ProductCard({
 }: ProductCardProps) {
   const image = product.images[0];
   const Heading = headingLevel;
+  const imageFrameClassName =
+    product.slug ===
+    "best-richard-mille-rm001-replica-men-s-tourbillon-watch-swiss-movement"
+      ? "scale-[1.18]"
+      : product.slug ===
+          "umi-richard-mille-rm-67-02-alexis-pinturault-white-quartz-tpt-carbon-blue-strap-automatic-replica-watch"
+        ? "scale-[0.9] translate-y-[8%]"
+        : undefined;
 
   return (
     <article
@@ -31,14 +39,12 @@ export function ProductCard({
     >
       <Link className="grid gap-4" href={`/products/${product.slug}`}>
         {image ? (
-          <div className="aspect-square w-full overflow-hidden rounded-xl">
+          <div className="aspect-square w-full overflow-hidden rounded-xl bg-white">
             <Image
               alt={image.alt}
               className={cn(
                 "h-full w-full object-cover",
-                product.slug ===
-                  "best-richard-mille-rm001-replica-men-s-tourbillon-watch-swiss-movement" &&
-                  "scale-[1.18]",
+                imageFrameClassName,
               )}
               height={image.height}
               src={image.url}
