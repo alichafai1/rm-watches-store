@@ -24,11 +24,11 @@ export function ProductCard({
   const imageFrameClassName =
     product.slug ===
     "best-richard-mille-rm001-replica-men-s-tourbillon-watch-swiss-movement"
-      ? "scale-[1.18]"
+      ? "scale-[1.18] object-cover"
       : product.slug ===
           "umi-richard-mille-rm-67-02-alexis-pinturault-white-quartz-tpt-carbon-blue-strap-automatic-replica-watch"
-        ? "scale-[0.9] translate-y-[8%]"
-        : undefined;
+        ? "object-contain object-center scale-[0.92] translate-y-[4%]"
+        : "object-cover";
 
   return (
     <article
@@ -42,10 +42,7 @@ export function ProductCard({
           <div className="aspect-square w-full overflow-hidden rounded-xl bg-white">
             <Image
               alt={image.alt}
-              className={cn(
-                "h-full w-full object-cover",
-                imageFrameClassName,
-              )}
+              className={cn("h-full w-full", imageFrameClassName)}
               height={image.height}
               src={image.url}
               width={image.width}
