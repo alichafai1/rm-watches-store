@@ -47,6 +47,12 @@ export function ProductMainSection({
       <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
         <ProductGallery
           discountPercent={discountPercent}
+          imageScale={
+            product.slug ===
+            "best-richard-mille-rm001-replica-men-s-tourbillon-watch-swiss-movement"
+              ? 1.18
+              : 1
+          }
           images={product.images}
           productTitle={product.title}
           showHot={product.isBestSeller}

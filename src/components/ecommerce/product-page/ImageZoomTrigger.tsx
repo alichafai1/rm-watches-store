@@ -18,6 +18,8 @@ type ImageZoomTriggerProps = {
   sizes: string;
   priority?: boolean;
   children?: ReactNode;
+  /** Resting display scale (crop-in). Default 1 */
+  displayScale?: number;
   /** Zoom scale when clicked. Default 2.4 */
   zoomScale?: number;
   onSwipeNext?: () => void;
@@ -58,6 +60,7 @@ export function ImageZoomTrigger({
   sizes,
   priority = false,
   children,
+  displayScale = 1,
   zoomScale = 2.4,
   onSwipeNext,
   onSwipePrevious,
@@ -165,8 +168,12 @@ export function ImageZoomTrigger({
         sizes={sizes}
         src={src}
         style={{
-          transform: isZoomed ? `scale(${zoomScale})` : "scale(1)",
-          transformOrigin: `${origin.x}% ${origin.y}%`,
+          transform: isZoomed
+            ? `scale(${zoomScale})`
+            : `scale(${displayScale})`,
+          transformOrigin: isZoomed
+            ? `${origin.x}% ${origin.y}%`
+            : "50% 50%",
         }}
       />
 

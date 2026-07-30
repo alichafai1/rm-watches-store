@@ -10,6 +10,8 @@ type ProductGalleryProps = {
   productTitle: string;
   discountPercent?: number;
   showHot?: boolean;
+  /** Slight crop-in on gallery images. Default 1 */
+  imageScale?: number;
 };
 
 function clampIndex(index: number, length: number) {
@@ -25,6 +27,7 @@ export function ProductGallery({
   productTitle,
   discountPercent,
   showHot = false,
+  imageScale = 1,
 }: ProductGalleryProps) {
   const labelId = useId();
   const galleryImages = images.length > 0 ? images : [];
@@ -60,6 +63,7 @@ export function ProductGallery({
         <ImageZoomTrigger
           alt={activeImage.alt || productTitle}
           className="aspect-[5/4] w-full rounded-[20px] bg-white shadow-none ring-0"
+          displayScale={imageScale}
           imageClassName="object-contain"
           onSwipeNext={
             hasMultiple
@@ -132,6 +136,11 @@ export function ProductGallery({
                   fill
                   sizes="110px"
                   src={image.url}
+                  style={
+                    imageScale !== 1
+                      ? { transform: `scale(${imageScale})` }
+                      : undefined
+                  }
                 />
               </button>
             );
