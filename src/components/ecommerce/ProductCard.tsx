@@ -27,7 +27,7 @@ export function ProductCard({
       ? "scale-[1.18] object-cover"
       : product.slug ===
           "umi-richard-mille-rm-67-02-alexis-pinturault-white-quartz-tpt-carbon-blue-strap-automatic-replica-watch"
-        ? "object-contain object-center scale-[0.92] translate-y-[4%]"
+        ? "object-contain object-center scale-[1.08] translate-y-[3%]"
         : "object-cover";
 
   return (
