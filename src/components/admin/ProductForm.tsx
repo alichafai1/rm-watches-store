@@ -155,8 +155,8 @@ export function ProductForm({ product, collections }: ProductFormProps) {
       <section className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-5">
         <h2 className="text-lg font-semibold">Gallery images</h2>
         <p className="text-sm text-neutral-600">
-          Main product photos shown in the product gallery. Upload photos, then
-          write alt text for each one.
+          Main product photos shown in the product gallery. Upload photos, set
+          the order (first image is main), then write alt text for each one.
         </p>
         <ImageUploader
           initialImages={product?.images ?? []}
