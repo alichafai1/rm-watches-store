@@ -31,13 +31,20 @@ export function ProductCard({
     >
       <Link className="grid gap-4" href={`/products/${product.slug}`}>
         {image ? (
-          <Image
-            alt={image.alt}
-            className="aspect-square w-full rounded-xl object-cover"
-            height={image.height}
-            src={image.url}
-            width={image.width}
-          />
+          <div className="aspect-square w-full overflow-hidden rounded-xl">
+            <Image
+              alt={image.alt}
+              className={cn(
+                "h-full w-full object-cover",
+                product.slug ===
+                  "best-richard-mille-rm001-replica-men-s-tourbillon-watch-swiss-movement" &&
+                  "scale-[1.28]",
+              )}
+              height={image.height}
+              src={image.url}
+              width={image.width}
+            />
+          </div>
         ) : null}
         <div className="grid gap-2 px-1 pb-1">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-[#9f7d3f]">
