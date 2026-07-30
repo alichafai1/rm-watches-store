@@ -165,25 +165,6 @@ export function ProductForm({ product, collections }: ProductFormProps) {
       </section>
 
       <section className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-5">
-        <h2 className="text-lg font-semibold">Description image</h2>
-        <p className="text-sm text-neutral-600">
-          This image appears in the product description / about section (separate
-          from gallery images).
-        </p>
-        <ImageUploader
-          initialImages={
-            product?.description_image
-              ? [product.description_image]
-              : product?.about?.image
-                ? [product.about.image]
-                : []
-          }
-          multiple={false}
-          name="description_image"
-        />
-      </section>
-
-      <section className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-5">
         <h2 className="text-lg font-semibold">Versions</h2>
         <VariantRowsEditor
           fallbackPrice={Number(product?.price ?? 0)}
