@@ -50,7 +50,7 @@ export function ProductMainSection({
           imageScale={
             product.slug ===
             "best-richard-mille-rm001-replica-men-s-tourbillon-watch-swiss-movement"
-              ? 1.18
+              ? 1.32
               : 1
           }
           images={product.images}
