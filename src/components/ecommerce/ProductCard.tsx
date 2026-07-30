@@ -38,7 +38,7 @@ export function ProductCard({
                 "h-full w-full object-cover",
                 product.slug ===
                   "best-richard-mille-rm001-replica-men-s-tourbillon-watch-swiss-movement" &&
-                  "scale-[1.28]",
+                  "scale-[1.18]",
               )}
               height={image.height}
               src={image.url}
