@@ -18,6 +18,22 @@ function slugify(value: string) {
     .replace(/^-|-$/g, "");
 }
 
+function parseMoney(value: FormDataEntryValue | number | string | null | undefined) {
+  if (typeof value === "number") {
+    return Number.isFinite(value) ? value : 0;
+  }
+
+  const raw = String(value ?? "")
+    .trim()
+    .replace(/,/g, "");
+  if (!raw) {
+    return 0;
+  }
+
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
 function parseJsonArray(value: FormDataEntryValue | null) {
   if (typeof value !== "string" || !value.trim()) {
     return [];
@@ -121,13 +137,10 @@ export async function saveProductAction(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
   const slugInput = String(formData.get("slug") ?? "").trim();
   const status = statusSchema.parse(String(formData.get("status") ?? "draft"));
-  const price = Number(formData.get("price") ?? 0);
+  const basePrice = parseMoney(formData.get("price"));
   const compareAtRaw = String(formData.get("compare_at_price") ?? "").trim();
-  const compareAtParsed = compareAtRaw === "" ? null : Number(compareAtRaw);
   const compare_at_price =
-    compareAtParsed !== null && Number.isFinite(compareAtParsed)
-      ? compareAtParsed
-      : null;
+    compareAtRaw === "" ? null : parseMoney(compareAtRaw);
   const images = parseJsonArray(formData.get("images")) as CmsProductRecord["images"];
   const description_image =
     parseProductImage(formData.get("description_image")) ??
@@ -139,30 +152,33 @@ export async function saveProductAction(formData: FormData) {
   );
   const rawVariants = parseJsonArray(formData.get("variants")) as Array<{
     name?: string;
-    price?: number;
+    price?: number | string;
     description?: string;
   }>;
   const variants = rawVariants
     .map((variant) => ({
       name: String(variant.name ?? "").trim(),
-      price: Number(variant.price),
+      price: parseMoney(variant.price ?? 0),
       description: String(variant.description ?? "").trim(),
     }))
-    .filter((variant) => variant.name.length > 0)
-    .map((variant) => ({
-      ...variant,
-      price: Number.isFinite(variant.price) ? variant.price : 0,
-    }));
-  const baseVariantPrice = Number.isFinite(price) ? price : 0;
+    .filter((variant) => variant.name.length > 0);
+  const defaultVariants = [
+    { name: "AAAAA Clone", price: basePrice, description: "" },
+    { name: "1:1 Clone", price: basePrice, description: "" },
+    { name: "Top 1:1 Clone", price: basePrice, description: "" },
+  ];
+  const seededVariants = variants.length > 0 ? variants : defaultVariants;
+  const uniqueVariantPrices = new Set(seededVariants.map((variant) => variant.price));
+  // If every version shares one price (including all 0), apply Base price to all.
+  // If versions already have different prices, keep them and only fill zeros from Base.
   const resolvedVariants =
-    variants.length > 0
-      ? variants
-      : [
-          { name: "AAAAA Clone", price: baseVariantPrice, description: "" },
-          { name: "1:1 Clone", price: baseVariantPrice, description: "" },
-          { name: "Top 1:1 Clone", price: baseVariantPrice, description: "" },
-        ];
-  const resolvedPrice = resolvedVariants[0]?.price ?? (Number.isFinite(price) ? price : 0);
+    uniqueVariantPrices.size <= 1
+      ? seededVariants.map((variant) => ({ ...variant, price: basePrice }))
+      : seededVariants.map((variant) => ({
+          ...variant,
+          price: variant.price > 0 ? variant.price : basePrice,
+        }));
+  const resolvedPrice = basePrice;
 
   const rawFaq = parseJsonArray(formData.get("faq")) as Array<{
     question?: string;

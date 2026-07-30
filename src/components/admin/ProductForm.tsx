@@ -60,7 +60,7 @@ export function ProductForm({ product, collections }: ProductFormProps) {
           </Field>
           <Field
             label="Base price"
-            hint="Used as the default price. Version prices below can override this on the product page."
+            hint="This is the product price. If all version prices below are the same (or 0), they update to match this when you save."
           >
             <input
               className={inputClassName}
