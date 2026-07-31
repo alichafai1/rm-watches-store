@@ -53,9 +53,6 @@ export function ProductCard({
           </div>
         ) : null}
         <div className="grid gap-2 px-1 pb-1">
-          <p className="text-xs font-medium uppercase tracking-[0.18em] text-[#9f7d3f]">
-            {product.movement}
-          </p>
           <Heading className="text-base font-semibold tracking-tight text-neutral-950">
             {product.title}
           </Heading>
