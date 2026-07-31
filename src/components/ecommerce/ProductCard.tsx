@@ -30,7 +30,7 @@ export function ProductCard({
         ? "object-contain object-center scale-[1.14] translate-y-[3%]"
         : product.slug ===
             "best-replica-richard-mille-rm67-02-super-clone-47mm-skeleton-dial-carbon-fiber-watch"
-          ? "object-contain object-center scale-[0.9]"
+          ? "object-contain object-center scale-[1.08]"
           : "object-cover";
 
   return (
