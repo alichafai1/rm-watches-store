@@ -28,7 +28,10 @@ export function ProductCard({
       : product.slug ===
           "umi-richard-mille-rm-67-02-alexis-pinturault-white-quartz-tpt-carbon-blue-strap-automatic-replica-watch"
         ? "object-contain object-center scale-[1.14] translate-y-[3%]"
-        : "object-cover";
+        : product.slug ===
+            "best-replica-richard-mille-rm67-02-super-clone-47mm-skeleton-dial-carbon-fiber-watch"
+          ? "object-contain object-center scale-[0.9]"
+          : "object-cover";
 
   return (
     <article
