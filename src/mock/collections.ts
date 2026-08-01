@@ -3,7 +3,7 @@ import { createDefaultCollectionFaq } from "@/lib/data/collection-faq";
 import { slugifyText } from "@/lib/utils/text";
 
 const collectionNumbers = [
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21,
 ] as const;
 
 const rm2101CollectionImage = {
@@ -149,6 +149,22 @@ const rm030CollectionImage = {
   width: 2160,
   height: 2160,
   objectClassName: "scale-[1.70] translate-y-2",
+};
+
+const rm035CollectionImage = {
+  url: "https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/Richard%20Mille%20RM%20035%20replica.webp",
+  alt: "Richard Mille RM 035 Richard mille replica super clone richard mille watches ",
+  width: 1280,
+  height: 1280,
+  objectClassName: "scale-[1.60] translate-y-2",
+};
+
+const rm037CollectionImage = {
+  url: "https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/Richard%20Mille%20RM%20037%20replica.webp",
+  alt: "Richard Mille RM 037 Richard mille replica super clone richard mille watches ",
+  width: 1280,
+  height: 1280,
+  objectClassName: "scale-[1.60] translate-y-2",
 };
 
 export const mockCollections: Collection[] = collectionNumbers.map((number): Collection => {
@@ -991,6 +1007,100 @@ export const mockCollections: Collection[] = collectionNumbers.map((number): Col
         seoTitle: "RM 030 | Watch Collection",
         seoDescription:
           "Explore the Richard Mille RM 030 replica collection featuring skeleton dials, lightweight materials, and premium 1:1 super clone craftsmanship.",
+      };
+    }
+
+    if (number === 20) {
+      return {
+        id: "20",
+        name: "RM 035",
+        slug,
+        description:
+          "Discover our curated selection of watches designed for style, precision, and everyday wear.",
+        about:
+          "The Richard Mille RM 035 collection captures the spirit of high-performance luxury, blending ultra-light construction with a bold skeleton dial aesthetic. For collectors seeking a premium Richard Mille replica, this lineup delivers the striking presence of the iconic RM 35 series in meticulously finished 1:1 form. Each Richard Mille super clone in this range showcases advanced case architecture, open-worked dials, and sport-ready proportions inspired by the original. Whether you are exploring a Richard Mille replica watch for daily wear or looking for a refined Richard Mille skeleton watch statement piece, our RM 035 selection emphasizes precision finishing and authentic detailing. Discover top-tier Richard Mille watch replica options that bring the RM 35 look to life with exceptional craftsmanship and everyday wearability.",
+        image: rm035CollectionImage,
+        faq: [
+          {
+            question: "What makes the RM 035 collection distinctive?",
+            answer:
+              "The RM 035 collection is known for its lightweight case, open-worked dial, and high-performance design language. Our Richard Mille replica versions preserve that athletic silhouette and mechanical aesthetic in premium 1:1 form.",
+          },
+          {
+            question:
+              "How does an RM 035 Richard Mille super clone compare to the original?",
+            answer:
+              "A high-quality Richard Mille super clone is built to mirror the original's proportions, finishing, and skeleton dial character. When comparing a Richard Mille replica vs original, top-tier pieces emphasize weight balance, case detailing, and overall visual fidelity.",
+          },
+          {
+            question:
+              "Is the RM 035 a good choice for a sporty Richard Mille replica watch?",
+            answer:
+              "Yes. The RM 035 profile suits collectors who want a bold, performance-driven Richard Mille watch replica with a lightweight feel and strong wrist presence for everyday wear.",
+          },
+          {
+            question:
+              "Where can I buy an RM 035 Richard Mille replica for sale?",
+            answer:
+              "You can browse our curated RM 035 collection online for verified Richard Mille replicas with clear product photography, specifications, and secure checkout.",
+          },
+          {
+            question:
+              "Do your RM 035 Richard Mille skeleton watch replicas show the movement?",
+            answer:
+              "Yes. Premium Richard Mille skeleton watch replicas in this collection highlight the open-worked dial so the mechanical architecture remains a central part of the design.",
+          },
+        ],
+        seoTitle: "RM 035 | Watch Collection",
+        seoDescription:
+          "Explore the Richard Mille RM 035 replica collection featuring lightweight cases, skeleton dials, and premium 1:1 super clone craftsmanship.",
+      };
+    }
+
+    if (number === 21) {
+      return {
+        id: "21",
+        name: "RM 037",
+        slug,
+        description:
+          "Discover our curated selection of watches designed for style, precision, and everyday wear.",
+        about:
+          "The Richard Mille RM 037 collection brings refined tonneau elegance together with a sophisticated skeleton dial presentation. Designed for collectors who want a more elegant Richard Mille replica statement, this lineup balances feminine proportions with mechanical complexity. Each Richard Mille super clone in the RM 037 range is finished to capture the original's refined case lines, open-worked architecture, and luxury detailing. Whether you are searching for a polished Richard Mille replica watch or a distinctive Richard Mille skeleton watch for formal and everyday wear, our curated RM 037 selection focuses on precision finishing and authentic design cues. Explore premium Richard Mille watch replica options that deliver the RM 037 look with exceptional clarity and craftsmanship.",
+        image: rm037CollectionImage,
+        faq: [
+          {
+            question: "What defines the RM 037 collection?",
+            answer:
+              "The RM 037 collection is recognized for its elegant tonneau case, refined finishing, and open-worked dial. Our Richard Mille replica versions preserve that sophisticated silhouette in high-grade 1:1 form.",
+          },
+          {
+            question:
+              "How does an RM 037 Richard Mille super clone compare to the original?",
+            answer:
+              "A premium Richard Mille super clone aims to mirror the original proportions, case finishing, and skeleton dial character. In a Richard Mille replica vs original comparison, top-tier pieces prioritize visual fidelity and refined wrist presence.",
+          },
+          {
+            question:
+              "Is the RM 037 suitable as an elegant Richard Mille replica watch?",
+            answer:
+              "Yes. The RM 037 profile is ideal for collectors seeking a more refined Richard Mille watch replica with elegant proportions and distinctive mechanical detailing.",
+          },
+          {
+            question:
+              "Where can I find an RM 037 Richard Mille replica for sale?",
+            answer:
+              "Browse our RM 037 collection for carefully selected Richard Mille replicas with detailed imagery, clear specifications, and secure online purchasing.",
+          },
+          {
+            question:
+              "Do RM 037 Richard Mille skeleton watch replicas feature open dials?",
+            answer:
+              "Yes. Our Richard Mille skeleton watch replicas in this collection showcase open-worked dials that highlight the mechanical architecture and signature RM aesthetic.",
+          },
+        ],
+        seoTitle: "RM 037 | Watch Collection",
+        seoDescription:
+          "Explore the Richard Mille RM 037 replica collection featuring elegant tonneau cases, skeleton dials, and premium 1:1 super clone craftsmanship.",
       };
     }
 
