@@ -2,7 +2,7 @@ import type { User } from "@supabase/supabase-js";
 import { createServerSupabaseAuthClient } from "@/lib/supabase/auth-server";
 import { createServiceRoleSupabaseClient } from "@/lib/supabase/service-role";
 
-function getAdminUserIds() {
+function getAdminAllowlist() {
   return (process.env.ADMIN_USER_IDS ?? "")
     .split(",")
     .map((value) => value.trim())
@@ -14,7 +14,18 @@ export function isAdminUser(user: User | null | undefined) {
     return false;
   }
 
-  return getAdminUserIds().includes(user.id);
+  const allowlist = getAdminAllowlist();
+  if (allowlist.includes(user.id)) {
+    return true;
+  }
+
+  const email = user.email?.trim().toLowerCase();
+  if (!email) {
+    return false;
+  }
+
+  // Allow email entries in ADMIN_USER_IDS as a fallback when the UUID is missing/wrong.
+  return allowlist.some((entry) => entry.toLowerCase() === email);
 }
 
 export async function getAdminSession() {

@@ -74,11 +74,13 @@ export async function adminLoginAction(formData: FormData) {
     password,
   });
 
-  if (error || !data.user || !isAdminUser(data.user)) {
-    if (data.user && !isAdminUser(data.user)) {
-      await supabase.auth.signOut();
-    }
+  if (error || !data.user) {
     redirect(`/admin/login?error=invalid`);
+  }
+
+  if (!isAdminUser(data.user)) {
+    await supabase.auth.signOut();
+    redirect(`/admin/login?error=unauthorized`);
   }
 
   redirect(next.startsWith("/admin") ? next : "/admin");

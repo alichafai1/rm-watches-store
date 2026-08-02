@@ -30,9 +30,16 @@ export default async function AdminLoginPage({
           Only your authorized account can open the dashboard.
         </p>
 
-        {params.error ? (
+        {params.error === "unauthorized" ? (
           <p className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-            Invalid credentials or unauthorized account.
+            Signed in, but this account is not allowlisted. On Vercel, set{" "}
+            <code className="rounded bg-red-100 px-1">ADMIN_USER_IDS</code> to
+            your Supabase user UUID (or email), then redeploy.
+          </p>
+        ) : null}
+        {params.error === "invalid" ? (
+          <p className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+            Invalid email or password.
           </p>
         ) : null}
 
