@@ -7,9 +7,9 @@ export default async function AdminDashboardPage() {
     productsTotal: 0,
     productsDraft: 0,
     productsPublished: 0,
-    blogsTotal: 0,
-    blogsDraft: 0,
-    blogsPublished: 0,
+    articlesTotal: 0,
+    articlesDraft: 0,
+    articlesPublished: 0,
   };
   let errorMessage: string | null = null;
 
@@ -56,17 +56,17 @@ export default async function AdminDashboardPage() {
           </article>
 
           <article className="rounded-xl border border-neutral-200 bg-white p-5">
-            <h2 className="text-lg font-semibold">Blogs</h2>
-            <p className="mt-2 text-3xl font-semibold">{counts.blogsTotal}</p>
+            <h2 className="text-lg font-semibold">Blog & guides</h2>
+            <p className="mt-2 text-3xl font-semibold">{counts.articlesTotal}</p>
             <p className="mt-1 text-sm text-neutral-600">
-              {counts.blogsPublished} published · {counts.blogsDraft} draft
+              {counts.articlesPublished} published · {counts.articlesDraft} draft
             </p>
             <div className="mt-4 flex gap-3 text-sm font-medium">
               <Link className="text-neutral-950 underline" href="/admin/blogs">
                 View all
               </Link>
               <Link className="text-neutral-950 underline" href="/admin/blogs/new">
-                New blog
+                New article
               </Link>
             </div>
           </article>

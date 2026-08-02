@@ -6,19 +6,22 @@ import { createBreadcrumbs } from "@/lib/seo/breadcrumbs";
 import { createPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Blog",
-  description: "Temporary blog index for future watch articles.",
+  title: "Watch Blog | Buying Advice, Care & Style",
+  description:
+    "Read expert watch articles covering buying advice, watch care, movements, materials, and style.",
   pathname: "/blog",
 });
 
-export default function BlogPage() {
-  const articles = getArticlesByType("blog");
+export const revalidate = 60;
+
+export default async function BlogPage() {
+  const articles = await getArticlesByType("blog");
 
   return (
     <PlaceholderPage
       breadcrumbs={createBreadcrumbs([{ label: "Blog", href: "/blog" }])}
-      description="This route will support timely watch articles and internal links to evergreen guides."
-      title="Blog"
+      description="Expert articles on choosing, understanding, styling, and caring for your watch."
+      title="Watch Blog"
     >
       <div className="grid gap-4 sm:grid-cols-2">
         {articles.map((article) => (

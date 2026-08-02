@@ -28,7 +28,7 @@ export function ArticleCard({
         />
       ) : null}
       <p className="text-xs uppercase tracking-wide text-neutral-600">
-        {article.category.replace("-", " ")}
+        {article.type === "guide" ? "Guide" : "Blog"}
       </p>
       <Heading className="text-base font-semibold">
         <Link href={`${hrefBase}/${article.slug}`}>{article.title}</Link>

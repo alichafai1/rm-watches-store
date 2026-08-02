@@ -5,7 +5,7 @@ import { adminLogoutAction } from "@/lib/admin/actions";
 const navItems = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/products", label: "Products" },
-  { href: "/admin/blogs", label: "Blogs" },
+  { href: "/admin/blogs", label: "Blog & guides" },
 ];
 
 type AdminShellProps = {

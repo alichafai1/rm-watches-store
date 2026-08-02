@@ -6,9 +6,14 @@ import { z } from "zod";
 import { requireAdmin, requireAdminDb } from "@/lib/auth/admin";
 import { parseSpecificationRows } from "@/lib/utils/specifications";
 import { sanitizeAboutHtml } from "@/lib/utils/rich-text";
+import {
+  articleHtmlToPlainText,
+  sanitizeArticleHtml,
+} from "@/lib/utils/article-html";
 import type { CmsArticleRecord, CmsProductRecord } from "@/types/cms";
 
 const statusSchema = z.enum(["draft", "published", "archived"]);
+const articleTypeSchema = z.enum(["blog", "guide"]);
 
 function slugify(value: string) {
   return value
@@ -354,6 +359,9 @@ export async function saveArticleAction(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
   const slugInput = String(formData.get("slug") ?? "").trim();
   const status = statusSchema.parse(String(formData.get("status") ?? "draft"));
+  const type = articleTypeSchema.parse(String(formData.get("type") ?? "blog"));
+  const excerpt = String(formData.get("excerpt") ?? "").trim();
+  const content = sanitizeArticleHtml(String(formData.get("content") ?? ""));
   const coverRaw = String(formData.get("cover_image") ?? "");
   let cover_image: CmsArticleRecord["cover_image"] = null;
 
@@ -370,19 +378,56 @@ export async function saveArticleAction(formData: FormData) {
   }
 
   const slug = slugify(slugInput || title);
+  if (!slug) {
+    throw new Error("Enter a title or valid slug.");
+  }
+  if (!excerpt) {
+    throw new Error("Short summary is required.");
+  }
+  if (status === "published") {
+    if (!articleHtmlToPlainText(content)) {
+      throw new Error("Main content is required before publishing.");
+    }
+    if (!cover_image?.url || !cover_image.alt?.trim()) {
+      throw new Error(
+        "A cover image with descriptive alt text is required before publishing.",
+      );
+    }
+  }
+
+  type PreviousArticle = Pick<
+    CmsArticleRecord,
+    "published_at" | "slug" | "status" | "type"
+  >;
+  let previous: PreviousArticle | null = null;
+  if (id) {
+    const { data, error } = await supabase
+      .from("cms_articles")
+      .select("published_at, slug, status, type")
+      .eq("id", id)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    previous = data as PreviousArticle | null;
+  }
+
   const payload = {
     title,
     slug,
-    excerpt: String(formData.get("excerpt") ?? ""),
-    content: String(formData.get("content") ?? ""),
+    excerpt,
+    content,
     cover_image,
     category: String(formData.get("category") ?? "company"),
-    type: String(formData.get("type") ?? "blog"),
+    type,
     status,
-    seo_title: String(formData.get("seo_title") ?? "") || null,
-    seo_description: String(formData.get("seo_description") ?? "") || null,
+    seo_title: String(formData.get("seo_title") ?? "").trim() || null,
+    seo_description:
+      String(formData.get("seo_description") ?? "").trim() || null,
     published_at:
-      status === "published" ? new Date().toISOString() : null,
+      status === "published"
+        ? previous?.status === "published" && previous.published_at
+          ? previous.published_at
+          : new Date().toISOString()
+        : null,
   };
 
   if (id) {
@@ -393,7 +438,10 @@ export async function saveArticleAction(formData: FormData) {
     if (error) {
       throw new Error(error.message);
     }
-    revalidatePath("/admin/blogs");
+    revalidateArticlePaths(type, slug);
+    if (previous && (previous.slug !== slug || previous.type !== type)) {
+      revalidateArticlePaths(previous.type, previous.slug);
+    }
     redirect(`/admin/blogs/${id}?saved=1`);
   }
 
@@ -407,7 +455,7 @@ export async function saveArticleAction(formData: FormData) {
     throw new Error(error.message);
   }
 
-  revalidatePath("/admin/blogs");
+  revalidateArticlePaths(type, slug);
   redirect(`/admin/blogs/${data.id}?saved=1`);
 }
 
@@ -415,13 +463,40 @@ export async function deleteArticleAction(formData: FormData) {
   const { supabase } = await requireAdminDb();
   const id = String(formData.get("id") ?? "");
 
+  const { data: existing, error: readError } = await supabase
+    .from("cms_articles")
+    .select("slug, type")
+    .eq("id", id)
+    .maybeSingle();
+  if (readError) {
+    throw new Error(readError.message);
+  }
+
   const { error } = await supabase.from("cms_articles").delete().eq("id", id);
   if (error) {
     throw new Error(error.message);
   }
 
   revalidatePath("/admin/blogs");
+  revalidatePath("/");
+  revalidatePath("/blog");
+  revalidatePath("/guides");
+  revalidatePath("/sitemap.xml");
+  if (existing?.slug && existing?.type) {
+    revalidatePath(
+      `/${existing.type === "guide" ? "guides" : "blog"}/${existing.slug}`,
+    );
+  }
   redirect("/admin/blogs");
+}
+
+function revalidateArticlePaths(type: string, slug: string) {
+  revalidatePath("/admin/blogs");
+  revalidatePath("/");
+  revalidatePath("/blog");
+  revalidatePath("/guides");
+  revalidatePath("/sitemap.xml");
+  revalidatePath(`/${type === "guide" ? "guides" : "blog"}/${slug}`);
 }
 
 export async function uploadAdminImageAction(formData: FormData) {

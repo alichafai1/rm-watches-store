@@ -7,24 +7,24 @@ export default async function AdminBlogsPage() {
   let errorMessage: string | null = null;
 
   try {
-    articles = await listAdminArticles("blog");
+    articles = await listAdminArticles();
   } catch (error) {
     errorMessage =
-      error instanceof Error ? error.message : "Could not load blogs.";
+      error instanceof Error ? error.message : "Could not load content.";
   }
 
   return (
-    <AdminShell title="Blogs">
+    <AdminShell title="Blog & guides">
       <div className="grid gap-4">
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm text-neutral-600">
-            Write drafts, then publish to `/blog`.
+            Blogs publish to `/blog`; guides publish to `/guides`.
           </p>
           <Link
             className="rounded-md bg-neutral-950 px-3 py-2 text-sm font-medium text-white"
             href="/admin/blogs/new"
           >
-            New blog
+            New article
           </Link>
         </div>
 
@@ -39,6 +39,7 @@ export default async function AdminBlogsPage() {
             <thead className="border-b border-neutral-200 bg-neutral-50 text-neutral-600">
               <tr>
                 <th className="px-4 py-3 font-medium">Title</th>
+                <th className="px-4 py-3 font-medium">Type</th>
                 <th className="px-4 py-3 font-medium">Status</th>
                 <th className="px-4 py-3 font-medium">Updated</th>
                 <th className="px-4 py-3 font-medium" />
@@ -47,8 +48,8 @@ export default async function AdminBlogsPage() {
             <tbody>
               {articles.length === 0 ? (
                 <tr>
-                  <td className="px-4 py-6 text-neutral-500" colSpan={4}>
-                    No blog posts yet.
+                  <td className="px-4 py-6 text-neutral-500" colSpan={5}>
+                    No articles or guides yet.
                   </td>
                 </tr>
               ) : (
@@ -58,6 +59,7 @@ export default async function AdminBlogsPage() {
                     key={article.id}
                   >
                     <td className="px-4 py-3 font-medium">{article.title}</td>
+                    <td className="px-4 py-3 capitalize">{article.type}</td>
                     <td className="px-4 py-3 capitalize">{article.status}</td>
                     <td className="px-4 py-3 text-neutral-600">
                       {new Date(article.updated_at).toLocaleDateString()}

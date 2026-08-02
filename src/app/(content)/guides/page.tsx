@@ -6,19 +6,22 @@ import { createBreadcrumbs } from "@/lib/seo/breadcrumbs";
 import { createPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Guides",
-  description: "Temporary guide index for future evergreen watch guides.",
+  title: "Watch Guides | Expert Buying & Ownership Advice",
+  description:
+    "Explore practical watch guides for choosing, comparing, wearing, and caring for luxury watches.",
   pathname: "/guides",
 });
 
-export default function GuidesPage() {
-  const guides = getArticlesByType("guide");
+export const revalidate = 60;
+
+export default async function GuidesPage() {
+  const guides = await getArticlesByType("guide");
 
   return (
     <PlaceholderPage
       breadcrumbs={createBreadcrumbs([{ label: "Guides", href: "/guides" }])}
-      description="This route will organize evergreen watch buying and care guides when editorial content is available."
-      title="Guides"
+      description="Detailed resources to help you choose, understand, and care for your watch."
+      title="Watch Guides"
     >
       <div className="grid gap-4 sm:grid-cols-2">
         {guides.map((guide) => (

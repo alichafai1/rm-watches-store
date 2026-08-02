@@ -1,7 +1,9 @@
 export const siteConfig = {
-  name: "Watch Store",
+  name: "RM Watches Store",
   description:
-    "A technical foundation for a structured ecommerce website for watches.",
-  url: "http://localhost:3000",
+    "Explore premium Richard Mille-inspired watches, detailed buying guides, and expert watch articles.",
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    "https://rm-watches-store-two.vercel.app",
   locale: "en",
 } as const;

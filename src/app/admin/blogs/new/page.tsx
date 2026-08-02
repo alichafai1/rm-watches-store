@@ -3,7 +3,7 @@ import { ArticleForm } from "@/components/admin/ArticleForm";
 
 export default function AdminNewBlogPage() {
   return (
-    <AdminShell title="New blog">
+    <AdminShell title="New blog or guide">
       <ArticleForm />
     </AdminShell>
   );

@@ -87,12 +87,16 @@ export async function getAdminCounts() {
     productsDraft: productRows.filter((row) => row.status === "draft").length,
     productsPublished: productRows.filter((row) => row.status === "published")
       .length,
-    blogsTotal: articleRows.filter((row) => row.type === "blog").length,
-    blogsDraft: articleRows.filter(
-      (row) => row.type === "blog" && row.status === "draft",
+    articlesTotal: articleRows.filter((row) =>
+      ["blog", "guide"].includes(row.type),
     ).length,
-    blogsPublished: articleRows.filter(
-      (row) => row.type === "blog" && row.status === "published",
+    articlesDraft: articleRows.filter(
+      (row) =>
+        ["blog", "guide"].includes(row.type) && row.status === "draft",
+    ).length,
+    articlesPublished: articleRows.filter(
+      (row) =>
+        ["blog", "guide"].includes(row.type) && row.status === "published",
     ).length,
   };
 }

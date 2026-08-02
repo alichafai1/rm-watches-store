@@ -9,6 +9,7 @@ import {
   deleteArticleAction,
   saveArticleAction,
 } from "@/lib/admin/actions";
+import { ArticleRichTextEditor } from "@/components/admin/ArticleRichTextEditor";
 import type { CmsArticleRecord } from "@/types/cms";
 
 type ArticleFormProps = {
@@ -19,23 +20,36 @@ export function ArticleForm({ article }: ArticleFormProps) {
   return (
     <form action={saveArticleAction} className="grid gap-6">
       {article ? <input name="id" type="hidden" value={article.id} /> : null}
+      <input
+        name="category"
+        type="hidden"
+        value={article?.category ?? "company"}
+      />
 
       <section className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-5">
-        <h2 className="text-lg font-semibold">Basics</h2>
+        <div>
+          <h2 className="text-lg font-semibold">Article details</h2>
+          <p className="mt-1 text-sm text-neutral-600">
+            Choose Blog or Guide to control where this content appears.
+          </p>
+        </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Title">
+          <Field label="Title (recommended: 50–60 characters)">
             <input
               className={inputClassName}
               defaultValue={article?.title ?? ""}
+              maxLength={100}
               name="title"
               required
             />
           </Field>
-          <Field label="Slug">
+          <Field label="Slug (leave blank to generate from title)">
             <input
               className={inputClassName}
               defaultValue={article?.slug ?? ""}
               name="slug"
+              pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
+              placeholder="how-to-choose-a-watch"
             />
           </Field>
           <Field label="Type">
@@ -46,19 +60,6 @@ export function ArticleForm({ article }: ArticleFormProps) {
             >
               <option value="blog">Blog</option>
               <option value="guide">Guide</option>
-            </select>
-          </Field>
-          <Field label="Category">
-            <select
-              className={inputClassName}
-              defaultValue={article?.category ?? "company"}
-              name="category"
-            >
-              <option value="buying-guide">Buying guide</option>
-              <option value="watch-care">Watch care</option>
-              <option value="style">Style</option>
-              <option value="education">Education</option>
-              <option value="company">Company</option>
             </select>
           </Field>
           <Field label="Status">
@@ -73,17 +74,23 @@ export function ArticleForm({ article }: ArticleFormProps) {
             </select>
           </Field>
         </div>
-        <Field label="Excerpt">
+        <Field label="Short summary (recommended: 120–200 characters)">
           <textarea
             className={textareaClassName}
             defaultValue={article?.excerpt ?? ""}
+            maxLength={300}
             name="excerpt"
+            placeholder="A clear one- or two-sentence summary shown on cards and below the article title."
+            required
           />
         </Field>
-        <Field label="Content">
-          <textarea
-            className={`${textareaClassName} min-h-56`}
-            defaultValue={article?.content ?? ""}
+        <Field label="Main content">
+          <p className="-mt-1 mb-2 text-xs leading-5 text-neutral-500">
+            Use one clear H2 for each main topic and H3 for subsections. Add
+            descriptive links and alt text to every image.
+          </p>
+          <ArticleRichTextEditor
+            initialContent={article?.content ?? ""}
             name="content"
           />
         </Field>
@@ -92,8 +99,8 @@ export function ArticleForm({ article }: ArticleFormProps) {
       <section className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-5">
         <h2 className="text-lg font-semibold">Cover image</h2>
         <p className="text-sm text-neutral-600">
-          Upload a cover image and add alt text. It is used on the blog page and
-          in listings.
+          Required when publishing. It appears on the homepage, listings,
+          article page, and social previews. Add descriptive alt text.
         </p>
         <ImageUploader
           initialImages={article?.cover_image ? [article.cover_image] : []}
@@ -104,17 +111,23 @@ export function ArticleForm({ article }: ArticleFormProps) {
 
       <section className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-5">
         <h2 className="text-lg font-semibold">SEO</h2>
-        <Field label="SEO title">
+        <p className="text-sm leading-6 text-neutral-600">
+          These fields control how the page can appear in search results. Leave
+          them blank to use the article title and short summary automatically.
+        </p>
+        <Field label="SEO title (recommended: 50–60 characters)">
           <input
             className={inputClassName}
             defaultValue={article?.seo_title ?? ""}
+            maxLength={70}
             name="seo_title"
           />
         </Field>
-        <Field label="SEO description">
+        <Field label="SEO description (recommended: 140–160 characters)">
           <textarea
             className={textareaClassName}
             defaultValue={article?.seo_description ?? ""}
+            maxLength={180}
             name="seo_description"
           />
         </Field>

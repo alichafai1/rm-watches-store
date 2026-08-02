@@ -11,10 +11,6 @@ type EditorialSectionProps = {
   guide?: Article;
 };
 
-function categoryLabel(category: Article["category"]) {
-  return category.replace("-", " ");
-}
-
 export function EditorialSection({ articles, guide }: EditorialSectionProps) {
   return (
     <Section ariaLabelledBy="editorial-heading" className="bg-white" spacing="lg">
@@ -22,7 +18,7 @@ export function EditorialSection({ articles, guide }: EditorialSectionProps) {
         <div className="grid gap-8">
           <HomeSectionHeader
             align="center"
-            description="Editorial placeholders that will later connect product discovery with useful watch education."
+            description="Expert guidance and practical articles to help you choose, understand, and care for your watch."
             eyebrow="Guides and articles"
             headingId="editorial-heading"
             title="Learn Before You Choose"
@@ -94,7 +90,7 @@ export function EditorialSection({ articles, guide }: EditorialSectionProps) {
                   ) : null}
                   <div className="grid content-center gap-2">
                     <p className="text-xs font-medium uppercase tracking-[0.18em] text-[#9f7d3f]">
-                      {categoryLabel(article.category)}
+                      Blog
                     </p>
                     <h3 className="text-base font-semibold tracking-tight text-neutral-950">
                       {article.title}

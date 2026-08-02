@@ -35,10 +35,13 @@ export const revalidate = 60;
 export default async function HomePage() {
   const featuredCollections = getFeaturedCollections(20);
   const newArrivalCollections = getFeaturedNewArrivalCollections(20);
-  const bestSellerProducts = await getHomepageBestSellerProducts(4);
-  const newArrivalProducts = await getHomepageNewArrivalProducts(4);
-  const featuredGuide = getFeaturedGuide();
-  const latestArticles = getLatestArticles(3);
+  const [bestSellerProducts, newArrivalProducts, featuredGuide, latestArticles] =
+    await Promise.all([
+      getHomepageBestSellerProducts(4),
+      getHomepageNewArrivalProducts(4),
+      getFeaturedGuide(),
+      getLatestArticles(3),
+    ]);
   const customerReviews = getCustomerReviews();
 
   return (

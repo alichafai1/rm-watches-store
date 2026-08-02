@@ -1,5 +1,6 @@
 import type { Article } from "@/types/article";
 import type { JsonLdObject } from "@/types/seo";
+import { siteConfig } from "@/constants/site";
 
 export function createArticleSchema(article: Article, url: string): JsonLdObject {
   return {
@@ -10,5 +11,15 @@ export function createArticleSchema(article: Article, url: string): JsonLdObject
     url,
     datePublished: article.publishedAt,
     dateModified: article.updatedAt,
+    image: article.image?.url,
+    mainEntityOfPage: url,
+    author: {
+      "@type": "Organization",
+      name: siteConfig.name,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+    },
   };
 }
