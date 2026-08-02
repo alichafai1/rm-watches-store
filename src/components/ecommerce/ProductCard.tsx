@@ -71,7 +71,7 @@ export function ProductCard({
       </Link>
       {showAction ? (
         <Link
-          className="mt-3 inline-flex w-full items-center justify-center rounded-md border border-neutral-950 bg-neutral-950 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white transition-colors duration-300 hover:border-[#b08a3c] hover:bg-[#b08a3c]"
+          className="product-card-cta mt-3 inline-flex w-full items-center justify-center rounded-md border border-neutral-950 bg-neutral-950 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors duration-300 hover:border-[#b08a3c] hover:bg-[#b08a3c]"
           href={`/products/${product.slug}`}
         >
           Shop Now

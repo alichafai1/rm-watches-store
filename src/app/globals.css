@@ -81,6 +81,11 @@ a {
   color: #ffffff !important;
 }
 
+.product-card-cta,
+.product-card-cta:hover {
+  color: #ffffff !important;
+}
+
 .home-cta-outline-dark:hover {
   border-color: #ffffff !important;
   background: rgb(255 255 255 / 0.1) !important;
