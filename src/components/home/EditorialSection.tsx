@@ -59,7 +59,7 @@ export function EditorialSection({ articles, guide }: EditorialSectionProps) {
               </article>
             ) : null}
 
-            <div className="grid gap-4">
+            <div className="grid content-start gap-4">
               <div className="flex items-end justify-between gap-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#9f7d3f]">
@@ -76,25 +76,25 @@ export function EditorialSection({ articles, guide }: EditorialSectionProps) {
 
               {articles.map((article) => (
                 <Link
-                  className="group grid grid-cols-[96px_1fr] gap-4 rounded-2xl border border-neutral-200 bg-white p-3 transition duration-300 hover:-translate-y-1 hover:border-neutral-300 hover:shadow-[var(--shadow-sm)] sm:grid-cols-[128px_1fr]"
+                  className="group grid grid-cols-[96px_1fr] items-center gap-4 rounded-2xl border border-neutral-200 bg-white p-3 transition duration-300 hover:-translate-y-1 hover:border-neutral-300 hover:shadow-[var(--shadow-sm)] sm:grid-cols-[128px_1fr]"
                   href={`/blog/${article.slug}`}
                   key={article.id}
                 >
                   {article.image ? (
                     <Image
                       alt={article.image.alt}
-                      className="aspect-square w-full rounded-xl bg-white object-contain"
+                      className="aspect-square w-full rounded-xl bg-neutral-50 object-cover"
                       height={article.image.height}
                       sizes="(max-width: 640px) 96px, 128px"
                       src={article.image.url}
                       width={article.image.width}
                     />
                   ) : null}
-                  <div className="grid content-center gap-2">
+                  <div className="grid content-center gap-1.5">
                     <p className="text-xs font-medium uppercase tracking-[0.18em] text-[#9f7d3f]">
                       Blog
                     </p>
-                    <h3 className="text-base font-semibold tracking-tight text-neutral-950">
+                    <h3 className="line-clamp-2 text-base font-semibold leading-6 tracking-tight text-neutral-950">
                       {article.title}
                     </h3>
                     <p className="line-clamp-2 text-sm leading-6 text-neutral-600">

@@ -159,6 +159,73 @@ function parseProductImage(
   return null;
 }
 
+/**
+ * Squares and centres the main gallery image so every storefront card frames its
+ * watch the same way. Runs on save rather than on upload because only the saved
+ * order tells us which photo is the main one. Additional photos are left alone,
+ * and any failure keeps the original image so saving never breaks.
+ */
+async function normalizeMainProductImage(
+  images: CmsProductRecord["images"],
+): Promise<CmsProductRecord["images"]> {
+  const main = images[0];
+
+  if (!main?.url?.startsWith("http")) return images;
+
+  const { NORMALIZED_IMAGE_PREFIX, normalizeProductImage } = await import(
+    "@/lib/images/product-image"
+  );
+
+  if (main.url.includes(NORMALIZED_IMAGE_PREFIX)) return images;
+
+  try {
+    const response = await fetch(main.url);
+    if (!response.ok) return images;
+
+    const contentType = (response.headers.get("content-type") ?? "")
+      .split(";")[0]
+      .trim()
+      .toLowerCase();
+
+    const original = Buffer.from(await response.arrayBuffer());
+    const normalized = await normalizeProductImage(original, contentType);
+    if (!normalized) return images;
+
+    const extension = contentType === "image/png" ? "png" : contentType === "image/webp" ? "webp" : "jpg";
+    const path = `${NORMALIZED_IMAGE_PREFIX}${Date.now()}-${crypto.randomUUID()}.${extension}`;
+
+    const { createServiceRoleSupabaseClient } = await import(
+      "@/lib/supabase/service-role"
+    );
+    const storage = createServiceRoleSupabaseClient().storage.from(
+      "website-media",
+    );
+
+    const { error } = await storage.upload(path, normalized.buffer, {
+      contentType,
+      upsert: false,
+    });
+
+    if (error) return images;
+
+    const {
+      data: { publicUrl },
+    } = storage.getPublicUrl(path);
+
+    return [
+      {
+        ...main,
+        height: normalized.height,
+        url: publicUrl,
+        width: normalized.width,
+      },
+      ...images.slice(1),
+    ];
+  } catch {
+    return images;
+  }
+}
+
 export async function saveProductAction(formData: FormData) {
   const { supabase } = await requireAdminDb();
 
@@ -170,11 +237,15 @@ export async function saveProductAction(formData: FormData) {
   const compareAtRaw = String(formData.get("compare_at_price") ?? "").trim();
   const compare_at_price =
     compareAtRaw === "" ? null : parseMoney(compareAtRaw);
-  const images = parseJsonArray(formData.get("images")) as CmsProductRecord["images"];
+  const uploadedImages = parseJsonArray(
+    formData.get("images"),
+  ) as CmsProductRecord["images"];
+  // Derived from the untouched upload so the description keeps its natural crop.
   const description_image =
     parseProductImage(formData.get("description_image")) ??
-    images[0] ??
+    uploadedImages[0] ??
     null;
+  const images = await normalizeMainProductImage(uploadedImages);
   const features = parseLines(formData.get("features"));
   const specifications = parseSpecificationRows(
     parseJsonArray(formData.get("specifications")),
@@ -589,14 +660,18 @@ export async function uploadAdminImageAction(formData: FormData) {
   };
   const extension = extensionByType[file.type];
   const path = `admin/${Date.now()}-${crypto.randomUUID()}.${extension}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
+  const originalBuffer: Buffer = Buffer.from(await file.arrayBuffer());
 
   try {
     const sharp = (await import("sharp")).default;
-    const metadata = await sharp(buffer, { animated: false }).metadata();
+    const metadata = await sharp(originalBuffer, { animated: false }).metadata();
     if (!metadata.width || !metadata.height) {
       return { error: "Could not determine image dimensions." };
     }
+
+    const buffer: Buffer = originalBuffer;
+    const width = metadata.width;
+    const height = metadata.height;
 
     const { createServiceRoleSupabaseClient } = await import(
       "@/lib/supabase/service-role"
@@ -621,8 +696,8 @@ export async function uploadAdminImageAction(formData: FormData) {
     return {
       url: publicUrl,
       alt: "",
-      width: metadata.width,
-      height: metadata.height,
+      width,
+      height,
     };
   } catch (error) {
     return {

@@ -96,7 +96,8 @@ function InlineEditor({
 
   return (
     <div>
-      <div className="flex flex-wrap gap-1 rounded-t-md border border-neutral-300 bg-neutral-50 p-1.5">
+      {/* Sticky so formatting stays reachable while editing long blocks. */}
+      <div className="sticky top-0 z-20 flex flex-wrap gap-1 rounded-t-md border border-neutral-300 bg-neutral-50 p-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
         {allowHeadings ? (
           <>
             <button
