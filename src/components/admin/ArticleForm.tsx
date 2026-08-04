@@ -88,7 +88,8 @@ export function ArticleForm({ article }: ArticleFormProps) {
             required
           />
         </Field>
-        <Field label="Main content">
+        <div className="grid gap-1.5 text-sm">
+          <p className="font-medium text-neutral-800">Main content</p>
           <p className="-mt-1 mb-2 text-xs leading-5 text-neutral-500">
             Use one clear H2 for each main topic and H3 for subsections. Add
             descriptive links and alt text to every image.
@@ -102,7 +103,7 @@ export function ArticleForm({ article }: ArticleFormProps) {
             }
             name="content_blocks"
           />
-        </Field>
+        </div>
       </section>
 
       <section className="grid gap-4 rounded-xl border border-neutral-200 bg-white p-5">
