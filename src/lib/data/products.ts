@@ -1,5 +1,3 @@
-import { mockProducts } from "@/mock/products";
-import { mockNewArrivalProducts } from "@/mock/new-arrival-products";
 import { getCollectionBySlug } from "@/lib/data/collections";
 import { getNewArrivalCollectionBySlug } from "@/lib/data/new-arrival-collections";
 import {
@@ -7,27 +5,6 @@ import {
   getPublishedCmsProducts,
 } from "@/lib/data/cms-products";
 import type { Product } from "@/types/product";
-
-function getMockProducts() {
-  return [...mockProducts, ...mockNewArrivalProducts];
-}
-
-function mergeCatalog(cmsProducts: Product[], mockProductsList: Product[]) {
-  const bySlug = new Map<string, Product>();
-
-  // Published CMS products first so they surface on homepage / shop lists
-  for (const product of cmsProducts) {
-    bySlug.set(product.slug, product);
-  }
-
-  for (const product of mockProductsList) {
-    if (!bySlug.has(product.slug)) {
-      bySlug.set(product.slug, product);
-    }
-  }
-
-  return Array.from(bySlug.values());
-}
 
 export function getProductCollectionPath(slug: string) {
   if (slug.startsWith("new-arrival-")) {
@@ -38,17 +15,11 @@ export function getProductCollectionPath(slug: string) {
 }
 
 export async function getProducts() {
-  const cmsProducts = await getPublishedCmsProducts();
-  return mergeCatalog(cmsProducts, getMockProducts());
+  return getPublishedCmsProducts();
 }
 
 export async function getProductBySlug(slug: string) {
-  const cmsProduct = await getPublishedCmsProductBySlug(slug);
-  if (cmsProduct) {
-    return cmsProduct;
-  }
-
-  return getMockProducts().find((product) => product.slug === slug);
+  return getPublishedCmsProductBySlug(slug);
 }
 
 export async function getNewArrivalProducts() {

@@ -1,5 +1,4 @@
 import { mockCollections } from "@/mock/collections";
-import { mockProducts } from "@/mock/products";
 import { getPublishedCmsProducts } from "@/lib/data/cms-products";
 import type { Collection } from "@/types/collection";
 
@@ -27,25 +26,12 @@ export function getFeaturedCollections(limit = 20) {
 
 export async function getCollectionProducts(collection: Collection) {
   const cmsProducts = await getPublishedCmsProducts();
-  const fromCms = cmsProducts.filter(
+
+  return cmsProducts.filter(
     (product) =>
       product.collectionId === collection.id ||
       product.collection.slug === collection.slug,
   );
-  const fromMock = mockProducts.filter(
-    (product) =>
-      product.collectionId === collection.id ||
-      product.collection.slug === collection.slug,
-  );
-
-  const bySlug = new Map(fromCms.map((product) => [product.slug, product]));
-  for (const product of fromMock) {
-    if (!bySlug.has(product.slug)) {
-      bySlug.set(product.slug, product);
-    }
-  }
-
-  return Array.from(bySlug.values());
 }
 
 export function getCollectionNavigationItems() {
