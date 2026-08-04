@@ -146,7 +146,6 @@ a {
 .article-content img {
   margin: 1.5rem auto;
   max-width: 100%;
-  border-radius: 0.75rem;
 }
 
 :where(a, button, input, textarea, select, summary):focus-visible {

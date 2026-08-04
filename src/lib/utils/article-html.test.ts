@@ -3,6 +3,7 @@ import {
   articleBlocksToHtml,
   articleHtmlToBlocks,
   extractEmbeddedArticleBlocks,
+  normalizeImportedArticleBlocks,
   parseAndSanitizeArticleBlocks,
   sanitizeArticleInlineHtml,
   serializeArticleContent,
@@ -56,6 +57,39 @@ describe("structured article content", () => {
         '<a href="https://example.com/article">External</a>',
       ),
     ).toContain('rel="noopener noreferrer" target="_blank"');
+  });
+
+  it("keeps underline formatting in sanitized paragraphs", () => {
+    expect(sanitizeArticleInlineHtml("<u>Important text</u>")).toBe(
+      "<u>Important text</u>",
+    );
+  });
+
+  it("turns imported bold section labels into semantic heading blocks", () => {
+    const imported: ArticleContentBlock[] = [
+      {
+        id: "imported",
+        type: "paragraph",
+        html: `<strong>Introduction</strong>${"Detailed guide content. ".repeat(12)}<strong>Materials</strong>${"Material comparison. ".repeat(12)}`,
+      },
+    ];
+    const normalized = normalizeImportedArticleBlocks(imported);
+    expect(normalized.map((block) => block.type)).toEqual([
+      "heading",
+      "paragraph",
+      "heading",
+      "paragraph",
+    ]);
+    expect(normalized[0]).toMatchObject({
+      type: "heading",
+      level: 2,
+      text: "Introduction",
+    });
+    expect(normalized[2]).toMatchObject({
+      type: "heading",
+      level: 3,
+      text: "Materials",
+    });
   });
 
   it("preserves structured blocks when the JSONB column is unavailable", () => {

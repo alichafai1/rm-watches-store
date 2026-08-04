@@ -58,9 +58,10 @@ function ArticleBodyImage({
     return null;
   }
 
-  const imageClassName = "h-auto w-full rounded-xl object-cover";
+  const imageClassName =
+    "mx-auto h-auto max-h-[760px] w-auto max-w-full object-contain";
   return (
-    <figure>
+    <figure className="my-8">
       {canUseNextImage(block.url) ? (
         <Image
           alt={block.alt}
@@ -192,10 +193,10 @@ export function ArticleDetail({
           </header>
 
           {article.image ? (
-            <div className="mx-auto mt-10 max-w-4xl overflow-hidden rounded-2xl bg-neutral-100">
+            <div className="mx-auto mt-10 flex max-w-4xl justify-center">
               <Image
                 alt={article.image.alt}
-                className="aspect-[16/9] w-full object-cover"
+                className="h-auto max-h-[760px] w-auto max-w-full object-contain"
                 height={article.image.height}
                 priority
                 sizes="(max-width: 896px) 100vw, 896px"

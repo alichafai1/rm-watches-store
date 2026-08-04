@@ -31,7 +31,7 @@ const transformArticleLink: sanitizeHtml.Transformer = (_tagName, attribs) => {
 };
 
 const inlineOptions: sanitizeHtml.IOptions = {
-  allowedTags: ["br", "strong", "em", "a"],
+  allowedTags: ["br", "strong", "em", "u", "a"],
   allowedAttributes: {
     a: ["href", "rel", "target"],
   },
@@ -49,6 +49,7 @@ const options: sanitizeHtml.IOptions = {
     "h3",
     "strong",
     "em",
+    "u",
     "ul",
     "ol",
     "li",
@@ -318,6 +319,54 @@ export function serializeArticleContent(blocks: ArticleContentBlock[]) {
   return `${html}\n<!-- article-blocks:${encoded} -->`;
 }
 
+/**
+ * Converts imported long paragraphs that use bold text as section labels into
+ * real heading and paragraph blocks. Normal short bold emphasis is untouched.
+ */
+export function normalizeImportedArticleBlocks(
+  blocks: ArticleContentBlock[],
+): ArticleContentBlock[] {
+  return blocks.flatMap((block) => {
+    if (
+      block.type !== "paragraph" ||
+      articleHtmlToPlainText(block.html).length < 200
+    ) {
+      return [block];
+    }
+
+    const matches = Array.from(
+      block.html.matchAll(/<strong>([^<]{2,180})<\/strong>/gi),
+    );
+    if (matches.length === 0 || matches[0].index !== 0) {
+      return [block];
+    }
+
+    return matches.flatMap((match, index) => {
+      const nextStart = matches[index + 1]?.index ?? block.html.length;
+      const copyStart = (match.index ?? 0) + match[0].length;
+      const copy = sanitizeArticleInlineHtml(
+        block.html.slice(copyStart, nextStart),
+      );
+      const heading: ArticleContentBlock = {
+        id: `${block.id}-heading-${index + 1}`,
+        type: "heading",
+        level: index === 0 ? 2 : 3,
+        text: articleHtmlToPlainText(match[1] ?? ""),
+      };
+      return hasText(copy)
+        ? [
+            heading,
+            {
+              id: `${block.id}-copy-${index + 1}`,
+              type: "paragraph" as const,
+              html: copy,
+            },
+          ]
+        : [heading];
+    });
+  });
+}
+
 /** Reads the compatibility payload used before the JSONB migration is applied. */
 export function extractEmbeddedArticleBlocks(
   value: string,
@@ -327,7 +376,9 @@ export function extractEmbeddedArticleBlocks(
 
   try {
     const decoded = Buffer.from(encoded, "base64url").toString("utf8");
-    return parseAndSanitizeArticleBlocks(decoded, "draft");
+    return normalizeImportedArticleBlocks(
+      parseAndSanitizeArticleBlocks(decoded, "draft"),
+    );
   } catch {
     return undefined;
   }
@@ -431,5 +482,5 @@ export function articleHtmlToBlocks(value: string): ArticleContentBlock[] {
     });
   }
 
-  return blocks;
+  return normalizeImportedArticleBlocks(blocks);
 }

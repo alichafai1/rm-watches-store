@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "@tiptap/extension-link";
+import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useRef, useState } from "react";
@@ -62,6 +63,7 @@ function InlineEditor({
       Link.configure({
         openOnClick: false,
       }),
+      Underline,
     ],
     editorProps: {
       attributes: {
@@ -104,6 +106,13 @@ function InlineEditor({
           type="button"
         >
           Italic
+        </button>
+        <button
+          className={toolbarButton}
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          type="button"
+        >
+          Underline
         </button>
         <button className={toolbarButton} onClick={setLink} type="button">
           Link
