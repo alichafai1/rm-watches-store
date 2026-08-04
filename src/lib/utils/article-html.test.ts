@@ -6,6 +6,7 @@ import {
   normalizeImportedArticleBlocks,
   parseAndSanitizeArticleBlocks,
   sanitizeArticleInlineHtml,
+  sanitizeArticleRichBlockHtml,
   serializeArticleContent,
 } from "@/lib/utils/article-html";
 import type { ArticleContentBlock } from "@/types/article";
@@ -128,6 +129,38 @@ describe("structured article content", () => {
     expect(parsed[0]).toMatchObject({
       type: "paragraph",
       html: "<h2>Main section</h2><p>Body copy</p><h3>Subsection</h3><p>More copy</p>",
+    });
+  });
+
+  it("removes empty paragraphs and headings before publishing", () => {
+    const html = [
+      "<h2>Main section</h2>",
+      "<p></p>",
+      "<p><br></p>",
+      "<h3>&nbsp;</h3>",
+      "<p><strong></strong></p>",
+      "<p>Useful copy</p>",
+      "<h3>Real subsection</h3>",
+    ].join("");
+
+    expect(sanitizeArticleRichBlockHtml(html)).toBe(
+      "<h2>Main section</h2><p>Useful copy</p><h3>Real subsection</h3>",
+    );
+
+    const parsed = parseAndSanitizeArticleBlocks(
+      asFormValue([
+        {
+          id: "content",
+          type: "paragraph",
+          html,
+        },
+      ]),
+      "published",
+    );
+
+    expect(parsed[0]).toMatchObject({
+      type: "paragraph",
+      html: "<h2>Main section</h2><p>Useful copy</p><h3>Real subsection</h3>",
     });
   });
 

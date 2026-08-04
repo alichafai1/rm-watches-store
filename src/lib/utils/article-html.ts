@@ -122,14 +122,26 @@ export function sanitizeArticleInlineHtml(value: string) {
   return sanitizeHtml(value.trim(), inlineOptions);
 }
 
+function removeEmptyArticleElements(value: string) {
+  return value
+    .replace(
+      /<(p|h2|h3)\b[^>]*>([\s\S]*?)<\/\1>/gi,
+      (element, _tag: string, content: string) =>
+        articleHtmlToPlainText(content) ? element : "",
+    )
+    .trim();
+}
+
 export function sanitizeArticleRichBlockHtml(value: string) {
-  const clean = sanitizeHtml(value.trim(), richBlockOptions);
+  const clean = removeEmptyArticleElements(
+    sanitizeHtml(value.trim(), richBlockOptions),
+  );
   if (!clean) return "";
   return /<(?:p|h2|h3)\b/i.test(clean) ? clean : `<p>${clean}</p>`;
 }
 
 export function sanitizeArticleHtml(value: string) {
-  return sanitizeHtml(value.trim(), options);
+  return removeEmptyArticleElements(sanitizeHtml(value.trim(), options));
 }
 
 /** Fast tag strip for SEO/word-count; not a security boundary. */

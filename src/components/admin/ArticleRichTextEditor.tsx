@@ -58,9 +58,11 @@ function InlineEditor({
         hardBreak: false,
         heading: allowHeadings ? { levels: [2, 3] } : false,
         horizontalRule: false,
+        link: false,
         listItem: false,
         orderedList: false,
         strike: false,
+        underline: false,
       }),
       Link.configure({
         openOnClick: false,
