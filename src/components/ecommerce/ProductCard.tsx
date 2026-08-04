@@ -42,7 +42,9 @@ export function ProductCard({
           </div>
         ) : null}
         <div className="grid gap-1 px-0.5 sm:gap-1.5 sm:px-1">
-          <Heading className="truncate text-[13px] font-semibold leading-5 tracking-tight text-neutral-950 sm:text-base sm:leading-6">
+          {/* Two lines on phones fit more of the model name; the reserved height
+              keeps every card in a row the same height. */}
+          <Heading className="line-clamp-2 min-h-10 text-[13px] font-semibold leading-5 tracking-tight text-neutral-950 sm:line-clamp-1 sm:min-h-0 sm:text-base sm:leading-6">
             {product.title}
           </Heading>
           <ProductRatingStars reviews={product.reviews} />

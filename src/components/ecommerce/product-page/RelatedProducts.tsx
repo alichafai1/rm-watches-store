@@ -1,4 +1,5 @@
 import { ProductCard } from "@/components/ecommerce/ProductCard";
+import { ResponsiveGrid } from "@/components/ui/ResponsiveGrid";
 import type { Product } from "@/types/product";
 
 type RelatedProductsProps = {
@@ -23,11 +24,11 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
           Related Products
         </h2>
       </div>
-      <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <ResponsiveGrid className="mt-8" columns="product">
         {products.map((product) => (
           <ProductCard headingLevel="h3" key={product.id} product={product} />
         ))}
-      </div>
+      </ResponsiveGrid>
     </section>
   );
 }

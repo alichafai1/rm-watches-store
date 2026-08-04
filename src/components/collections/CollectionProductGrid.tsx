@@ -1,4 +1,5 @@
 import { ProductCard } from "@/components/ecommerce/ProductCard";
+import { ResponsiveGrid } from "@/components/ui/ResponsiveGrid";
 import type { Product } from "@/types/product";
 
 type CollectionProductGridProps = {
@@ -10,7 +11,7 @@ const paginationItems = ["Previous", "1", "2", "3", "Next"];
 export function CollectionProductGrid({ products }: CollectionProductGridProps) {
   return (
     <div className="grid gap-8">
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <ResponsiveGrid columns="product">
         {products.map((product) => (
           <ProductCard
             headingLevel="h3"
@@ -19,7 +20,7 @@ export function CollectionProductGrid({ products }: CollectionProductGridProps) 
             showAction
           />
         ))}
-      </div>
+      </ResponsiveGrid>
 
       <nav aria-label="Collection pagination" className="flex justify-center">
         <ul className="flex flex-wrap items-center justify-center gap-2">

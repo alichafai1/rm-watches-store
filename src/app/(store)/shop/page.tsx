@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ProductCard } from "@/components/ecommerce/ProductCard";
 import { PlaceholderPage } from "@/components/ui/PlaceholderPage";
+import { ResponsiveGrid } from "@/components/ui/ResponsiveGrid";
 import { getProducts } from "@/lib/data/products";
 import { createBreadcrumbs } from "@/lib/seo/breadcrumbs";
 import { createPageMetadata } from "@/lib/seo/metadata";
@@ -22,11 +23,11 @@ export default async function ShopPage() {
       description="This route will become the primary product listing page when catalog data and filtering are introduced later."
       title="Shop"
     >
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <ResponsiveGrid columns="product">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
-      </div>
+      </ResponsiveGrid>
     </PlaceholderPage>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ProductCard } from "@/components/ecommerce/ProductCard";
 import { PlaceholderPage } from "@/components/ui/PlaceholderPage";
+import { ResponsiveGrid } from "@/components/ui/ResponsiveGrid";
 import { getProductsByGender } from "@/lib/data/products";
 import { createBreadcrumbs } from "@/lib/seo/breadcrumbs";
 import { createPageMetadata } from "@/lib/seo/metadata";
@@ -25,11 +26,11 @@ export default async function MenWatchesPage() {
       description="This placeholder route is prepared for a men's watches landing page once product data exists."
       title="Men's Watches"
     >
-      <div className="grid gap-4 sm:grid-cols-2">
+      <ResponsiveGrid columns="product">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
-      </div>
+      </ResponsiveGrid>
     </PlaceholderPage>
   );
 }
