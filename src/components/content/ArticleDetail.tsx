@@ -3,11 +3,15 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { sanitizeArticleHtml } from "@/lib/utils/article-html";
-import type { Article } from "@/types/article";
+import {
+  sanitizeArticleHtml,
+  sanitizeArticleInlineHtml,
+} from "@/lib/utils/article-html";
+import type { Article, ArticleContentBlock } from "@/types/article";
 
 type ArticleDetailProps = {
   article: Article;
+  relatedArticles?: Article[];
 };
 
 function formatDate(value?: string) {
@@ -17,7 +21,129 @@ function formatDate(value?: string) {
   }).format(new Date(value));
 }
 
-export function ArticleDetail({ article }: ArticleDetailProps) {
+function isSafeImageUrl(value: string) {
+  if (value.startsWith("/") && !value.startsWith("//")) return true;
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function canUseNextImage(value: string) {
+  if (value.startsWith("/") && !value.startsWith("//")) return true;
+  try {
+    const url = new URL(value);
+    return (
+      url.protocol === "https:" &&
+      url.hostname === "jolmyqqzsqvyapoixnqh.supabase.co" &&
+      url.pathname.startsWith("/storage/v1/object/public/website-media/")
+    );
+  } catch {
+    return false;
+  }
+}
+
+function ArticleBodyImage({
+  block,
+}: {
+  block: Extract<ArticleContentBlock, { type: "image" }>;
+}) {
+  if (
+    !isSafeImageUrl(block.url) ||
+    block.width <= 0 ||
+    block.height <= 0
+  ) {
+    return null;
+  }
+
+  const imageClassName = "h-auto w-full rounded-xl object-cover";
+  return (
+    <figure>
+      {canUseNextImage(block.url) ? (
+        <Image
+          alt={block.alt}
+          className={imageClassName}
+          height={block.height}
+          loading="lazy"
+          sizes="(max-width: 768px) 100vw, 768px"
+          src={block.url}
+          width={block.width}
+        />
+      ) : (
+        // Arbitrary CMS hosts cannot safely pass through the configured optimizer.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          alt={block.alt}
+          className={imageClassName}
+          height={block.height}
+          loading="lazy"
+          src={block.url}
+          width={block.width}
+        />
+      )}
+      {block.caption ? (
+        <figcaption className="mt-2 text-center text-sm text-neutral-500">
+          {block.caption}
+        </figcaption>
+      ) : null}
+    </figure>
+  );
+}
+
+function ArticleBlocks({ blocks }: { blocks: ArticleContentBlock[] }) {
+  return blocks.map((block) => {
+    switch (block.type) {
+      case "heading":
+        return block.level === 2 ? (
+          <h2 key={block.id}>{block.text}</h2>
+        ) : (
+          <h3 key={block.id}>{block.text}</h3>
+        );
+      case "paragraph":
+        return (
+          <p
+            dangerouslySetInnerHTML={{
+              __html: sanitizeArticleInlineHtml(block.html),
+            }}
+            key={block.id}
+          />
+        );
+      case "list": {
+        const List = block.style === "ordered" ? "ol" : "ul";
+        return (
+          <List key={block.id}>
+            {block.items.map((item, index) => (
+              <li
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeArticleInlineHtml(item),
+                }}
+                key={`${block.id}-${index}`}
+              />
+            ))}
+          </List>
+        );
+      }
+      case "quote":
+        return (
+          <blockquote
+            dangerouslySetInnerHTML={{
+              __html: sanitizeArticleInlineHtml(block.html),
+            }}
+            key={block.id}
+          />
+        );
+      case "image":
+        return <ArticleBodyImage block={block} key={block.id} />;
+    }
+  });
+}
+
+export function ArticleDetail({
+  article,
+  relatedArticles = [],
+}: ArticleDetailProps) {
   const isGuide = article.type === "guide";
   const base = isGuide ? "/guides" : "/blog";
   const label = isGuide ? "Guides" : "Blog";
@@ -33,6 +159,7 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
         <article>
           <Breadcrumbs
             items={[
+              { label: "Home", href: "/" },
               { label, href: base },
               { label: article.title, href: `${base}/${article.slug}` },
             ]}
@@ -52,8 +179,14 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
             </p>
             {published ? (
               <p className="mt-4 text-sm text-neutral-500">
-                Published {published}
-                {updated ? ` · Updated ${updated}` : ""}
+                Published{" "}
+                <time dateTime={article.publishedAt}>{published}</time>
+                {updated && article.updatedAt ? (
+                  <>
+                    {" · Updated "}
+                    <time dateTime={article.updatedAt}>{updated}</time>
+                  </>
+                ) : null}
               </p>
             ) : null}
           </header>
@@ -65,35 +198,63 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
                 className="aspect-[16/9] w-full object-cover"
                 height={article.image.height}
                 priority
+                sizes="(max-width: 896px) 100vw, 896px"
                 src={article.image.url}
                 width={article.image.width}
               />
             </div>
           ) : null}
 
-          <div
-            className="article-content mx-auto mt-10 max-w-3xl text-base leading-8 text-neutral-700 sm:text-lg"
-            dangerouslySetInnerHTML={{
-              __html: sanitizeArticleHtml(article.content),
-            }}
-          />
+          {article.contentBlocks ? (
+            <div className="article-content mx-auto mt-10 max-w-3xl text-base leading-8 text-neutral-700 sm:text-lg">
+              <ArticleBlocks blocks={article.contentBlocks} />
+            </div>
+          ) : (
+            <div
+              className="article-content mx-auto mt-10 max-w-3xl text-base leading-8 text-neutral-700 sm:text-lg"
+              dangerouslySetInnerHTML={{
+                __html: sanitizeArticleHtml(article.content),
+              }}
+            />
+          )}
 
-          <footer className="mx-auto mt-12 flex max-w-3xl flex-wrap gap-3 border-t border-neutral-200 pt-6 text-sm">
-            <Link
-              className="font-semibold text-neutral-950 underline-offset-4 hover:underline"
-              href={base}
-            >
-              View all {label.toLowerCase()}
-            </Link>
-            <span aria-hidden="true" className="text-neutral-300">
-              ·
-            </span>
-            <Link
-              className="font-semibold text-neutral-950 underline-offset-4 hover:underline"
-              href="/shop"
-            >
-              Explore watches
-            </Link>
+          <footer className="mx-auto mt-12 max-w-3xl border-t border-neutral-200 pt-6 text-sm">
+            {relatedArticles.length > 0 ? (
+              <div className="mb-6">
+                <h2 className="text-base font-semibold text-neutral-950">
+                  Related reading
+                </h2>
+                <ul className="mt-3 grid gap-2">
+                  {relatedArticles.map((related) => (
+                    <li key={related.id}>
+                      <Link
+                        className="text-neutral-700 underline-offset-4 hover:text-neutral-950 hover:underline"
+                        href={`/${related.type === "guide" ? "guides" : "blog"}/${related.slug}`}
+                      >
+                        {related.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+            <div className="flex flex-wrap gap-3">
+              <Link
+                className="font-semibold text-neutral-950 underline-offset-4 hover:underline"
+                href={base}
+              >
+                View all {label.toLowerCase()}
+              </Link>
+              <span aria-hidden="true" className="text-neutral-300">
+                ·
+              </span>
+              <Link
+                className="font-semibold text-neutral-950 underline-offset-4 hover:underline"
+                href="/shop"
+              >
+                Explore watches
+              </Link>
+            </div>
           </footer>
         </article>
       </Container>

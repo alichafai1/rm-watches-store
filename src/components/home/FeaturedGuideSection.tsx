@@ -22,6 +22,7 @@ export function FeaturedGuideSection({ guide }: FeaturedGuideSectionProps) {
                 alt={image.alt}
                 className="aspect-square w-full rounded-lg object-cover"
                 height={image.height}
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 src={image.url}
                 width={image.width}
               />

@@ -7,13 +7,29 @@ import { requireAdmin, requireAdminDb } from "@/lib/auth/admin";
 import { parseSpecificationRows } from "@/lib/utils/specifications";
 import { sanitizeAboutHtml } from "@/lib/utils/rich-text";
 import {
-  articleHtmlToPlainText,
-  sanitizeArticleHtml,
+  parseAndSanitizeArticleBlocks,
+  serializeArticleContent,
 } from "@/lib/utils/article-html";
 import type { CmsArticleRecord, CmsProductRecord } from "@/types/cms";
 
 const statusSchema = z.enum(["draft", "published", "archived"]);
 const articleTypeSchema = z.enum(["blog", "guide"]);
+const articleImageSchema = z.object({
+  url: z.string().trim().max(2_000).refine((value) => {
+    if (value.startsWith("/") && !value.startsWith("//")) return true;
+    try {
+      const url = new URL(value);
+      return url.protocol === "http:" || url.protocol === "https:";
+    } catch {
+      return false;
+    }
+  }, "Cover image URL must use HTTP or HTTPS."),
+  alt: z.string().trim().max(500),
+  width: z.number().int().min(0).max(20_000),
+  height: z.number().int().min(0).max(20_000),
+  fit: z.enum(["cover", "contain"]).optional(),
+  objectClassName: z.string().max(500).optional(),
+}).strict();
 
 function slugify(value: string) {
   return value
@@ -50,6 +66,12 @@ function parseJsonArray(value: FormDataEntryValue | null) {
   } catch {
     return [];
   }
+}
+
+function omitKey<T extends object, K extends keyof T>(value: T, key: K): Omit<T, K> {
+  const copy = { ...value };
+  delete copy[key];
+  return copy;
 }
 
 function parseLines(value: FormDataEntryValue | null) {
@@ -287,7 +309,7 @@ export async function saveProductAction(formData: FormData) {
         .eq("id", id);
 
       if (error && /description_image/i.test(error.message)) {
-        const { description_image: _ignored, ...legacyPayload } = fullPayload;
+        const legacyPayload = omitKey(fullPayload, "description_image");
         ({ error } = await supabase
           .from("cms_products")
           .update(legacyPayload)
@@ -311,7 +333,7 @@ export async function saveProductAction(formData: FormData) {
       insertResult.error &&
       /description_image/i.test(insertResult.error.message)
     ) {
-      const { description_image: _ignored, ...legacyPayload } = fullPayload;
+      const legacyPayload = omitKey(fullPayload, "description_image");
       insertResult = await supabase
         .from("cms_products")
         .insert(legacyPayload)
@@ -361,15 +383,23 @@ export async function saveArticleAction(formData: FormData) {
   const status = statusSchema.parse(String(formData.get("status") ?? "draft"));
   const type = articleTypeSchema.parse(String(formData.get("type") ?? "blog"));
   const excerpt = String(formData.get("excerpt") ?? "").trim();
-  const content = sanitizeArticleHtml(String(formData.get("content") ?? ""));
+  const content_blocks = parseAndSanitizeArticleBlocks(
+    formData.get("content_blocks"),
+    status,
+  );
+  const content = serializeArticleContent(content_blocks);
   const coverRaw = String(formData.get("cover_image") ?? "");
   let cover_image: CmsArticleRecord["cover_image"] = null;
 
   if (coverRaw.trim()) {
     try {
-      cover_image = JSON.parse(coverRaw) as CmsArticleRecord["cover_image"];
+      const parsedCover = articleImageSchema.safeParse(JSON.parse(coverRaw));
+      if (!parsedCover.success) {
+        throw new Error("Invalid cover image data.");
+      }
+      cover_image = parsedCover.data;
     } catch {
-      cover_image = null;
+      throw new Error("Invalid cover image data.");
     }
   }
 
@@ -385,12 +415,14 @@ export async function saveArticleAction(formData: FormData) {
     throw new Error("Short summary is required.");
   }
   if (status === "published") {
-    if (!articleHtmlToPlainText(content)) {
-      throw new Error("Main content is required before publishing.");
-    }
-    if (!cover_image?.url || !cover_image.alt?.trim()) {
+    if (
+      !cover_image?.url ||
+      !cover_image.alt?.trim() ||
+      cover_image.width <= 0 ||
+      cover_image.height <= 0
+    ) {
       throw new Error(
-        "A cover image with descriptive alt text is required before publishing.",
+        "A cover image with descriptive alt text, width, and height is required before publishing.",
       );
     }
   }
@@ -415,6 +447,7 @@ export async function saveArticleAction(formData: FormData) {
     slug,
     excerpt,
     content,
+    content_blocks,
     cover_image,
     category: String(formData.get("category") ?? "company"),
     type,
@@ -431,10 +464,17 @@ export async function saveArticleAction(formData: FormData) {
   };
 
   if (id) {
-    const { error } = await supabase
+    let { error } = await supabase
       .from("cms_articles")
       .update(payload)
       .eq("id", id);
+    if (error && /content_blocks/i.test(error.message)) {
+      const legacyPayload = omitKey(payload, "content_blocks");
+      ({ error } = await supabase
+        .from("cms_articles")
+        .update(legacyPayload)
+        .eq("id", id));
+    }
     if (error) {
       throw new Error(error.message);
     }
@@ -445,14 +485,25 @@ export async function saveArticleAction(formData: FormData) {
     redirect(`/admin/blogs/${id}?saved=1`);
   }
 
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from("cms_articles")
     .insert(payload)
     .select("id")
     .single();
+  if (error && /content_blocks/i.test(error.message)) {
+    const legacyPayload = omitKey(payload, "content_blocks");
+    ({ data, error } = await supabase
+      .from("cms_articles")
+      .insert(legacyPayload)
+      .select("id")
+      .single());
+  }
 
   if (error) {
     throw new Error(error.message);
+  }
+  if (!data) {
+    throw new Error("Article was saved but no record was returned.");
   }
 
   revalidateArticlePaths(type, slug);
@@ -518,11 +569,23 @@ export async function uploadAdminImageAction(formData: FormData) {
     return { error: "Unsupported file type." };
   }
 
-  const extension = file.name.split(".").pop()?.toLowerCase() || "webp";
+  const extensionByType: Record<string, string> = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp",
+    "image/gif": "gif",
+  };
+  const extension = extensionByType[file.type];
   const path = `admin/${Date.now()}-${crypto.randomUUID()}.${extension}`;
   const buffer = Buffer.from(await file.arrayBuffer());
 
   try {
+    const sharp = (await import("sharp")).default;
+    const metadata = await sharp(buffer, { animated: false }).metadata();
+    if (!metadata.width || !metadata.height) {
+      return { error: "Could not determine image dimensions." };
+    }
+
     const { createServiceRoleSupabaseClient } = await import(
       "@/lib/supabase/service-role"
     );
@@ -546,8 +609,8 @@ export async function uploadAdminImageAction(formData: FormData) {
     return {
       url: publicUrl,
       alt: "",
-      width: 1024,
-      height: 1024,
+      width: metadata.width,
+      height: metadata.height,
     };
   } catch (error) {
     return {

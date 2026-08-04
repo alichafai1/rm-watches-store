@@ -53,6 +53,7 @@ create table if not exists public.cms_articles (
   title text not null,
   excerpt text not null default '',
   content text not null default '',
+  content_blocks jsonb,
   cover_image jsonb,
   category text not null default 'company',
   type text not null default 'blog' check (type in ('blog', 'guide', 'pillar', 'cluster')),
@@ -63,6 +64,10 @@ create table if not exists public.cms_articles (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Backwards-compatible migration for databases created before structured content.
+alter table public.cms_articles
+add column if not exists content_blocks jsonb;
 
 create index if not exists cms_articles_status_idx on public.cms_articles (status);
 create index if not exists cms_articles_type_status_idx on public.cms_articles (type, status);

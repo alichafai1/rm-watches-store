@@ -2,10 +2,15 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleDetail } from "@/components/content/ArticleDetail";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { getArticleBySlug, getArticlesByType } from "@/lib/data/articles";
+import {
+  getArticleBySlug,
+  getArticlesByType,
+  getRelatedArticles,
+} from "@/lib/data/articles";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { createArticleSchema } from "@/lib/seo/schema/article";
-import { canonicalUrl } from "@/lib/seo/urls";
+import { createBreadcrumbSchema } from "@/lib/seo/schema/breadcrumb";
+import { absoluteUrl, canonicalUrl } from "@/lib/seo/urls";
 import { titleFromSlug } from "@/lib/utils/text";
 
 type BlogArticlePageProps = {
@@ -27,41 +32,53 @@ export async function generateMetadata({
 }: BlogArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
-  const title = article?.seoTitle ?? titleFromSlug(slug);
-  const description = article?.seoDescription ?? article?.excerpt;
+  const publishedArticle =
+    article?.type === "blog" && article.status === "published" ? article : null;
+  const title = publishedArticle?.seoTitle ?? titleFromSlug(slug);
+  const description =
+    publishedArticle?.seoDescription ?? publishedArticle?.excerpt;
   const base = createPageMetadata({
     title,
     description,
     pathname: `/blog/${slug}`,
   });
 
-  return article?.image
+  if (!publishedArticle) {
+    return {
+      ...base,
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const image = publishedArticle.image
     ? {
-        ...base,
-        openGraph: {
-          title,
-          description,
-          url: canonicalUrl(`/blog/${slug}`),
-          type: "article",
-          publishedTime: article.publishedAt,
-          modifiedTime: article.updatedAt,
-          images: [
-            {
-              url: article.image.url,
-              width: article.image.width,
-              height: article.image.height,
-              alt: article.image.alt,
-            },
-          ],
-        },
-        twitter: {
-          card: "summary_large_image",
-          title,
-          description,
-          images: [article.image.url],
-        },
+        url: absoluteUrl(publishedArticle.image.url),
+        width: publishedArticle.image.width,
+        height: publishedArticle.image.height,
+        alt: publishedArticle.image.alt,
       }
-    : base;
+    : undefined;
+
+  return {
+    ...base,
+    openGraph: {
+      ...base.openGraph,
+      title,
+      description,
+      url: canonicalUrl(`/blog/${slug}`),
+      type: "article",
+      publishedTime: publishedArticle.publishedAt,
+      modifiedTime: publishedArticle.updatedAt,
+      images: image ? [image] : undefined,
+    },
+    twitter: {
+      ...base.twitter,
+      card: "summary_large_image",
+      title,
+      description,
+      images: image ? [image.url] : undefined,
+    },
+  };
 }
 
 export default async function BlogArticlePage({
@@ -75,10 +92,17 @@ export default async function BlogArticlePage({
   }
 
   const url = canonicalUrl(`/blog/${article.slug}`);
+  const relatedArticles = await getRelatedArticles(article);
+  const breadcrumbs = [
+    { label: "Home", href: absoluteUrl("/") },
+    { label: "Blog", href: absoluteUrl("/blog") },
+    { label: article.title, href: url },
+  ];
   return (
     <>
       <JsonLd data={createArticleSchema(article, url)} />
-      <ArticleDetail article={article} />
+      <JsonLd data={createBreadcrumbSchema(breadcrumbs)} />
+      <ArticleDetail article={article} relatedArticles={relatedArticles} />
     </>
   );
 }

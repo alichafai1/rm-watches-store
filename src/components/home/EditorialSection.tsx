@@ -32,6 +32,7 @@ export function EditorialSection({ articles, guide }: EditorialSectionProps) {
                     alt={guide.image.alt}
                     className="aspect-[16/10] w-full object-cover opacity-75 transition duration-300 group-hover:scale-105 group-hover:opacity-60"
                     height={guide.image.height}
+                    sizes="(max-width: 1024px) 100vw, 55vw"
                     src={guide.image.url}
                     width={guide.image.width}
                   />
@@ -84,6 +85,7 @@ export function EditorialSection({ articles, guide }: EditorialSectionProps) {
                       alt={article.image.alt}
                       className="aspect-square w-full rounded-xl bg-neutral-50 object-cover"
                       height={article.image.height}
+                      sizes="(max-width: 640px) 96px, 128px"
                       src={article.image.url}
                       width={article.image.width}
                     />

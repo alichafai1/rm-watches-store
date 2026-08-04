@@ -2,10 +2,15 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleDetail } from "@/components/content/ArticleDetail";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { getArticleBySlug, getArticlesByType } from "@/lib/data/articles";
+import {
+  getArticleBySlug,
+  getArticlesByType,
+  getRelatedArticles,
+} from "@/lib/data/articles";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { createArticleSchema } from "@/lib/seo/schema/article";
-import { canonicalUrl } from "@/lib/seo/urls";
+import { createBreadcrumbSchema } from "@/lib/seo/schema/breadcrumb";
+import { absoluteUrl, canonicalUrl } from "@/lib/seo/urls";
 import { titleFromSlug } from "@/lib/utils/text";
 
 type GuidePageProps = {
@@ -27,41 +32,52 @@ export async function generateMetadata({
 }: GuidePageProps): Promise<Metadata> {
   const { slug } = await params;
   const guide = await getArticleBySlug(slug);
-  const title = guide?.seoTitle ?? titleFromSlug(slug);
-  const description = guide?.seoDescription ?? guide?.excerpt;
+  const publishedGuide =
+    guide?.type === "guide" && guide.status === "published" ? guide : null;
+  const title = publishedGuide?.seoTitle ?? titleFromSlug(slug);
+  const description = publishedGuide?.seoDescription ?? publishedGuide?.excerpt;
   const base = createPageMetadata({
     title,
     description,
     pathname: `/guides/${slug}`,
   });
 
-  return guide?.image
+  if (!publishedGuide) {
+    return {
+      ...base,
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const image = publishedGuide.image
     ? {
-        ...base,
-        openGraph: {
-          title,
-          description,
-          url: canonicalUrl(`/guides/${slug}`),
-          type: "article",
-          publishedTime: guide.publishedAt,
-          modifiedTime: guide.updatedAt,
-          images: [
-            {
-              url: guide.image.url,
-              width: guide.image.width,
-              height: guide.image.height,
-              alt: guide.image.alt,
-            },
-          ],
-        },
-        twitter: {
-          card: "summary_large_image",
-          title,
-          description,
-          images: [guide.image.url],
-        },
+        url: absoluteUrl(publishedGuide.image.url),
+        width: publishedGuide.image.width,
+        height: publishedGuide.image.height,
+        alt: publishedGuide.image.alt,
       }
-    : base;
+    : undefined;
+
+  return {
+    ...base,
+    openGraph: {
+      ...base.openGraph,
+      title,
+      description,
+      url: canonicalUrl(`/guides/${slug}`),
+      type: "article",
+      publishedTime: publishedGuide.publishedAt,
+      modifiedTime: publishedGuide.updatedAt,
+      images: image ? [image] : undefined,
+    },
+    twitter: {
+      ...base.twitter,
+      card: "summary_large_image",
+      title,
+      description,
+      images: image ? [image.url] : undefined,
+    },
+  };
 }
 
 export default async function GuideDetailPage({ params }: GuidePageProps) {
@@ -73,10 +89,17 @@ export default async function GuideDetailPage({ params }: GuidePageProps) {
   }
 
   const url = canonicalUrl(`/guides/${guide.slug}`);
+  const relatedArticles = await getRelatedArticles(guide);
+  const breadcrumbs = [
+    { label: "Home", href: absoluteUrl("/") },
+    { label: "Guides", href: absoluteUrl("/guides") },
+    { label: guide.title, href: url },
+  ];
   return (
     <>
       <JsonLd data={createArticleSchema(guide, url)} />
-      <ArticleDetail article={guide} />
+      <JsonLd data={createBreadcrumbSchema(breadcrumbs)} />
+      <ArticleDetail article={guide} relatedArticles={relatedArticles} />
     </>
   );
 }

@@ -10,6 +10,10 @@ import {
   saveArticleAction,
 } from "@/lib/admin/actions";
 import { ArticleRichTextEditor } from "@/components/admin/ArticleRichTextEditor";
+import {
+  articleHtmlToBlocks,
+  extractEmbeddedArticleBlocks,
+} from "@/lib/utils/article-html";
 import type { CmsArticleRecord } from "@/types/cms";
 
 type ArticleFormProps = {
@@ -90,8 +94,13 @@ export function ArticleForm({ article }: ArticleFormProps) {
             descriptive links and alt text to every image.
           </p>
           <ArticleRichTextEditor
-            initialContent={article?.content ?? ""}
-            name="content"
+            initialBlocks={
+              article?.content_blocks?.length
+                ? article.content_blocks
+                : extractEmbeddedArticleBlocks(article?.content ?? "") ??
+                  articleHtmlToBlocks(article?.content ?? "")
+            }
+            name="content_blocks"
           />
         </Field>
       </section>

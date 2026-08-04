@@ -1,5 +1,6 @@
 import { hasUsableCmsEnv } from "@/lib/supabase/env";
 import { createCmsReadSupabaseClients } from "@/lib/supabase/server";
+import { extractEmbeddedArticleBlocks } from "@/lib/utils/article-html";
 import type { Article } from "@/types/article";
 import type { CmsArticleRecord } from "@/types/cms";
 
@@ -10,6 +11,10 @@ export function mapCmsArticleToArticle(record: CmsArticleRecord): Article {
     title: record.title,
     excerpt: record.excerpt,
     content: record.content,
+    contentBlocks:
+      record.content_blocks?.length
+        ? record.content_blocks
+        : extractEmbeddedArticleBlocks(record.content),
     image: record.cover_image ?? undefined,
     category: record.category,
     type: record.type,

@@ -23,6 +23,7 @@ export function ArticleCard({
           alt={article.image.alt}
           className="aspect-[4/3] w-full rounded-md object-cover"
           height={article.image.height}
+          sizes="(max-width: 640px) 100vw, 50vw"
           src={article.image.url}
           width={article.image.width}
         />

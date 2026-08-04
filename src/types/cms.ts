@@ -1,4 +1,9 @@
-import type { ArticleCategory, ArticleType, PublicationStatus } from "@/types/article";
+import type {
+  ArticleCategory,
+  ArticleContentBlock,
+  ArticleType,
+  PublicationStatus,
+} from "@/types/article";
 import type {
   CurrencyCode,
   ProductAbout,
@@ -56,6 +61,8 @@ export type CmsArticleRecord = {
   title: string;
   excerpt: string;
   content: string;
+  /** Optional until the content_blocks database migration has been applied. */
+  content_blocks?: ArticleContentBlock[] | null;
   cover_image: ProductImage | null;
   category: ArticleCategory;
   type: ArticleType;

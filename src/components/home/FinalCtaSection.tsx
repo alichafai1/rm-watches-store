@@ -48,6 +48,7 @@ export function FinalCtaSection() {
               alt="Large watch placeholder for final homepage call to action"
               className="aspect-[4/3] h-full w-full rounded-xl object-cover opacity-90"
               height={800}
+              sizes="(max-width: 1024px) 100vw, 50vw"
               src="/images/placeholders/watch-placeholder.svg"
               width={800}
             />

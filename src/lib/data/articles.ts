@@ -3,7 +3,7 @@ import {
   getPublishedCmsArticleBySlug,
   getPublishedCmsArticles,
 } from "@/lib/data/cms-articles";
-import type { ArticleType } from "@/types/article";
+import type { Article, ArticleType } from "@/types/article";
 
 function publishedMockArticles() {
   return mockArticles.filter((article) => article.status === "published");
@@ -47,4 +47,23 @@ export async function getFeaturedGuide() {
 
 export async function getLatestArticles(limit = 3) {
   return (await getArticlesByType("blog")).slice(0, limit);
+}
+
+export async function getRelatedArticles(article: Article, limit = 3) {
+  const candidates = (await getArticles()).filter(
+    (candidate) => candidate.id !== article.id && candidate.slug !== article.slug,
+  );
+
+  return candidates
+    .sort((a, b) => {
+      const categoryDifference =
+        Number(b.category === article.category) -
+        Number(a.category === article.category);
+      if (categoryDifference !== 0) return categoryDifference;
+      return (
+        new Date(b.publishedAt ?? 0).getTime() -
+        new Date(a.publishedAt ?? 0).getTime()
+      );
+    })
+    .slice(0, limit);
 }
