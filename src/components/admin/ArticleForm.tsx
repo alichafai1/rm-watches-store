@@ -38,7 +38,7 @@ export function ArticleForm({ article }: ArticleFormProps) {
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Title (recommended: 50–60 characters)">
+          <Field label="Article title · H1 automatic (recommended: 50–60 characters)">
             <input
               className={inputClassName}
               defaultValue={article?.title ?? ""}
@@ -91,8 +91,8 @@ export function ArticleForm({ article }: ArticleFormProps) {
         <div className="grid gap-1.5 text-sm">
           <p className="font-medium text-neutral-800">Main content</p>
           <p className="-mt-1 mb-2 text-xs leading-5 text-neutral-500">
-            Use one clear H2 for each main topic and H3 for subsections. Add
-            descriptive links and alt text to every image.
+            The article title above is the only H1. Use H2 for each main section
+            and H3 for subsections, then place paragraph blocks below them.
           </p>
           <ArticleRichTextEditor
             initialBlocks={

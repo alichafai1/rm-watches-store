@@ -36,6 +36,15 @@ function newBlock(type: ArticleContentBlock["type"]): ArticleContentBlock {
   }
 }
 
+function newHeadingBlock(level: 2 | 3): ArticleContentBlock {
+  return {
+    id: blockId(),
+    type: "heading",
+    level,
+    text: "",
+  };
+}
+
 function InlineEditor({
   value,
   onChange,
@@ -232,7 +241,25 @@ export function ArticleRichTextEditor({
       />
 
       <div className="flex flex-wrap gap-2">
-        {(["heading", "paragraph", "list", "quote"] as const).map((type) => (
+        <button
+          className={toolbarButton}
+          onClick={() =>
+            setBlocks((current) => [...current, newHeadingBlock(2)])
+          }
+          type="button"
+        >
+          Add H2 section title
+        </button>
+        <button
+          className={toolbarButton}
+          onClick={() =>
+            setBlocks((current) => [...current, newHeadingBlock(3)])
+          }
+          type="button"
+        >
+          Add H3 subtitle
+        </button>
+        {(["paragraph", "list", "quote"] as const).map((type) => (
           <button
             className={toolbarButton}
             key={type}
@@ -331,13 +358,17 @@ export function ArticleRichTextEditor({
                   }
                   value={block.level}
                 >
-                  <option value={2}>H2</option>
-                  <option value={3}>H3</option>
+                  <option value={2}>H2 · Main section</option>
+                  <option value={3}>H3 · Subsection</option>
                 </select>
                 <input
                   className="min-h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm"
                   onChange={(event) => updateBlock(block.id, { text: event.target.value })}
-                  placeholder="Section heading"
+                  placeholder={
+                    block.level === 2
+                      ? "Main section title"
+                      : "Subsection title"
+                  }
                   value={block.text}
                 />
               </div>
