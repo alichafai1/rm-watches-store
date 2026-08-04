@@ -14,6 +14,19 @@ const columnClassName: Record<NonNullable<ResponsiveGridProps["columns"]>, strin
   product: "grid-cols-2 md:grid-cols-3 xl:grid-cols-4",
 };
 
+/**
+ * Product cards sit two per row on phones, so they get a narrow gap between
+ * columns to leave the watch as much width as possible, and a wider gap between
+ * rows so the cards still read as separate products.
+ */
+const gapClassName: Record<NonNullable<ResponsiveGridProps["columns"]>, string> = {
+  auto: "gap-4 sm:gap-6",
+  two: "gap-4 sm:gap-6",
+  three: "gap-4 sm:gap-6",
+  four: "gap-4 sm:gap-6",
+  product: "gap-x-3 gap-y-8 sm:gap-6",
+};
+
 export function ResponsiveGrid({
   children,
   className,
@@ -22,7 +35,12 @@ export function ResponsiveGrid({
 }: ResponsiveGridProps) {
   return (
     <div
-      className={cn("grid gap-4 sm:gap-6", columnClassName[columns], className)}
+      className={cn(
+        "grid",
+        gapClassName[columns],
+        columnClassName[columns],
+        className,
+      )}
       {...props}
     >
       {children}
