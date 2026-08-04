@@ -14,7 +14,7 @@ type ArticleRichTextEditorProps = {
 };
 
 const toolbarButton =
-  "rounded-md border border-neutral-300 bg-white px-2.5 py-1.5 text-xs font-medium text-neutral-800 hover:border-neutral-950 disabled:opacity-40";
+  "rounded-md border border-neutral-300 bg-white px-2.5 py-1.5 text-xs font-medium text-neutral-800 hover:border-neutral-950 aria-pressed:border-neutral-950 aria-pressed:bg-neutral-950 aria-pressed:text-white disabled:opacity-40";
 
 function blockId() {
   return crypto.randomUUID();
@@ -36,19 +36,12 @@ function newBlock(type: ArticleContentBlock["type"]): ArticleContentBlock {
   }
 }
 
-function newHeadingBlock(level: 2 | 3): ArticleContentBlock {
-  return {
-    id: blockId(),
-    type: "heading",
-    level,
-    text: "",
-  };
-}
-
 function InlineEditor({
+  allowHeadings = false,
   value,
   onChange,
 }: {
+  allowHeadings?: boolean;
   value: string;
   onChange: (value: string) => void;
 }) {
@@ -63,7 +56,7 @@ function InlineEditor({
         codeBlock: false,
         dropcursor: false,
         hardBreak: false,
-        heading: false,
+        heading: allowHeadings ? { levels: [2, 3] } : false,
         horizontalRule: false,
         listItem: false,
         orderedList: false,
@@ -77,7 +70,7 @@ function InlineEditor({
     editorProps: {
       attributes: {
         class:
-          "min-h-20 rounded-b-md border border-t-0 border-neutral-300 bg-white px-3 py-2 text-sm leading-6 outline-none focus:border-neutral-500",
+          "article-editor min-h-20 rounded-b-md border border-t-0 border-neutral-300 bg-white px-3 py-2 text-sm leading-6 outline-none focus:border-neutral-500",
       },
     },
     onUpdate: ({ editor: currentEditor }) => onChange(currentEditor.getHTML()),
@@ -102,28 +95,75 @@ function InlineEditor({
   return (
     <div>
       <div className="flex flex-wrap gap-1 rounded-t-md border border-neutral-300 bg-neutral-50 p-1.5">
+        {allowHeadings ? (
+          <>
+            <button
+              className={toolbarButton}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => editor.chain().focus().setParagraph().run()}
+              aria-pressed={editor.isActive("paragraph")}
+              type="button"
+            >
+              Paragraph
+            </button>
+            <button
+              className={toolbarButton}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 2 }).run()
+              }
+              aria-pressed={editor.isActive("heading", { level: 2 })}
+              type="button"
+            >
+              H2
+            </button>
+            <button
+              className={toolbarButton}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 3 }).run()
+              }
+              aria-pressed={editor.isActive("heading", { level: 3 })}
+              type="button"
+            >
+              H3
+            </button>
+          </>
+        ) : null}
         <button
           className={toolbarButton}
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => editor.chain().focus().toggleBold().run()}
+          aria-pressed={editor.isActive("bold")}
           type="button"
         >
           Bold
         </button>
         <button
           className={toolbarButton}
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => editor.chain().focus().toggleItalic().run()}
+          aria-pressed={editor.isActive("italic")}
           type="button"
         >
           Italic
         </button>
         <button
           className={toolbarButton}
+          onMouseDown={(event) => event.preventDefault()}
           onClick={() => editor.chain().focus().toggleUnderline().run()}
+          aria-pressed={editor.isActive("underline")}
           type="button"
         >
           Underline
         </button>
-        <button className={toolbarButton} onClick={setLink} type="button">
+        <button
+          className={toolbarButton}
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={setLink}
+          aria-pressed={editor.isActive("link")}
+          type="button"
+        >
           Link
         </button>
       </div>
@@ -241,24 +281,6 @@ export function ArticleRichTextEditor({
       />
 
       <div className="flex flex-wrap gap-2">
-        <button
-          className={toolbarButton}
-          onClick={() =>
-            setBlocks((current) => [...current, newHeadingBlock(2)])
-          }
-          type="button"
-        >
-          Add H2 section title
-        </button>
-        <button
-          className={toolbarButton}
-          onClick={() =>
-            setBlocks((current) => [...current, newHeadingBlock(3)])
-          }
-          type="button"
-        >
-          Add H3 subtitle
-        </button>
         {(["paragraph", "list", "quote"] as const).map((type) => (
           <button
             className={toolbarButton}
@@ -374,7 +396,15 @@ export function ArticleRichTextEditor({
               </div>
             ) : null}
 
-            {block.type === "paragraph" || block.type === "quote" ? (
+            {block.type === "paragraph" ? (
+              <InlineEditor
+                allowHeadings
+                onChange={(html) => updateBlock(block.id, { html })}
+                value={block.html}
+              />
+            ) : null}
+
+            {block.type === "quote" ? (
               <InlineEditor
                 onChange={(html) => updateBlock(block.id, { html })}
                 value={block.html}

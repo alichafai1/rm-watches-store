@@ -6,6 +6,7 @@ import { Section } from "@/components/ui/Section";
 import {
   sanitizeArticleHtml,
   sanitizeArticleInlineHtml,
+  sanitizeArticleRichBlockHtml,
 } from "@/lib/utils/article-html";
 import type { Article, ArticleContentBlock } from "@/types/article";
 
@@ -104,9 +105,10 @@ function ArticleBlocks({ blocks }: { blocks: ArticleContentBlock[] }) {
         );
       case "paragraph":
         return (
-          <p
+          <div
+            className="article-rich-block"
             dangerouslySetInnerHTML={{
-              __html: sanitizeArticleInlineHtml(block.html),
+              __html: sanitizeArticleRichBlockHtml(block.html),
             }}
             key={block.id}
           />

@@ -387,7 +387,13 @@ export async function saveArticleAction(formData: FormData) {
     formData.get("content_blocks"),
     status,
   );
-  const content = serializeArticleContent(content_blocks);
+  // Prefer lean HTML when content_blocks is stored; embed only for legacy DBs.
+  const content = serializeArticleContent(content_blocks, {
+    embedBlocks: false,
+  });
+  const legacyContent = serializeArticleContent(content_blocks, {
+    embedBlocks: true,
+  });
   const coverRaw = String(formData.get("cover_image") ?? "");
   let cover_image: CmsArticleRecord["cover_image"] = null;
 
@@ -469,7 +475,10 @@ export async function saveArticleAction(formData: FormData) {
       .update(payload)
       .eq("id", id);
     if (error && /content_blocks/i.test(error.message)) {
-      const legacyPayload = omitKey(payload, "content_blocks");
+      const legacyPayload = {
+        ...omitKey(payload, "content_blocks"),
+        content: legacyContent,
+      };
       ({ error } = await supabase
         .from("cms_articles")
         .update(legacyPayload)
@@ -491,7 +500,10 @@ export async function saveArticleAction(formData: FormData) {
     .select("id")
     .single();
   if (error && /content_blocks/i.test(error.message)) {
-    const legacyPayload = omitKey(payload, "content_blocks");
+    const legacyPayload = {
+      ...omitKey(payload, "content_blocks"),
+      content: legacyContent,
+    };
     ({ data, error } = await supabase
       .from("cms_articles")
       .insert(legacyPayload)

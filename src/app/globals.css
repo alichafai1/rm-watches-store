@@ -113,6 +113,26 @@ a {
   margin-block: 0.85rem;
 }
 
+/* Keep writing compact; the published article retains the spacing above. */
+.article-editor h2 {
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.article-editor h3 {
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.article-editor h2:first-child,
+.article-editor h3:first-child {
+  margin-top: 0;
+}
+
+.article-editor p {
+  margin-block: 0;
+}
+
 .article-editor ul,
 .article-content ul {
   margin: 1rem 0;

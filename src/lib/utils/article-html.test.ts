@@ -107,7 +107,28 @@ describe("structured article content", () => {
     ];
     const stored = serializeArticleContent(blocks);
     expect(stored).toContain("<!-- article-blocks:");
-    expect(extractEmbeddedArticleBlocks(stored)).toEqual(blocks);
+    expect(extractEmbeddedArticleBlocks(stored)).toEqual([
+      { id: "intro", type: "paragraph", html: "<p>Introduction</p>" },
+      blocks[1],
+    ]);
+  });
+
+  it("preserves H2 and H3 lines inside paragraph editor blocks", () => {
+    const blocks: ArticleContentBlock[] = [
+      {
+        id: "rich-paragraph",
+        type: "paragraph",
+        html: "<h2>Main section</h2><p>Body copy</p><h3>Subsection</h3><p>More copy</p>",
+      },
+    ];
+    const parsed = parseAndSanitizeArticleBlocks(
+      asFormValue(blocks),
+      "published",
+    );
+    expect(parsed[0]).toMatchObject({
+      type: "paragraph",
+      html: "<h2>Main section</h2><p>Body copy</p><h3>Subsection</h3><p>More copy</p>",
+    });
   });
 
   it("removes unsafe inline markup", () => {

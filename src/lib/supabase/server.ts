@@ -5,7 +5,8 @@ import {
   getSupabaseUrl,
 } from "@/lib/supabase/env";
 
-const CMS_FETCH_TIMEOUT_MS = 2500;
+/** Allow larger article payloads without aborting mid-flight on cold starts. */
+const CMS_FETCH_TIMEOUT_MS = 8000;
 
 function timedFetch(
   input: RequestInfo | URL,

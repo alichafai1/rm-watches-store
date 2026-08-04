@@ -26,11 +26,11 @@ export function EditorialSection({ articles, guide }: EditorialSectionProps) {
 
           <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
             {guide ? (
-              <article className="group overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-950 text-white transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
+              <article className="group overflow-hidden rounded-2xl border border-neutral-200 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
                 {guide.image ? (
                   <Image
                     alt={guide.image.alt}
-                    className="aspect-[16/10] w-full object-cover opacity-75 transition duration-300 group-hover:scale-105 group-hover:opacity-60"
+                    className="h-auto max-h-[460px] w-full bg-white object-contain"
                     height={guide.image.height}
                     sizes="(max-width: 1024px) 100vw, 55vw"
                     src={guide.image.url}
@@ -38,14 +38,14 @@ export function EditorialSection({ articles, guide }: EditorialSectionProps) {
                   />
                 ) : null}
                 <div className="grid gap-4 p-6 sm:p-8">
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#d6bd7f]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#9f7d3f]">
                     Watch Guides
                   </p>
                   <div className="grid gap-3">
-                    <h3 className="text-2xl font-semibold tracking-tight">
+                    <h3 className="text-2xl font-semibold tracking-tight text-neutral-950">
                       {guide.title}
                     </h3>
-                    <p className="max-w-2xl text-sm leading-6 text-neutral-300">
+                    <p className="max-w-2xl text-sm leading-6 text-neutral-600">
                       {guide.excerpt}
                     </p>
                   </div>
@@ -83,7 +83,7 @@ export function EditorialSection({ articles, guide }: EditorialSectionProps) {
                   {article.image ? (
                     <Image
                       alt={article.image.alt}
-                      className="aspect-square w-full rounded-xl bg-neutral-50 object-cover"
+                      className="aspect-square w-full rounded-xl bg-white object-contain"
                       height={article.image.height}
                       sizes="(max-width: 640px) 96px, 128px"
                       src={article.image.url}

@@ -91,8 +91,8 @@ export function ArticleForm({ article }: ArticleFormProps) {
         <div className="grid gap-1.5 text-sm">
           <p className="font-medium text-neutral-800">Main content</p>
           <p className="-mt-1 mb-2 text-xs leading-5 text-neutral-500">
-            The article title above is the only H1. Use H2 for each main section
-            and H3 for subsections, then place paragraph blocks below them.
+            The article title above is the only H1. In a paragraph block,
+            select a line and use H2 for a main section or H3 for a subsection.
           </p>
           <ArticleRichTextEditor
             initialBlocks={

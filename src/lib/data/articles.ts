@@ -42,6 +42,7 @@ export async function getArticlesByType(type: ArticleType) {
 }
 
 export async function getFeaturedGuide() {
+  // Shares the cached list fetch with getLatestArticles on the homepage.
   return (await getArticlesByType("guide"))[0];
 }
 
@@ -50,6 +51,7 @@ export async function getLatestArticles(limit = 3) {
 }
 
 export async function getRelatedArticles(article: Article, limit = 3) {
+  // Uses the lean list query (no full article bodies).
   const candidates = (await getArticles()).filter(
     (candidate) => candidate.id !== article.id && candidate.slug !== article.slug,
   );

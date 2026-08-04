@@ -41,6 +41,11 @@ const inlineOptions: sanitizeHtml.IOptions = {
   },
 };
 
+const richBlockOptions: sanitizeHtml.IOptions = {
+  ...inlineOptions,
+  allowedTags: ["p", "h2", "h3", "br", "strong", "em", "u", "a"],
+};
+
 const options: sanitizeHtml.IOptions = {
   allowedTags: [
     "p",
@@ -117,15 +122,28 @@ export function sanitizeArticleInlineHtml(value: string) {
   return sanitizeHtml(value.trim(), inlineOptions);
 }
 
+export function sanitizeArticleRichBlockHtml(value: string) {
+  const clean = sanitizeHtml(value.trim(), richBlockOptions);
+  if (!clean) return "";
+  return /<(?:p|h2|h3)\b/i.test(clean) ? clean : `<p>${clean}</p>`;
+}
+
 export function sanitizeArticleHtml(value: string) {
   return sanitizeHtml(value.trim(), options);
 }
 
+/** Fast tag strip for SEO/word-count; not a security boundary. */
 export function articleHtmlToPlainText(value: string) {
-  return sanitizeHtml(sanitizeArticleHtml(value), {
-    allowedTags: [],
-    allowedAttributes: {},
-  })
+  return value
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -186,6 +204,7 @@ export function parseAndSanitizeArticleBlocks(
   const blocks = parsed.data.map((block): ArticleContentBlock => {
     switch (block.type) {
       case "paragraph":
+        return { ...block, html: sanitizeArticleRichBlockHtml(block.html) };
       case "quote":
         return { ...block, html: sanitizeArticleInlineHtml(block.html) };
       case "list":
@@ -235,6 +254,15 @@ export function parseAndSanitizeArticleBlocks(
       if (block.type === "heading" && block.level === 3 && !hasH2) {
         throw new Error("An H3 subsection must come after an H2 section.");
       }
+      if (block.type === "paragraph") {
+        for (const match of block.html.matchAll(/<(h2|h3)\b/gi)) {
+          const level = match[1].toLowerCase();
+          if (level === "h2") hasH2 = true;
+          if (level === "h3" && !hasH2) {
+            throw new Error("An H3 subsection must come after an H2 section.");
+          }
+        }
+      }
       if (
         (block.type === "paragraph" || block.type === "quote") &&
         !hasText(block.html)
@@ -274,7 +302,7 @@ export function articleBlocksToHtml(blocks: ArticleContentBlock[]) {
             : "";
         case "paragraph":
           return hasText(block.html)
-            ? `<p>${sanitizeArticleInlineHtml(block.html)}</p>`
+            ? sanitizeArticleRichBlockHtml(block.html)
             : "";
         case "quote":
           return hasText(block.html)
@@ -310,9 +338,18 @@ export function articleBlocksToHtml(blocks: ArticleContentBlock[]) {
 const embeddedBlocksPattern =
   /<!--\s*article-blocks:([A-Za-z0-9_-]+)\s*-->\s*$/;
 
-/** Stores a sanitized HTML fallback plus non-rendered structured metadata. */
-export function serializeArticleContent(blocks: ArticleContentBlock[]) {
+/**
+ * Stores sanitized HTML. When `embedBlocks` is true (legacy DBs without
+ * content_blocks), also appends a non-rendered structured metadata comment.
+ */
+export function serializeArticleContent(
+  blocks: ArticleContentBlock[],
+  options?: { embedBlocks?: boolean },
+) {
   const html = articleBlocksToHtml(blocks);
+  if (options?.embedBlocks === false) {
+    return html;
+  }
   const encoded = Buffer.from(JSON.stringify(blocks), "utf8").toString(
     "base64url",
   );
