@@ -16,8 +16,11 @@
  *   --slug=<slug>   only process a single product
  *   --concurrency=n products processed in parallel (default 4)
  *   --report        list which images are already normalized and exit
- *   --audit         download every main image and report any that is not square or
- *                   is framed differently to the rest, then exit
+ *   --audit         download every main image and report how each one is framed,
+ *                   flagging any that is not square, then exit
+ *   --ratio=<0-1>   how much of the frame the watch fills (default 0.94). Photos
+ *                   with the strap cropped off look oversized at the default, so
+ *                   they are re-framed nearer the catalogue median of ~0.65
  *   --force         re-normalize main images that were already processed, which is
  *                   needed after changing the framing ratio
  */
@@ -38,6 +41,13 @@ const slugArg = args.find((value) => value.startsWith("--slug="));
 const concurrencyArg = args.find((value) =>
   value.startsWith("--concurrency="),
 );
+const ratioArg = args.find((value) => value.startsWith("--ratio="));
+const contentRatio = ratioArg ? Number(ratioArg.split("=")[1]) : undefined;
+
+if (ratioArg && !(contentRatio! > 0 && contentRatio! <= 1)) {
+  console.error(`--ratio must be between 0 and 1, got "${ratioArg.split("=")[1]}"`);
+  process.exit(1);
+}
 const limit = limitArg ? Number(limitArg.split("=")[1]) : undefined;
 const onlySlug = slugArg ? slugArg.split("=")[1] : undefined;
 const concurrency = concurrencyArg
@@ -240,7 +250,9 @@ async function processProduct(product: (typeof products)[number]) {
       }
 
       const original = Buffer.from(await response.arrayBuffer());
-      const normalized = await normalizeProductImage(original, contentType);
+      const normalized = await normalizeProductImage(original, contentType, {
+        contentRatio,
+      });
 
       if (!normalized) {
         nextImages.push(image);

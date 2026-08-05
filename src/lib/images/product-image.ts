@@ -19,6 +19,12 @@ export const NORMALIZED_IMAGE_PREFIX = "products/normalized/";
  * Share of the square canvas the watch occupies once normalized. Kept high so the
  * watch still reads clearly in the small cards used on phones, while leaving just
  * enough margin that it never looks cropped against the frame edge.
+ *
+ * This measures the watch's longest side, which works because almost every photo
+ * shows the full watch standing upright, so the strap sets the height and the case
+ * reads at a consistent width. A photo whose strap is cropped at the edges has a
+ * much squarer outline, and filling the frame with it makes the case tower over the
+ * neighbouring cards; those are re-framed at a smaller ratio instead.
  */
 const CONTENT_RATIO = 0.94;
 /** Largest square we store; bigger canvases are downscaled to this. */
@@ -42,8 +48,15 @@ export type NormalizedImage = {
 export async function normalizeProductImage(
   input: Buffer,
   contentType: string,
+  options?: {
+    /** Overrides how much of the frame the watch fills. See CONTENT_RATIO. */
+    contentRatio?: number;
+  },
 ): Promise<NormalizedImage | null> {
   if (!NORMALIZABLE_IMAGE_TYPES.includes(contentType)) return null;
+
+  const contentRatio = options?.contentRatio ?? CONTENT_RATIO;
+  if (!(contentRatio > 0 && contentRatio <= 1)) return null;
 
   const sharp = (await import("sharp")).default;
 
@@ -76,7 +89,7 @@ export async function normalizeProductImage(
 
   // Sizing the canvas around the trimmed subject keeps the watch at its native
   // resolution instead of upscaling small photos.
-  const side = Math.ceil(Math.max(width, height) / CONTENT_RATIO);
+  const side = Math.ceil(Math.max(width, height) / contentRatio);
   const left = Math.floor((side - width) / 2);
   const top = Math.floor((side - height) / 2);
 
