@@ -74,19 +74,19 @@ export const footerNavigationGroups: FooterNavigationGroup[] = [
     ],
   },
   {
-    title: "Customer Care",
-    links: [
-      { label: "Contact", href: "/contact" },
-      { label: "FAQ", href: "/faq" },
-    ],
-  },
-  {
     title: "Legal",
     links: [
       { label: "Privacy Policy", href: "/privacy-policy" },
       { label: "Shipping Policy", href: "/shipping-policy" },
       { label: "Refund & Return Policy", href: "/refund-return-policy" },
       { label: "Terms of Service", href: "/terms-of-service" },
+    ],
+  },
+  {
+    title: "Customer Care",
+    links: [
+      { label: "Contact", href: "/contact" },
+      { label: "FAQ", href: "/faq" },
     ],
   },
 ];
