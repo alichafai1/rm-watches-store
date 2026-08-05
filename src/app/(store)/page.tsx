@@ -57,7 +57,6 @@ export default async function HomePage() {
         viewAllHref="/shop/best-sellers"
         viewAllLabel="View best sellers"
       />
-      <BenefitsSection />
       <NewArrivalCollectionsSection collections={newArrivalCollections} />
       <ProductSection
         description="Fresh additions arranged for quick scanning and easy product discovery."
@@ -66,8 +65,9 @@ export default async function HomePage() {
         viewAllHref="/shop/new-arrivals"
         viewAllLabel="View new arrivals"
       />
-      <EditorialSection articles={latestArticles} guide={featuredGuide} />
       <CustomerExperiencesSection reviews={customerReviews} />
+      <EditorialSection articles={latestArticles} guide={featuredGuide} />
+      <BenefitsSection />
       <FaqSection />
       <TrustAssurancesSection />
     </>
