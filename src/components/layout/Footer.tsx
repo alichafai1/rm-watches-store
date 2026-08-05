@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { FooterNavigation } from "@/components/layout/FooterNavigation";
+import { Logo } from "@/components/layout/Logo";
 import { Container } from "@/components/ui/Container";
 import { Divider } from "@/components/ui/Divider";
 import { siteConfig } from "@/constants/site";
@@ -12,11 +14,10 @@ export function Footer() {
         <div className="grid gap-8 py-10 sm:py-12">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_2fr]">
             <section aria-labelledby="footer-brand" className="max-w-sm">
-              <h2
-                className="text-base font-semibold tracking-tight text-neutral-950"
-                id="footer-brand"
-              >
-                {siteConfig.name}
+              <h2 id="footer-brand">
+                <Link className="inline-block" href="/">
+                  <Logo className="h-11" sizes="148px" />
+                </Link>
               </h2>
               <p className="mt-3 text-sm leading-6 text-neutral-600">
                 A clean ecommerce foundation for watch catalog, collection,
