@@ -7,6 +7,7 @@ import {
   paymentIconUrl,
   paymentMethods,
 } from "@/constants/payment-methods";
+import { cn } from "@/lib/utils/cn";
 import type { CurrencyCode, ProductVariant } from "@/types/product";
 
 type ProductPurchasePanelProps = {
@@ -31,18 +32,28 @@ export function ProductPurchasePanel({
           <legend className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500">
             Choose version
           </legend>
-          <div className="mt-2.5 flex flex-wrap gap-2">
+          <div
+            className={cn(
+              "mt-2.5 gap-2",
+              // A short list shares one row on phones as equal columns; a longer
+              // one would squeeze the labels, so it keeps wrapping.
+              variants.length <= 4
+                ? "grid grid-flow-col auto-cols-fr sm:flex sm:flex-wrap"
+                : "flex flex-wrap",
+            )}
+          >
             {variants.map((variant) => {
               const isSelected = selectedVariantName === variant.name;
 
               return (
                 <button
                   aria-pressed={isSelected}
-                  className={
+                  className={cn(
+                    "whitespace-nowrap rounded-lg border px-2 py-2.5 text-center text-[13px] sm:px-4 sm:text-sm",
                     isSelected
-                      ? "rounded-lg border border-[#b08a3c] bg-[#f8f2e8] px-4 py-2.5 text-sm font-semibold text-neutral-950"
-                      : "rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm font-medium text-neutral-800 hover:border-neutral-400"
-                  }
+                      ? "border-[#b08a3c] bg-[#f8f2e8] font-semibold text-neutral-950"
+                      : "border-neutral-200 bg-white font-medium text-neutral-800 hover:border-neutral-400",
+                  )}
                   key={variant.name}
                   onClick={() => onVariantChange(variant)}
                   type="button"
