@@ -28,8 +28,7 @@ export const checkoutShippingOptions: CheckoutShippingOption[] = [
  */
 export const checkoutPaymentOptions: CheckoutPaymentOption[] = [
   {
-    id: "secure-payment",
-    label: "Secure Payment",
-    description: "Card and wallet payments, processed on an encrypted connection",
+    id: "flypay",
+    label: "flypay",
   },
 ];
