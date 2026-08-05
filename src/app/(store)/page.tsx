@@ -49,7 +49,6 @@ export default async function HomePage() {
       <JsonLd data={createFaqPageSchema(homepageFaqItems)} />
       <HeroSection />
       <FeaturedCollectionsSection collections={featuredCollections} />
-      <NewArrivalCollectionsSection collections={newArrivalCollections} />
       <ProductSection
         description="A focused selection of watches presented with clean imagery, concise details, and clear paths to explore more."
         eyebrow="Popular picks"
@@ -58,6 +57,8 @@ export default async function HomePage() {
         viewAllHref="/shop/best-sellers"
         viewAllLabel="View best sellers"
       />
+      <BenefitsSection />
+      <NewArrivalCollectionsSection collections={newArrivalCollections} />
       <ProductSection
         description="Fresh additions arranged for quick scanning and easy product discovery."
         products={newArrivalProducts}
@@ -65,7 +66,6 @@ export default async function HomePage() {
         viewAllHref="/shop/new-arrivals"
         viewAllLabel="View new arrivals"
       />
-      <BenefitsSection />
       <EditorialSection articles={latestArticles} guide={featuredGuide} />
       <CustomerExperiencesSection reviews={customerReviews} />
       <FaqSection />
