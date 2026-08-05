@@ -1,74 +1,20 @@
 import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-
-type TrustAssurance = {
-  description: string;
-  iconAlt?: string;
-  iconClassName?: string;
-  iconSrc?: string;
-  id: string;
-  title: string;
-};
-
-const trustAssurances: TrustAssurance[] = [
-  {
-    id: "free-shipping",
-    title: "Free Shipping",
-    description: "Expected delivery between 2–3 days",
-    iconSrc:
-      "https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/free%20shipping%20icon.webp",
-    iconAlt: "Free shipping",
-    iconClassName: "scale-[1]",
-  },
-  {
-    id: "returns",
-    title: "30 Days Return",
-    description: "Return label included for easy returns",
-    iconSrc:
-      "https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/days%20moneyback.webp",
-    iconAlt: "30 days return",
-    // This asset fills nearly the full canvas; others have ~20% padding.
-    iconClassName: "scale-[1]",
-  },
-  {
-    id: "secure-checkout",
-    title: "Secure checkout powered by Stripe",
-    description: "Payments are processed securely",
-    iconSrc:
-      "https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/secure%20checkout%20icon.webp",
-    iconAlt: "Secure checkout",
-    iconClassName: "scale-[1]",
-  },
-];
-
-function TrustAssuranceIconPlaceholder() {
-  return (
-    <span
-      aria-hidden="true"
-      className="flex size-12 shrink-0 items-center justify-center rounded-full border border-neutral-200 bg-neutral-100 text-[10px] font-medium uppercase tracking-[0.14em] text-neutral-400"
-    >
-      Icon
-    </span>
-  );
-}
+import { trustAssurances, type TrustAssurance } from "@/constants/trust-assurances";
 
 function TrustAssuranceIcon({ item }: { item: TrustAssurance }) {
-  if (item.iconSrc) {
-    return (
-      <span className="relative block size-12 shrink-0">
-        <Image
-          alt={item.iconAlt ?? item.title}
-          className={`object-contain object-center ${item.iconClassName ?? "scale-[1.25]"}`}
-          fill
-          sizes="48px"
-          src={item.iconSrc}
-        />
-      </span>
-    );
-  }
-
-  return <TrustAssuranceIconPlaceholder />;
+  return (
+    <span className="relative block size-12 shrink-0">
+      <Image
+        alt={item.iconAlt}
+        className="object-contain object-center"
+        fill
+        sizes="48px"
+        src={item.iconSrc}
+      />
+    </span>
+  );
 }
 
 export function TrustAssurancesSection() {

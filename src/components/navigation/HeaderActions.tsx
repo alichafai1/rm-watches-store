@@ -1,3 +1,4 @@
+import { CartLink } from "@/components/cart/CartLink";
 import type { CommerceUtilityAction } from "@/constants/navigation";
 import { commerceUtilityActions } from "@/constants/navigation";
 import { IconButton } from "@/components/ui/IconButton";
@@ -55,17 +56,25 @@ function ActionIcon({ id }: Pick<CommerceUtilityAction, "id">) {
 }
 
 export function HeaderActions({ className, compact = false }: HeaderActionsProps) {
+  // The cart is the only action wired up so far, so it stays visible on phones
+  // while the remaining placeholders are hidden to save room.
   const actions = compact
-    ? commerceUtilityActions.filter((action) => action.id === "search")
+    ? commerceUtilityActions.filter(
+        (action) => action.id === "search" || action.id === "cart",
+      )
     : commerceUtilityActions;
 
   return (
     <div className={cn("flex items-center gap-1", className)}>
-      {actions.map((action) => (
-        <IconButton key={action.id} label={action.label}>
-          <ActionIcon id={action.id} />
-        </IconButton>
-      ))}
+      {actions.map((action) =>
+        action.id === "cart" ? (
+          <CartLink key={action.id} />
+        ) : (
+          <IconButton key={action.id} label={action.label}>
+            <ActionIcon id={action.id} />
+          </IconButton>
+        ),
+      )}
     </div>
   );
 }

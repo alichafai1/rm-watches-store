@@ -1,29 +1,73 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useCart } from "@/components/cart/useCart";
 import { Button } from "@/components/ui/Button";
 import {
   paymentIconUrl,
   paymentMethods,
 } from "@/constants/payment-methods";
 import { cn } from "@/lib/utils/cn";
-import type { CurrencyCode, ProductVariant } from "@/types/product";
+import type { CartItemInput } from "@/types/cart";
+import type { Product, ProductVariant } from "@/types/product";
 
 type ProductPurchasePanelProps = {
-  currency: CurrencyCode;
   onVariantChange: (variant: ProductVariant) => void;
-  selectedVariantName: string;
-  variants: ProductVariant[];
+  product: Product;
+  selectedVariant: ProductVariant | null;
 };
 
 export function ProductPurchasePanel({
   onVariantChange,
-  selectedVariantName,
-  variants,
+  product,
+  selectedVariant,
 }: ProductPurchasePanelProps) {
+  const router = useRouter();
+  const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [justAdded, setJustAdded] = useState(false);
+  const addedTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const variants = product.variants;
   const hasVariants = variants.length > 0;
+  const isSoldOut = product.stock === "out_of_stock";
+  const selectedVariantName = selectedVariant?.name ?? "";
+
+  useEffect(() => {
+    return () => {
+      if (addedTimeout.current) clearTimeout(addedTimeout.current);
+    };
+  }, []);
+
+  function buildCartItem(): CartItemInput {
+    const image = product.images[0];
+
+    return {
+      compareAtPrice: product.compareAtPrice,
+      currency: product.currency,
+      image: image ? { alt: image.alt, url: image.url } : undefined,
+      productId: product.id,
+      slug: product.slug,
+      title: product.title,
+      unitPrice: selectedVariant?.price ?? product.price,
+      variantName: selectedVariant?.name,
+    };
+  }
+
+  function handleAddToCart() {
+    addItem(buildCartItem(), quantity);
+    setJustAdded(true);
+
+    if (addedTimeout.current) clearTimeout(addedTimeout.current);
+    addedTimeout.current = setTimeout(() => setJustAdded(false), 2200);
+  }
+
+  function handleBuyNow() {
+    addItem(buildCartItem(), quantity);
+    router.push("/checkout");
+  }
 
   return (
     <div className="grid gap-6">
@@ -95,19 +139,30 @@ export function ProductPurchasePanel({
                 +
               </button>
             </div>
-            <Button className="min-h-12 uppercase tracking-wide" disabled>
-              Add To Cart
+            <Button
+              className="min-h-12 uppercase tracking-wide"
+              disabled={isSoldOut}
+              onClick={handleAddToCart}
+            >
+              {justAdded ? "Added To Cart" : "Add To Cart"}
             </Button>
           </div>
 
           <button
-            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-[#9a752e] bg-[#9a752e] px-5 text-sm font-semibold uppercase tracking-[0.14em] text-white transition duration-200 hover:border-[#866432] hover:bg-[#866432] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9a752e] focus-visible:ring-offset-2"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-[#9a752e] bg-[#9a752e] px-5 text-sm font-semibold uppercase tracking-[0.14em] text-white transition duration-200 hover:border-[#866432] hover:bg-[#866432] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9a752e] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={isSoldOut}
+            onClick={handleBuyNow}
             type="button"
           >
             Buy Now
           </button>
-          <p className="text-center text-xs leading-relaxed text-neutral-500 sm:text-[13px]">
-            Express checkout — skip the cart and pay securely
+          <p
+            aria-live="polite"
+            className="text-center text-xs leading-relaxed text-neutral-500 sm:text-[13px]"
+          >
+            {justAdded
+              ? "Added to your cart — open the cart to check out."
+              : "Express checkout — skip the cart and pay securely"}
           </p>
         </div>
 

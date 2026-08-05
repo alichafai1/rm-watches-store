@@ -113,10 +113,9 @@ export function ProductMainSection({
           </div>
 
           <ProductPurchasePanel
-            currency={product.currency}
             onVariantChange={setSelectedVariant}
-            selectedVariantName={selectedVariant?.name ?? ""}
-            variants={product.variants}
+            product={product}
+            selectedVariant={selectedVariant}
           />
         </div>
       </div>
