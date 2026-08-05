@@ -4,18 +4,18 @@ import { createBreadcrumbs } from "@/lib/seo/breadcrumbs";
 import { createPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Privacy Policy",
-  description: "Privacy Policy for RM Watches Store.",
-  pathname: "/privacy-policy",
+  title: "Refund & Return Policy",
+  description: "Refund and Return Policy for RM Watches Store.",
+  pathname: "/refund-return-policy",
 });
 
-export default function PrivacyPolicyPage() {
+export default function RefundReturnPolicyPage() {
   return (
     <PolicyPage
       breadcrumbs={createBreadcrumbs([
-        { label: "Privacy Policy", href: "/privacy-policy" },
+        { label: "Refund & Return Policy", href: "/refund-return-policy" },
       ])}
-      title="Privacy Policy"
+      title="Refund & Return Policy"
     />
   );
 }

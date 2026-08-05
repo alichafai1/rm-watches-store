@@ -4,18 +4,18 @@ import { createBreadcrumbs } from "@/lib/seo/breadcrumbs";
 import { createPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Privacy Policy",
-  description: "Privacy Policy for RM Watches Store.",
-  pathname: "/privacy-policy",
+  title: "Terms of Service",
+  description: "Terms of Service for RM Watches Store.",
+  pathname: "/terms-of-service",
 });
 
-export default function PrivacyPolicyPage() {
+export default function TermsOfServicePage() {
   return (
     <PolicyPage
       breadcrumbs={createBreadcrumbs([
-        { label: "Privacy Policy", href: "/privacy-policy" },
+        { label: "Terms of Service", href: "/terms-of-service" },
       ])}
-      title="Privacy Policy"
+      title="Terms of Service"
     />
   );
 }

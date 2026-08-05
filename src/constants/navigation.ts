@@ -78,8 +78,6 @@ export const footerNavigationGroups: FooterNavigationGroup[] = [
     links: [
       { label: "Contact", href: "/contact" },
       { label: "FAQ", href: "/faq" },
-      { label: "Shipping", href: "/shipping" },
-      { label: "Returns", href: "/returns" },
       { label: "Warranty", href: "/warranty" },
     ],
   },
@@ -87,7 +85,9 @@ export const footerNavigationGroups: FooterNavigationGroup[] = [
     title: "Legal",
     links: [
       { label: "Privacy Policy", href: "/privacy-policy" },
-      { label: "Terms", href: "/terms" },
+      { label: "Shipping Policy", href: "/shipping-policy" },
+      { label: "Refund & Return Policy", href: "/refund-return-policy" },
+      { label: "Terms of Service", href: "/terms-of-service" },
     ],
   },
 ];
