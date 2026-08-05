@@ -86,6 +86,22 @@ a {
   color: #ffffff !important;
 }
 
+/*
+ * Gallery arrows stay out of the way on mouse and trackpad devices until the
+ * frame is hovered or an arrow takes focus. Touch devices have no hover state,
+ * so there they remain visible.
+ */
+@media (hover: hover) and (pointer: fine) {
+  .gallery-arrow {
+    opacity: 0;
+  }
+
+  .gallery-frame:hover .gallery-arrow,
+  .gallery-frame:focus-within .gallery-arrow {
+    opacity: 1;
+  }
+}
+
 .home-cta-outline-dark:hover {
   border-color: #ffffff !important;
   background: rgb(255 255 255 / 0.1) !important;

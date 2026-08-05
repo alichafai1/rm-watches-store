@@ -1,8 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useId, useState } from "react";
+import { useId, useState } from "react";
+import { GalleryArrow } from "@/components/ecommerce/product-page/GalleryArrow";
 import { ImageZoomTrigger } from "@/components/ecommerce/product-page/ImageZoomTrigger";
+import { ProductImageViewer } from "@/components/ecommerce/product-page/ProductImageViewer";
 import type { ProductImage } from "@/types/product";
 
 type ProductGalleryProps = {
@@ -28,18 +30,25 @@ export function ProductGallery({
 }: ProductGalleryProps) {
   const labelId = useId();
   const galleryImages = images.length > 0 ? images : [];
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const activeImage = galleryImages[activeIndex];
-  const hasMultiple = galleryImages.length > 1;
   const imageSignature = galleryImages.map((image) => image.url).join("|");
 
-  useEffect(() => {
-    setActiveIndex(0);
-  }, [imageSignature]);
+  const [state, setState] = useState({ activeIndex: 0, signature: imageSignature });
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
+
+  // Switching to another product replaces the image set, so the index resets.
+  if (state.signature !== imageSignature) {
+    setState({ activeIndex: 0, signature: imageSignature });
+  }
+
+  const activeIndex = state.activeIndex;
+  const activeImage = galleryImages[activeIndex];
+  const hasMultiple = galleryImages.length > 1;
 
   function selectImage(index: number) {
-    setActiveIndex(clampIndex(index, galleryImages.length));
+    setState((current) => ({
+      ...current,
+      activeIndex: clampIndex(index, galleryImages.length),
+    }));
   }
 
   if (!activeImage) {
@@ -56,11 +65,20 @@ export function ProductGallery({
         Product images for {productTitle}
       </p>
 
-      <div className="relative">
+      {/* `gallery-frame` drives the arrow hover reveal on pointer devices. */}
+      <div
+        className="gallery-frame relative"
+        onKeyDown={(event) => {
+          if (!hasMultiple) return;
+          if (event.key === "ArrowRight") selectImage(activeIndex + 1);
+          if (event.key === "ArrowLeft") selectImage(activeIndex - 1);
+        }}
+      >
         <ImageZoomTrigger
           alt={activeImage.alt || productTitle}
           className="aspect-[5/4] w-full rounded-[20px] bg-white shadow-none ring-0"
           imageClassName="object-contain"
+          onRequestFullscreen={() => setIsViewerOpen(true)}
           onSwipeNext={
             hasMultiple
               ? () => selectImage(activeIndex + 1)
@@ -75,6 +93,21 @@ export function ProductGallery({
           sizes="(min-width: 1024px) 48vw, 100vw"
           src={activeImage.url}
         />
+
+        {hasMultiple ? (
+          <>
+            <GalleryArrow
+              direction="previous"
+              label="Previous image"
+              onClick={() => selectImage(activeIndex - 1)}
+            />
+            <GalleryArrow
+              direction="next"
+              label="Next image"
+              onClick={() => selectImage(activeIndex + 1)}
+            />
+          </>
+        ) : null}
 
         {hasMultiple ? (
           <div
@@ -137,6 +170,16 @@ export function ProductGallery({
             );
           })}
         </div>
+      ) : null}
+
+      {isViewerOpen ? (
+        <ProductImageViewer
+          activeIndex={activeIndex}
+          images={galleryImages}
+          onClose={() => setIsViewerOpen(false)}
+          onIndexChange={selectImage}
+          productTitle={productTitle}
+        />
       ) : null}
     </div>
   );

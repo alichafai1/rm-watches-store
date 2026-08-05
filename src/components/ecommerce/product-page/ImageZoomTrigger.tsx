@@ -18,8 +18,13 @@ type ImageZoomTriggerProps = {
   sizes: string;
   priority?: boolean;
   children?: ReactNode;
-  /** Zoom scale when clicked. Default 2.4 */
+  /** Zoom scale on pointer devices when clicked. Default 2.4 */
   zoomScale?: number;
+  /**
+   * Touch devices open the full-screen viewer instead of zooming in place: the
+   * frame is far too small to explore a watch dial inside.
+   */
+  onRequestFullscreen?: () => void;
   onSwipeNext?: () => void;
   onSwipePrevious?: () => void;
 };
@@ -27,6 +32,7 @@ type ImageZoomTriggerProps = {
 type Point = { x: number; y: number };
 
 const SWIPE_THRESHOLD_PX = 48;
+const FADE_MS = 260;
 
 function pointFromEvent(event: MouseEvent<HTMLButtonElement>): Point {
   const rect = event.currentTarget.getBoundingClientRect();
@@ -59,20 +65,51 @@ export function ImageZoomTrigger({
   priority = false,
   children,
   zoomScale = 2.4,
+  onRequestFullscreen,
   onSwipeNext,
   onSwipePrevious,
 }: ImageZoomTriggerProps) {
   const [cursor, setCursor] = useState<Point | null>(null);
   const [isZoomed, setIsZoomed] = useState(false);
   const [origin, setOrigin] = useState<Point>({ x: 50, y: 50 });
+
+  /**
+   * The outgoing image stays mounted until the incoming one has loaded, so
+   * switching images dissolves instead of flashing the empty frame.
+   */
+  const [layers, setLayers] = useState<{ current: string; outgoing: string | null }>({
+    current: src,
+    outgoing: null,
+  });
+  const [isCurrentLoaded, setIsCurrentLoaded] = useState(true);
+
   const touchStartRef = useRef<Point | null>(null);
   const didSwipeRef = useRef(false);
+  const suppressClickRef = useRef(false);
+  const fadeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
+  if (layers.current !== src) {
+    setLayers({ current: src, outgoing: layers.current });
+    setIsCurrentLoaded(false);
     setIsZoomed(false);
     setOrigin({ x: 50, y: 50 });
     setCursor(null);
-  }, [src]);
+  }
+
+  useEffect(() => {
+    return () => {
+      if (fadeTimeoutRef.current) clearTimeout(fadeTimeoutRef.current);
+    };
+  }, []);
+
+  function handleCurrentLoaded() {
+    setIsCurrentLoaded(true);
+
+    if (fadeTimeoutRef.current) clearTimeout(fadeTimeoutRef.current);
+    fadeTimeoutRef.current = setTimeout(() => {
+      setLayers((current) => ({ ...current, outgoing: null }));
+    }, FADE_MS);
+  }
 
   function handleMove(event: MouseEvent<HTMLButtonElement>) {
     const nextCursor = pointFromEvent(event);
@@ -84,20 +121,15 @@ export function ImageZoomTrigger({
   }
 
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
-    if (didSwipeRef.current) {
+    if (didSwipeRef.current || suppressClickRef.current) {
       didSwipeRef.current = false;
+      suppressClickRef.current = false;
       return;
     }
 
     const nextOrigin = originFromEvent(event);
     setOrigin(nextOrigin);
-
-    if (isZoomed) {
-      setIsZoomed(false);
-      return;
-    }
-
-    setIsZoomed(true);
+    setIsZoomed((current) => !current);
   }
 
   function handleTouchStart(event: TouchEvent<HTMLButtonElement>) {
@@ -108,6 +140,8 @@ export function ImageZoomTrigger({
 
     touchStartRef.current = { x: touch.clientX, y: touch.clientY };
     didSwipeRef.current = false;
+    // A previous tap may have opened the viewer without a click ever arriving.
+    suppressClickRef.current = false;
   }
 
   function handleTouchEnd(event: TouchEvent<HTMLButtonElement>) {
@@ -115,28 +149,37 @@ export function ImageZoomTrigger({
     const touch = event.changedTouches[0];
     touchStartRef.current = null;
 
-    if (!start || !touch || isZoomed) {
+    if (!start || !touch) {
       return;
     }
 
     const dx = touch.clientX - start.x;
     const dy = touch.clientY - start.y;
+    const isHorizontalSwipe =
+      Math.abs(dx) >= SWIPE_THRESHOLD_PX && Math.abs(dx) >= Math.abs(dy) * 1.15;
 
-    if (
-      Math.abs(dx) < SWIPE_THRESHOLD_PX ||
-      Math.abs(dx) < Math.abs(dy) * 1.15
-    ) {
+    if (isHorizontalSwipe) {
+      didSwipeRef.current = true;
+
+      if (dx < 0) {
+        onSwipeNext?.();
+      } else {
+        onSwipePrevious?.();
+      }
       return;
     }
 
-    didSwipeRef.current = true;
-
-    if (dx < 0) {
-      onSwipeNext?.();
-    } else {
-      onSwipePrevious?.();
+    if (onRequestFullscreen && Math.hypot(dx, dy) < 12) {
+      // The browser fires click after touchend; that click must not also zoom.
+      suppressClickRef.current = true;
+      onRequestFullscreen();
     }
   }
+
+  const zoomStyle = {
+    transform: isZoomed ? `scale(${zoomScale})` : "scale(1)",
+    transformOrigin: `${origin.x}% ${origin.y}%`,
+  };
 
   return (
     <button
@@ -157,17 +200,31 @@ export function ImageZoomTrigger({
       onTouchStart={handleTouchStart}
       type="button"
     >
+      {layers.outgoing ? (
+        <Image
+          alt=""
+          aria-hidden="true"
+          className={imageClassName}
+          fill
+          key={layers.outgoing}
+          sizes={sizes}
+          src={layers.outgoing}
+          style={zoomStyle}
+        />
+      ) : null}
+
       <Image
         alt={alt}
-        className={imageClassName}
+        className={`${imageClassName} transition-opacity duration-[260ms] ease-out ${
+          isCurrentLoaded ? "opacity-100" : "opacity-0"
+        }`}
         fill
+        key={layers.current}
+        onLoad={handleCurrentLoaded}
         priority={priority}
         sizes={sizes}
-        src={src}
-        style={{
-          transform: isZoomed ? `scale(${zoomScale})` : "scale(1)",
-          transformOrigin: `${origin.x}% ${origin.y}%`,
-        }}
+        src={layers.current}
+        style={zoomStyle}
       />
 
       {!isZoomed && cursor ? (
