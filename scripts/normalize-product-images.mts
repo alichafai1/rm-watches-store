@@ -16,6 +16,8 @@
  *   --slug=<slug>   only process a single product
  *   --concurrency=n products processed in parallel (default 4)
  *   --report        list which images are already normalized and exit
+ *   --audit         download every main image and report any that is not square or
+ *                   is framed differently to the rest, then exit
  *   --force         re-normalize main images that were already processed, which is
  *                   needed after changing the framing ratio
  */
@@ -29,6 +31,7 @@ const NORMALIZED_PREFIX = "products/normalized/";
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
 const reportOnly = args.includes("--report");
+const auditOnly = args.includes("--audit");
 const force = args.includes("--force");
 const limitArg = args.find((value) => value.startsWith("--limit="));
 const slugArg = args.find((value) => value.startsWith("--slug="));
@@ -141,6 +144,48 @@ Report over ${products.length} product(s):
   products fully untouched:            ${untouched}
 `);
   process.exit(0);
+}
+
+if (auditOnly) {
+  // A card only looks consistent when the canvas is square and the watch fills the
+  // same share of it, so check the pixels rather than trusting the storage path.
+  const offenders: string[] = [];
+
+  for (const product of products) {
+    const images = Array.isArray(product.images) ? product.images : [];
+    const url = typeof images[0]?.url === "string" ? images[0].url : "";
+    if (!url.startsWith("http")) continue;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`download failed (${response.status})`);
+
+      const buffer = Buffer.from(await response.arrayBuffer());
+      const sharp = (await import("sharp")).default;
+      const meta = await sharp(buffer).metadata();
+      const square = meta.width === meta.height;
+      const fill = await measureFill(buffer);
+
+      if (!square || fill < 0.9) {
+        offenders.push(
+          `  ${product.slug}\n    ${meta.width}x${meta.height}${square ? "" : " NOT SQUARE"} fill=${(fill * 100).toFixed(0)}%`,
+        );
+      }
+    } catch (auditError) {
+      offenders.push(
+        `  ${product.slug}\n    could not read (${auditError instanceof Error ? auditError.message : auditError})`,
+      );
+    }
+  }
+
+  if (offenders.length) {
+    console.log(`Main images framed differently to the rest:\n${offenders.join("\n")}`);
+    console.log(`\nRe-frame each with: --force --slug=<slug>`);
+  } else {
+    console.log(`All ${products.length} main image(s) are square and evenly framed.`);
+  }
+
+  process.exit(offenders.length ? 1 : 0);
 }
 
 console.log(
