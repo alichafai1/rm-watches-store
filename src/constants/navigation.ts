@@ -78,7 +78,6 @@ export const footerNavigationGroups: FooterNavigationGroup[] = [
     links: [
       { label: "Contact", href: "/contact" },
       { label: "FAQ", href: "/faq" },
-      { label: "Warranty", href: "/warranty" },
     ],
   },
   {

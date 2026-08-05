@@ -17,7 +17,6 @@ export const staticRoutes: RouteItem[] = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "FAQ", href: "/faq" },
-  { label: "Warranty", href: "/warranty" },
   { label: "Privacy Policy", href: "/privacy-policy" },
   { label: "Shipping Policy", href: "/shipping-policy" },
   { label: "Refund & Return Policy", href: "/refund-return-policy" },
