@@ -14,6 +14,7 @@ import {
   getCollectionProducts,
   getCollections,
 } from "@/lib/data/collections";
+import { getNewArrivalCollectionBySlug } from "@/lib/data/new-arrival-collections";
 import { createBreadcrumbs } from "@/lib/seo/breadcrumbs";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { titleFromSlug } from "@/lib/utils/text";
@@ -54,6 +55,15 @@ export default async function CollectionDetailPage({
   const legacyCollection = getCollectionByLegacySlug(slug);
   if (legacyCollection) {
     permanentRedirect(`/collections/${legacyCollection.slug}`);
+  }
+
+  // New-arrival collections live under /new-arrival-collections/[slug].
+  // Redirect misplaced /collections/{slug} requests so they don't 404.
+  const newArrivalCollection = getNewArrivalCollectionBySlug(slug);
+  if (newArrivalCollection) {
+    permanentRedirect(
+      `/new-arrival-collections/${newArrivalCollection.slug}`,
+    );
   }
 
   const collection = getCollectionBySlug(slug);

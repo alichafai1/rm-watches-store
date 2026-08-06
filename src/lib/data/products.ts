@@ -7,7 +7,13 @@ import {
 import type { Product } from "@/types/product";
 
 export function getProductCollectionPath(slug: string) {
-  if (slug.startsWith("new-arrival-")) {
+  // New-arrival collections use name-based slugs (e.g. rm-07-01), not only
+  // the legacy "new-arrival-N" prefix — look up the registry before defaulting
+  // to /collections/, or product breadcrumbs link to 404s.
+  if (
+    slug.startsWith("new-arrival-") ||
+    Boolean(getNewArrivalCollectionBySlug(slug))
+  ) {
     return `/new-arrival-collections/${slug}`;
   }
 
