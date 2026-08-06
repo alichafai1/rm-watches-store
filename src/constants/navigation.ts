@@ -21,11 +21,7 @@ export type AnnouncementConfig = {
 
 export const announcementBar: AnnouncementConfig = {
   enabled: true,
-  message: "Phase 2 global shell placeholder.",
-  link: {
-    label: "View shop",
-    href: "/shop",
-  },
+  message: "Free shipping worldwide",
 };
 
 export const mainNavigation: NavigationItem[] = [
