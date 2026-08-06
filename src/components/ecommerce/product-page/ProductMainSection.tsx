@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ProductGallery } from "@/components/ecommerce/product-page/ProductGallery";
 import { ProductPurchasePanel } from "@/components/ecommerce/product-page/ProductPurchasePanel";
 import { ProductRatingStars } from "@/components/ecommerce/ProductRatingStars";
+import { trackViewItem } from "@/lib/analytics/gtag";
 import { formatPrice } from "@/lib/utils/format-price";
 import type { BreadcrumbItem } from "@/types/seo";
 import type {
@@ -28,6 +29,23 @@ export function ProductMainSection({
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
     initialVariant ?? null,
   );
+
+  useEffect(() => {
+    const price = product.variants[0]?.price ?? product.price;
+    trackViewItem({
+      currency: product.currency,
+      value: price,
+      items: [
+        {
+          item_id: product.id,
+          item_name: product.title,
+          item_variant: product.variants[0]?.name,
+          price,
+          quantity: 1,
+        },
+      ],
+    });
+  }, [product]);
 
   const displayPrice = selectedVariant?.price ?? product.price;
   const discountPercent =

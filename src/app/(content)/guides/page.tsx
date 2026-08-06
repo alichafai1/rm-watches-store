@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { GuideCard } from "@/components/guides/GuideCard";
 import { PlaceholderPage } from "@/components/ui/PlaceholderPage";
+import { ResponsiveGrid } from "@/components/ui/ResponsiveGrid";
 import { getArticlesByType } from "@/lib/data/articles";
 import { createBreadcrumbs } from "@/lib/seo/breadcrumbs";
 import { createPageMetadata } from "@/lib/seo/metadata";
@@ -23,11 +24,11 @@ export default async function GuidesPage() {
       description="Detailed resources to help you choose, understand, and care for your watch."
       title="Watch Guides"
     >
-      <div className="grid gap-4 sm:grid-cols-2">
+      <ResponsiveGrid columns="three">
         {guides.map((guide) => (
           <GuideCard guide={guide} key={guide.id} />
         ))}
-      </div>
+      </ResponsiveGrid>
     </PlaceholderPage>
   );
 }

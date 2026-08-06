@@ -9,6 +9,7 @@ import {
   paymentIconUrl,
   paymentMethods,
 } from "@/constants/payment-methods";
+import { trackAddToCart, trackEvent } from "@/lib/analytics/gtag";
 import { cn } from "@/lib/utils/cn";
 import type { CartItemInput } from "@/types/cart";
 import type { Product, ProductVariant } from "@/types/product";
@@ -56,8 +57,26 @@ export function ProductPurchasePanel({
     };
   }
 
+  function trackCartAdd() {
+    const unitPrice = selectedVariant?.price ?? product.price;
+    trackAddToCart({
+      currency: product.currency,
+      value: unitPrice * quantity,
+      items: [
+        {
+          item_id: product.id,
+          item_name: product.title,
+          item_variant: selectedVariant?.name,
+          price: unitPrice,
+          quantity,
+        },
+      ],
+    });
+  }
+
   function handleAddToCart() {
     addItem(buildCartItem(), quantity);
+    trackCartAdd();
     setJustAdded(true);
 
     if (addedTimeout.current) clearTimeout(addedTimeout.current);
@@ -66,6 +85,13 @@ export function ProductPurchasePanel({
 
   function handleBuyNow() {
     addItem(buildCartItem(), quantity);
+    trackCartAdd();
+    trackEvent("buy_now", {
+      currency: product.currency,
+      value: (selectedVariant?.price ?? product.price) * quantity,
+      item_id: product.id,
+      item_name: product.title,
+    });
     router.push("/checkout");
   }
 

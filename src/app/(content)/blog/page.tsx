@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ArticleCard } from "@/components/blog/ArticleCard";
 import { PlaceholderPage } from "@/components/ui/PlaceholderPage";
+import { ResponsiveGrid } from "@/components/ui/ResponsiveGrid";
 import { getArticlesByType } from "@/lib/data/articles";
 import { createBreadcrumbs } from "@/lib/seo/breadcrumbs";
 import { createPageMetadata } from "@/lib/seo/metadata";
@@ -23,11 +24,11 @@ export default async function BlogPage() {
       description="Expert articles on choosing, understanding, styling, and caring for your watch."
       title="Watch Blog"
     >
-      <div className="grid gap-4 sm:grid-cols-2">
+      <ResponsiveGrid columns="three">
         {articles.map((article) => (
           <ArticleCard article={article} hrefBase="/blog" key={article.id} />
         ))}
-      </div>
+      </ResponsiveGrid>
     </PlaceholderPage>
   );
 }

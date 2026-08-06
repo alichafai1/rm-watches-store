@@ -17,24 +17,31 @@ export function ArticleCard({
   const Heading = headingLevel;
 
   return (
-    <ArticleCardBase>
+    <ArticleCardBase className="h-full content-start gap-3">
       {article.image ? (
         <Image
           alt={article.image.alt}
           className="aspect-[4/3] w-full rounded-md object-cover"
           height={article.image.height}
-          sizes="(max-width: 640px) 100vw, 50vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           src={article.image.url}
           width={article.image.width}
         />
       ) : null}
-      <p className="text-xs uppercase tracking-wide text-neutral-600">
+      <p className="text-xs uppercase tracking-wide text-neutral-500">
         {article.type === "guide" ? "Guide" : "Blog"}
       </p>
-      <Heading className="text-base font-semibold">
-        <Link href={`${hrefBase}/${article.slug}`}>{article.title}</Link>
+      <Heading className="text-base font-semibold leading-snug tracking-tight">
+        <Link
+          className="transition-colors hover:text-neutral-600"
+          href={`${hrefBase}/${article.slug}`}
+        >
+          {article.title}
+        </Link>
       </Heading>
-      <p className="text-sm text-neutral-700">{article.excerpt}</p>
+      <p className="line-clamp-3 text-sm leading-6 text-neutral-600">
+        {article.excerpt}
+      </p>
     </ArticleCardBase>
   );
 }

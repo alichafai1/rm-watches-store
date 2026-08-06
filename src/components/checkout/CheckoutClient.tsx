@@ -19,6 +19,7 @@ import {
   checkoutShippingOptions,
 } from "@/constants/checkout";
 import { defaultCountryCode } from "@/constants/countries";
+import { trackBeginCheckout, trackEvent } from "@/lib/analytics/gtag";
 import {
   createEmptyAddress,
   validateCheckoutForm,
@@ -50,6 +51,7 @@ export function CheckoutClient() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [invalidNonce, setInvalidNonce] = useState(0);
   const formRef = useRef<HTMLFormElement>(null);
+  const beginCheckoutTracked = useRef(false);
 
   const shippingOption =
     checkoutShippingOptions.find(
@@ -66,6 +68,25 @@ export function CheckoutClient() {
     firstInvalid?.focus();
     firstInvalid?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [invalidNonce]);
+
+  useEffect(() => {
+    if (!isHydrated || items.length === 0 || beginCheckoutTracked.current) {
+      return;
+    }
+
+    beginCheckoutTracked.current = true;
+    trackBeginCheckout({
+      currency,
+      value: subtotal,
+      items: items.map((item) => ({
+        item_id: item.productId,
+        item_name: item.title,
+        item_variant: item.variantName,
+        price: item.unitPrice,
+        quantity: item.quantity,
+      })),
+    });
+  }, [currency, isHydrated, items, subtotal]);
 
   function setField<Key extends keyof CheckoutFormValues>(
     field: Key,
@@ -108,6 +129,21 @@ export function CheckoutClient() {
       setInvalidNonce((current) => current + 1);
       return;
     }
+
+    // Payment is not connected yet — do not emit a fake `purchase` event.
+    trackEvent("checkout_submit", {
+      currency,
+      value: total,
+      payment_option: values.paymentOptionId,
+      shipping_option: values.shippingOptionId,
+      items: items.map((item) => ({
+        item_id: item.productId,
+        item_name: item.title,
+        item_variant: item.variantName,
+        price: item.unitPrice,
+        quantity: item.quantity,
+      })),
+    });
 
     setHasSubmitted(true);
   }
