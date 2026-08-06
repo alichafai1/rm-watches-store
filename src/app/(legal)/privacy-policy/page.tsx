@@ -177,7 +177,7 @@ export default function PrivacyPolicyPage() {
       </p>
       <p>
         Email:{" "}
-        <a href="mailto:ali2006@gmail.com">ali2006@gmail.com</a>
+        <a href="mailto:contact@rm-replica.com">contact@rm-replica.com</a>
       </p>
     </PolicyPage>
   );
