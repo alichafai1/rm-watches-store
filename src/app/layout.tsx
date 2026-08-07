@@ -4,6 +4,12 @@ import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { siteConfig } from "@/constants/site";
 import "./globals.css";
 
+/** Origin for Storage images used on first paint (hero + collection/product media). */
+const supabaseOrigin = (
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  "https://jolmyqqzsqvyapoixnqh.supabase.co"
+).replace(/\/+$/, "");
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
@@ -34,6 +40,10 @@ type RootLayoutProps = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
+      <head>
+        {/* Warm DNS/TLS before cross-origin Storage image requests (LCP on desktop). */}
+        <link rel="preconnect" href={supabaseOrigin} />
+      </head>
       <body>
         {children}
         <GoogleAnalytics />
