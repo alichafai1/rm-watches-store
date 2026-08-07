@@ -152,19 +152,19 @@ const rm030CollectionImage = {
 };
 
 const rm035CollectionImage = {
-  url: "https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/Richard%20Mille%20RM%20035%20replica.webp",
-  alt: "Richard Mille RM 035 Richard mille replica super clone richard mille watches ",
+  url: "https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/richard-mille-rm-035-rafael-nadal-replica.webp",
+  alt: "Richard Mille RM 035 Rafael Nadal replica watch with yellow strap",
   width: 1280,
   height: 1280,
   objectClassName: "scale-[1.60] translate-y-2",
 };
 
 const rm037CollectionImage = {
-  url: "https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/Richard%20Mille%20RM%20037%20replica.webp",
-  alt: "Richard Mille RM 037 Richard mille replica super clone richard mille watches ",
+  url: "https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/richard-mille-rm037-replica.webp",
+  alt: "Richard Mille RM 037 diamond pavé replica watch with white rubber strap",
   width: 1280,
   height: 1280,
-  objectClassName: "scale-[1.60] translate-y-2",
+  objectClassName: "scale-[1.60] translate-y-1",
 };
 
 export const mockCollections: Collection[] = collectionNumbers.map((number): Collection => {
