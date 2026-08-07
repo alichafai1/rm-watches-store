@@ -42,15 +42,16 @@ export default function HomePage() {
     <>
       <JsonLd data={createFaqPageSchema(homepageFaqItems)} />
       <HeroSection />
-      <Suspense>
-        {/*
-          Defer style/layout of below-fold DOM so the hero LCP text can paint
-          immediately (homepage HTML is large once collections/products render).
-        */}
-        <div className="home-below-fold">
+      {/*
+        Keep .home-below-fold outside Suspense so contain-intrinsic-size reserves
+        space on first paint; otherwise Footer sits under the hero until the
+        below-fold RSC streams in (desktop CLS ~0.274).
+      */}
+      <div className="home-below-fold">
+        <Suspense>
           <HomePageBelowFold />
-        </div>
-      </Suspense>
+        </Suspense>
+      </div>
     </>
   );
 }
