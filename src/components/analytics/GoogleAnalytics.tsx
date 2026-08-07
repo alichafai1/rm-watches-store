@@ -29,6 +29,11 @@ function AnalyticsPageViews() {
  * Loads gtag.js only when NEXT_PUBLIC_GA_MEASUREMENT_ID is set.
  * Automatic page_view is disabled in config so App Router navigations are
  * tracked once via the pathname effect below.
+ *
+ * `lazyOnload` keeps the ~160 KiB gtag payload off the critical path that
+ * PageSpeed scores, while still loading analytics after the page is idle.
+ * Ecommerce helpers in `gtag.ts` call `window.gtag` when present; dataLayer
+ * queues commands once the init snippet runs.
  */
 export function GoogleAnalytics() {
   if (!isAnalyticsEnabled()) return null;
@@ -37,9 +42,9 @@ export function GoogleAnalytics() {
     <>
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
-      <Script id="ga4-init" strategy="afterInteractive">
+      <Script id="ga4-init" strategy="lazyOnload">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}

@@ -1,7 +1,5 @@
-"use client";
-
 import Link from "next/link";
-import { useId, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { HomeSectionHeader } from "@/components/home/HomeSectionHeader";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
@@ -116,9 +114,6 @@ const faqItems: FaqItem[] = [
 ];
 
 export function FaqSection() {
-  const [openIndex, setOpenIndex] = useState(0);
-  const baseId = useId();
-
   return (
     <Section ariaLabelledBy="faq-heading" className="bg-white" spacing="lg">
       <Container size="lg">
@@ -132,51 +127,25 @@ export function FaqSection() {
           />
 
           <div className="divide-y divide-neutral-200 border-y border-neutral-200">
-            {faqItems.map((item, index) => {
-              const isOpen = openIndex === index;
-              const buttonId = `${baseId}-button-${index}`;
-              const panelId = `${baseId}-panel-${index}`;
-
-              return (
-                <div key={item.question}>
-                  <button
-                    aria-controls={panelId}
-                    aria-expanded={isOpen}
-                    className="flex w-full items-center justify-between gap-6 py-5 text-left"
-                    id={buttonId}
-                    onClick={() => setOpenIndex(isOpen ? -1 : index)}
-                    type="button"
+            {faqItems.map((item, index) => (
+              <details className="group" key={item.question} open={index === 0}>
+                <summary className="flex w-full cursor-pointer list-none items-center justify-between gap-6 py-5 text-left [&::-webkit-details-marker]:hidden">
+                  <span className="text-base font-semibold text-neutral-950">
+                    {item.question}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="text-xl leading-none text-[#9f7d3f]"
                   >
-                    <span className="text-base font-semibold text-neutral-950">
-                      {item.question}
-                    </span>
-                    <span
-                      aria-hidden="true"
-                      className="text-xl leading-none text-[#9f7d3f]"
-                    >
-                      {isOpen ? "-" : "+"}
-                    </span>
-                  </button>
-                  <div
-                    aria-hidden={!isOpen}
-                    aria-labelledby={buttonId}
-                    className={
-                      isOpen
-                        ? "grid grid-rows-[1fr] transition-all duration-300"
-                        : "hidden"
-                    }
-                    id={panelId}
-                    role="region"
-                  >
-                    {isOpen ? (
-                      <div className="max-w-3xl overflow-hidden pb-5 text-sm leading-7 text-neutral-600 [&_strong]:font-semibold [&_strong]:text-neutral-950">
-                        {item.answer}
-                      </div>
-                    ) : null}
-                  </div>
+                    <span className="group-open:hidden">+</span>
+                    <span className="hidden group-open:inline">-</span>
+                  </span>
+                </summary>
+                <div className="max-w-3xl overflow-hidden pb-5 text-sm leading-7 text-neutral-600 [&_strong]:font-semibold [&_strong]:text-neutral-950">
+                  {item.answer}
                 </div>
-              );
-            })}
+              </details>
+            ))}
           </div>
         </div>
       </Container>

@@ -1,6 +1,3 @@
-"use client";
-
-import { useId } from "react";
 import { getProductRating } from "@/lib/utils/product-rating";
 import { cn } from "@/lib/utils/cn";
 import type { ProductReview } from "@/types/product";
@@ -28,19 +25,25 @@ function starFill(average: number, index: number): "full" | "half" | "empty" {
   return "empty";
 }
 
+/**
+ * Pure rating display (no client hooks). Kept free of `"use client"` so
+ * ProductCard can stay a Server Component, but it is also imported by the
+ * client ProductMainSection — so gradient ids must be deterministic to avoid
+ * SSR/client hydration mismatches.
+ */
 export function ProductRatingStars({
   reviews,
   className,
   size = "sm",
   showCount = true,
 }: ProductRatingStarsProps) {
-  const gradientId = useId().replace(/:/g, "");
   const rating = getProductRating(reviews);
 
   if (!rating) {
     return null;
   }
 
+  const gradientId = ratingGradientId(reviews, size, rating);
   const starClass = size === "md" ? "size-4" : "size-3.5";
 
   return (
@@ -84,6 +87,17 @@ export function ProductRatingStars({
       ) : null}
     </div>
   );
+}
+
+/** Stable SVG id from review ids + size so SSR and client markup match. */
+function ratingGradientId(
+  reviews: ProductReview[] | undefined,
+  size: string,
+  rating: { count: number; exactAverage: number },
+) {
+  const reviewKey = (reviews ?? []).map((review) => review.id).join("-");
+  const raw = `rating-${size}-${rating.count}-${rating.exactAverage.toFixed(2)}-${reviewKey}`;
+  return raw.replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 120) || "rating-stars";
 }
 
 function HalfStar({
