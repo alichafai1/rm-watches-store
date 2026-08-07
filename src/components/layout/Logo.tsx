@@ -23,6 +23,7 @@ export function Logo({ className, priority = false, sizes }: LogoProps) {
       priority={priority}
       sizes={sizes}
       src="/images/brand/logo.png"
+      unoptimized
       width={LOGO_WIDTH}
     />
   );
