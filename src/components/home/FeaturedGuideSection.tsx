@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import { Container } from "@/components/ui/Container";
 import { LinkButton } from "@/components/ui/LinkButton";
 import { Section } from "@/components/ui/Section";
@@ -18,10 +18,11 @@ export function FeaturedGuideSection({ guide }: FeaturedGuideSectionProps) {
         <article className="grid overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-[var(--shadow-sm)] lg:grid-cols-2">
           <div className="bg-neutral-50 p-4">
             {image ? (
-              <Image
+              <StorefrontImage
                 alt={image.alt}
                 className="aspect-square w-full rounded-lg object-cover"
                 height={image.height}
+                preset="editorial"
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 src={image.url}
                 width={image.width}

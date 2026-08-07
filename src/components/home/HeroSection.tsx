@@ -1,9 +1,8 @@
-import Image from "next/image";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import { Container } from "@/components/ui/Container";
 import { LinkButton } from "@/components/ui/LinkButton";
 import { Section } from "@/components/ui/Section";
 import { Typography } from "@/components/ui/Typography";
-import { STOREFRONT_IMAGE_QUALITY } from "@/constants/image-quality";
 
 const HERO_IMAGE_SRC =
   "https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/Richard%20Mille%20Replica.webp";
@@ -12,15 +11,14 @@ export function HeroSection() {
   return (
     <Section className="relative overflow-hidden bg-black text-white" spacing="sm">
       {/*
-        Optimized via next/image (no `unoptimized`, no full-origin preload).
-        Hidden below md for layout; avoid `priority` so mobile text LCP is not
-        competing with a hero preload.
+        Supabase transform (bypass Vercel `/_next/image`). Hidden below md;
+        avoid `priority` so mobile text LCP is not competing with a hero fetch.
       */}
-      <Image
+      <StorefrontImage
         alt="Richard MIlle Replica Watches Super Clone watches "
         className="hidden object-cover object-center md:block"
         fill
-        quality={STOREFRONT_IMAGE_QUALITY}
+        preset="hero"
         sizes="100vw"
         src={HERO_IMAGE_SRC}
       />

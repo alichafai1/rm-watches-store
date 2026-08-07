@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { trustAssurances, type TrustAssurance } from "@/constants/trust-assurances";
@@ -6,10 +6,11 @@ import { trustAssurances, type TrustAssurance } from "@/constants/trust-assuranc
 function TrustAssuranceIcon({ item }: { item: TrustAssurance }) {
   return (
     <span className="relative block size-12 shrink-0">
-      <Image
+      <StorefrontImage
         alt={item.iconAlt}
         className="object-contain object-center"
         fill
+        preset="trustIcon"
         sizes="48px"
         src={item.iconSrc}
       />

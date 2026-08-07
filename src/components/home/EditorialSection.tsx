@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { HomeSectionHeader } from "@/components/home/HomeSectionHeader";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import { Container } from "@/components/ui/Container";
 import { LinkButton } from "@/components/ui/LinkButton";
 import { Section } from "@/components/ui/Section";
@@ -28,10 +28,11 @@ export function EditorialSection({ articles, guide }: EditorialSectionProps) {
             {guide ? (
               <article className="group overflow-hidden rounded-2xl border border-neutral-200 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
                 {guide.image ? (
-                  <Image
+                  <StorefrontImage
                     alt={guide.image.alt}
                     className="h-auto max-h-[460px] w-full bg-white object-contain"
                     height={guide.image.height}
+                    preset="editorial"
                     sizes="(max-width: 1024px) 100vw, 55vw"
                     src={guide.image.url}
                     width={guide.image.width}
@@ -81,10 +82,11 @@ export function EditorialSection({ articles, guide }: EditorialSectionProps) {
                   key={article.id}
                 >
                   {article.image ? (
-                    <Image
+                    <StorefrontImage
                       alt={article.image.alt}
                       className="aspect-square w-full rounded-xl bg-neutral-50 object-cover"
                       height={article.image.height}
+                      preset="editorialThumb"
                       sizes="(max-width: 640px) 96px, 128px"
                       src={article.image.url}
                       width={article.image.width}

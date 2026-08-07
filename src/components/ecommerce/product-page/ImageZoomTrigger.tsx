@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import {
   useEffect,
   useRef,
@@ -9,6 +8,7 @@ import {
   type ReactNode,
   type TouchEvent,
 } from "react";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 
 type ImageZoomTriggerProps = {
   alt: string;
@@ -16,7 +16,6 @@ type ImageZoomTriggerProps = {
   className?: string;
   imageClassName?: string;
   sizes: string;
-  quality?: number;
   priority?: boolean;
   children?: ReactNode;
   /** Zoom scale on pointer devices when clicked. Default 2.4 */
@@ -63,7 +62,6 @@ export function ImageZoomTrigger({
   className = "",
   imageClassName = "",
   sizes,
-  quality,
   priority = false,
   children,
   zoomScale = 2.4,
@@ -203,20 +201,20 @@ export function ImageZoomTrigger({
       type="button"
     >
       {layers.outgoing ? (
-        <Image
+        <StorefrontImage
           alt=""
           aria-hidden="true"
           className={imageClassName}
           fill
           key={layers.outgoing}
-          quality={quality}
+          original
           sizes={sizes}
           src={layers.outgoing}
           style={zoomStyle}
         />
       ) : null}
 
-      <Image
+      <StorefrontImage
         alt={alt}
         className={`${imageClassName} transition-opacity duration-[260ms] ease-out ${
           isCurrentLoaded ? "opacity-100" : "opacity-0"
@@ -224,8 +222,8 @@ export function ImageZoomTrigger({
         fill
         key={layers.current}
         onLoad={handleCurrentLoaded}
+        original
         priority={priority}
-        quality={quality}
         sizes={sizes}
         src={layers.current}
         style={zoomStyle}

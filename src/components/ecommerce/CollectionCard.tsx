@@ -1,7 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { CollectionCardBase } from "@/components/ecommerce/CollectionCardBase";
-import { STOREFRONT_IMAGE_QUALITY } from "@/constants/image-quality";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import type { Collection } from "@/types/collection";
 
 type CollectionCardProps = {
@@ -21,11 +20,11 @@ export function CollectionCard({
     <CollectionCardBase
       media={
         collection.image ? (
-          <Image
+          <StorefrontImage
             alt={collection.image.alt}
             className="aspect-square w-full rounded object-cover"
             height={collection.image.height}
-            quality={STOREFRONT_IMAGE_QUALITY}
+            preset="collectionCard"
             // Collections index: 1 col → 2 cols from `sm`.
             sizes="(max-width: 639px) 100vw, 50vw"
             src={collection.image.url}

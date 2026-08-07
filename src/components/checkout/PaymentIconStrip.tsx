@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { STOREFRONT_IMAGE_QUALITY } from "@/constants/image-quality";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import { paymentIconUrl, paymentMethods } from "@/constants/payment-methods";
 import { cn } from "@/lib/utils/cn";
 
@@ -33,12 +32,12 @@ export function PaymentIconStrip({
           key={method.name}
           title={method.name}
         >
-          <Image
+          <StorefrontImage
             alt={method.name}
             className="pointer-events-none size-full select-none object-contain"
             draggable={false}
             height={28}
-            quality={STOREFRONT_IMAGE_QUALITY}
+            preset="paymentIcon"
             sizes="48px"
             src={paymentIconUrl(method.path)}
             width={48}

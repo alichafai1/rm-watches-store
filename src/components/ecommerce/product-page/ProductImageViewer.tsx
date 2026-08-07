@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { GalleryArrow } from "@/components/ecommerce/product-page/GalleryArrow";
-import { PRODUCT_DETAIL_IMAGE_QUALITY } from "@/constants/image-quality";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import type { ProductImage } from "@/types/product";
 
 type ProductImageViewerProps = {
@@ -300,15 +299,14 @@ export function ProductImageViewer({
           ref={surfaceRef}
           style={{ cursor: scale > MIN_SCALE ? "grab" : "zoom-in" }}
         >
-          <Image
+          <StorefrontImage
             alt={activeImage.alt || productTitle}
             className="object-contain"
             draggable={false}
             fill
-            // Matches the gallery's mobile `sizes`, so on phones this reuses the
-            // image already in cache instead of fetching a new variant.
+            // Original object URL for zoom quality; `unoptimized` bypasses Vercel.
+            original
             priority
-            quality={PRODUCT_DETAIL_IMAGE_QUALITY}
             sizes="100vw"
             src={activeImage.url}
             style={{

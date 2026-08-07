@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
-import { STOREFRONT_IMAGE_QUALITY } from "@/constants/image-quality";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import type { Collection } from "@/types/collection";
 
 type CollectionScrollerProps = {
@@ -69,11 +68,11 @@ export function CollectionScroller({
                   <div
                     className={`relative h-full w-full ${collection.image.objectClassName ?? ""}`}
                   >
-                    <Image
+                    <StorefrontImage
                       alt={collection.image.alt}
                       className="object-contain"
                       fill
-                      quality={STOREFRONT_IMAGE_QUALITY}
+                      preset="collectionScroller"
                       sizes="(max-width: 1024px) 45vw, 15vw"
                       src={collection.image.url}
                     />

@@ -1,10 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import { LinkButton } from "@/components/ui/LinkButton";
 import { ResponsiveGrid } from "@/components/ui/ResponsiveGrid";
-import { STOREFRONT_IMAGE_QUALITY } from "@/constants/image-quality";
 import { cn } from "@/lib/utils/cn";
 import type { CustomerReview } from "@/types/customer-review";
 
@@ -49,12 +48,12 @@ function ReviewCustomerAvatar({
       className={cn("relative inline-block shrink-0 overflow-hidden", className)}
       style={{ height: size, width: size }}
     >
-      <Image
+      <StorefrontImage
         alt={getCustomerImageAlt(review)}
         className="object-cover object-center"
         fill
         onError={() => setUseFallback(true)}
-        quality={STOREFRONT_IMAGE_QUALITY}
+        preset="avatar"
         sizes={`${size}px`}
         src={src}
       />
@@ -103,11 +102,11 @@ function ReviewDetailPanel({
   return (
     <div className="relative z-10 grid w-full max-w-4xl overflow-hidden rounded-3xl bg-white shadow-2xl md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
       <div className="relative aspect-[4/5] min-h-[280px] bg-neutral-100 md:aspect-auto md:min-h-[520px]">
-        <Image
+        <StorefrontImage
           alt={getReviewImageAlt(review)}
           className="object-cover"
           fill
-          quality={STOREFRONT_IMAGE_QUALITY}
+          preset="review"
           sizes="(max-width: 768px) 100vw, 50vw"
           src={getReviewImageSrc(review)}
         />
@@ -154,11 +153,11 @@ function ReviewDetailPanel({
               </p>
               <div className="flex items-center gap-4">
                 <div className="relative size-16 shrink-0 overflow-hidden rounded-xl border border-neutral-200 bg-white">
-                  <Image
+                  <StorefrontImage
                     alt={review.productName}
                     className="object-cover"
                     fill
-                    quality={STOREFRONT_IMAGE_QUALITY}
+                    preset="reviewThumb"
                     sizes="64px"
                     src={review.productImage}
                   />
@@ -223,11 +222,11 @@ export function CustomerExperienceGallery({
               onClick={() => setSelectedReview(review)}
               type="button"
             >
-              <Image
+              <StorefrontImage
                 alt={getReviewImageAlt(review)}
                 className="object-cover transition duration-500 group-hover:scale-[1.03]"
                 fill
-                quality={STOREFRONT_IMAGE_QUALITY}
+                preset="review"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 src={getReviewImageSrc(review)}
               />

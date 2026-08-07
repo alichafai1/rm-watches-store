@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { STOREFRONT_IMAGE_QUALITY } from "@/constants/image-quality";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import { cn } from "@/lib/utils/cn";
 import type { Collection } from "@/types/collection";
 
@@ -18,11 +17,11 @@ export function CollectionSeoSection({ collection }: CollectionSeoSectionProps) 
       <div className="grid gap-8 lg:grid-cols-[0.8fr_1fr] lg:items-center">
         <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
           {image ? (
-            <Image
+            <StorefrontImage
               alt={image.alt}
               className={cn("object-contain", image.objectClassName)}
               fill
-              quality={STOREFRONT_IMAGE_QUALITY}
+              preset="collectionSeo"
               sizes="(min-width: 1024px) 40vw, 100vw"
               src={image.url}
             />

@@ -1,11 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/components/cart/useCart";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import { Button } from "@/components/ui/Button";
-import { STOREFRONT_IMAGE_QUALITY } from "@/constants/image-quality";
 import {
   paymentIconUrl,
   paymentMethods,
@@ -208,12 +207,12 @@ export function ProductPurchasePanel({
                 key={method.name}
                 title={method.name}
               >
-                <Image
+                <StorefrontImage
                   alt={method.name}
                   className="pointer-events-none select-none object-contain [-webkit-user-drag:none]"
                   draggable={false}
                   height={28}
-                  quality={STOREFRONT_IMAGE_QUALITY}
+                  preset="paymentIcon"
                   sizes="48px"
                   src={paymentIconUrl(method.path)}
                   width={48}

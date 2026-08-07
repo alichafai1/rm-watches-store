@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { PaymentIconStrip } from "@/components/checkout/PaymentIconStrip";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import { trustAssurances } from "@/constants/trust-assurances";
 
 function LockIcon() {
@@ -40,10 +40,11 @@ export function CheckoutAssuranceList() {
       {trustAssurances.map((item) => (
         <li className="flex items-center gap-3" key={item.id}>
           <span className="relative block size-9 shrink-0">
-            <Image
+            <StorefrontImage
               alt={item.iconAlt}
               className="object-contain object-center"
               fill
+              preset="trustIcon"
               sizes="36px"
               src={item.iconSrc}
             />

@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArticleCardBase } from "@/components/blog/ArticleCardBase";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import type { Article } from "@/types/article";
 
 type ArticleCardProps = {
@@ -19,10 +19,11 @@ export function ArticleCard({
   return (
     <ArticleCardBase className="h-full content-start gap-3">
       {article.image ? (
-        <Image
+        <StorefrontImage
           alt={article.image.alt}
           className="aspect-[4/3] w-full rounded-md object-cover"
           height={article.image.height}
+          preset="articleCard"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           src={article.image.url}
           width={article.image.width}

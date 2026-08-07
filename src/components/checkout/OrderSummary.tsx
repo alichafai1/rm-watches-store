@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { CheckoutAssuranceList } from "@/components/checkout/CheckoutTrustBadges";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import { MAX_ITEM_QUANTITY } from "@/lib/cart/cart-storage";
 import { formatPrice } from "@/lib/utils/format-price";
 import { cn } from "@/lib/utils/cn";
@@ -50,10 +50,11 @@ export function OrderSummary({
           <li className="flex items-start gap-4" key={item.id}>
             <span className="relative block size-16 shrink-0 rounded-xl border border-neutral-200 bg-white">
               {item.image ? (
-                <Image
+                <StorefrontImage
                   alt={item.image.alt}
                   className="rounded-xl object-contain object-center p-1"
                   fill
+                  preset="cartThumb"
                   sizes="64px"
                   src={item.image.url}
                 />

@@ -1,8 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
+import { isSupabasePublicStorageUrl } from "@/lib/images/supabase-transform";
 import {
   sanitizeArticleHtml,
   sanitizeArticleInlineHtml,
@@ -32,20 +33,6 @@ function isSafeImageUrl(value: string) {
   }
 }
 
-function canUseNextImage(value: string) {
-  if (value.startsWith("/") && !value.startsWith("//")) return true;
-  try {
-    const url = new URL(value);
-    return (
-      url.protocol === "https:" &&
-      url.hostname === "jolmyqqzsqvyapoixnqh.supabase.co" &&
-      url.pathname.startsWith("/storage/v1/object/public/website-media/")
-    );
-  } catch {
-    return false;
-  }
-}
-
 function ArticleBodyImage({
   block,
 }: {
@@ -63,12 +50,14 @@ function ArticleBodyImage({
     "mx-auto h-auto max-h-[760px] w-auto max-w-full object-contain";
   return (
     <figure className="my-8">
-      {canUseNextImage(block.url) ? (
-        <Image
+      {isSupabasePublicStorageUrl(block.url) ||
+      (block.url.startsWith("/") && !block.url.startsWith("//")) ? (
+        <StorefrontImage
           alt={block.alt}
           className={imageClassName}
           height={block.height}
           loading="lazy"
+          preset="editorial"
           sizes="(max-width: 768px) 100vw, 768px"
           src={block.url}
           width={block.width}
@@ -196,10 +185,11 @@ export function ArticleDetail({
 
           {article.image ? (
             <div className="mx-auto mt-10 flex max-w-4xl justify-center">
-              <Image
+              <StorefrontImage
                 alt={article.image.alt}
                 className="h-auto max-h-[760px] w-auto max-w-full object-contain"
                 height={article.image.height}
+                preset="editorial"
                 priority
                 sizes="(max-width: 896px) 100vw, 896px"
                 src={article.image.url}

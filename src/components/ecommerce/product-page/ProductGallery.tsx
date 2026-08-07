@@ -1,14 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { useId, useState } from "react";
 import { GalleryArrow } from "@/components/ecommerce/product-page/GalleryArrow";
 import { ImageZoomTrigger } from "@/components/ecommerce/product-page/ImageZoomTrigger";
 import { ProductImageViewer } from "@/components/ecommerce/product-page/ProductImageViewer";
-import {
-  PRODUCT_DETAIL_IMAGE_QUALITY,
-  STOREFRONT_IMAGE_QUALITY,
-} from "@/constants/image-quality";
+import { StorefrontImage } from "@/components/media/StorefrontImage";
 import type { ProductImage } from "@/types/product";
 
 type ProductGalleryProps = {
@@ -94,7 +90,6 @@ export function ProductGallery({
               : undefined
           }
           priority
-          quality={PRODUCT_DETAIL_IMAGE_QUALITY}
           sizes="(min-width: 1024px) 48vw, 100vw"
           src={activeImage.url}
         />
@@ -164,11 +159,11 @@ export function ProductGallery({
                 onClick={() => selectImage(index)}
                 type="button"
               >
-                <Image
+                <StorefrontImage
                   alt={image.alt || `${productTitle} thumbnail ${index + 1}`}
                   className="object-contain"
                   fill
-                  quality={STOREFRONT_IMAGE_QUALITY}
+                  preset="galleryThumb"
                   sizes="110px"
                   src={image.url}
                 />
