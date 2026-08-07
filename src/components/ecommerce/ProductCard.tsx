@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ProductRatingStars } from "@/components/ecommerce/ProductRatingStars";
+import { STOREFRONT_IMAGE_QUALITY } from "@/constants/image-quality";
 import { formatPrice } from "@/lib/utils/format-price";
 import { cn } from "@/lib/utils/cn";
 import type { Product } from "@/types/product";
@@ -36,6 +37,9 @@ export function ProductCard({
               alt={image.alt}
               className="h-full w-full object-contain object-center"
               height={image.height}
+              quality={STOREFRONT_IMAGE_QUALITY}
+              // Matches ResponsiveGrid `product`: 2 / 3 / 4 columns.
+              sizes="(max-width: 767px) 50vw, (max-width: 1279px) 33vw, 25vw"
               src={image.url}
               width={image.width}
             />

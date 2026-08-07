@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/components/cart/useCart";
 import { Button } from "@/components/ui/Button";
+import { STOREFRONT_IMAGE_QUALITY } from "@/constants/image-quality";
 import {
   paymentIconUrl,
   paymentMethods,
@@ -212,8 +213,9 @@ export function ProductPurchasePanel({
                   className="pointer-events-none select-none object-contain [-webkit-user-drag:none]"
                   draggable={false}
                   height={28}
+                  quality={STOREFRONT_IMAGE_QUALITY}
+                  sizes="48px"
                   src={paymentIconUrl(method.path)}
-                  unoptimized
                   width={48}
                 />
               </li>

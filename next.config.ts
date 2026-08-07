@@ -26,6 +26,8 @@ const nextConfig: NextConfig = {
     // Local DNS/VPN tools (e.g. Clash fake-ip) can map supabase.co to
     // 198.18.x.x. Next.js blocks those as private IPs unless allowed.
     dangerouslyAllowLocalIP: process.env.NODE_ENV === "development",
+    // Prefer modern formats; quality is set per <Image> (85 storefront / 90 PDP).
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         hostname: "jolmyqqzsqvyapoixnqh.supabase.co",

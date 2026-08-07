@@ -3,6 +3,7 @@ import { Container } from "@/components/ui/Container";
 import { LinkButton } from "@/components/ui/LinkButton";
 import { Section } from "@/components/ui/Section";
 import { Typography } from "@/components/ui/Typography";
+import { STOREFRONT_IMAGE_QUALITY } from "@/constants/image-quality";
 
 const HERO_IMAGE_SRC =
   "https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/Richard%20Mille%20Replica.webp";
@@ -11,24 +12,17 @@ export function HeroSection() {
   return (
     <Section className="relative overflow-hidden bg-black text-white" spacing="sm">
       {/*
-        Desktop-only preload: the art is `hidden` below md, and Next `priority`
-        would still preload it on mobile — competing with the text LCP.
+        Optimized via next/image (no `unoptimized`, no full-origin preload).
+        Hidden below md for layout; avoid `priority` so mobile text LCP is not
+        competing with a hero preload.
       */}
-      <link
-        rel="preload"
-        as="image"
-        href={HERO_IMAGE_SRC}
-        media="(min-width: 768px)"
-        fetchPriority="high"
-      />
-      {/* Desktop/tablet: full hero image. Phone: solid black (left side of the art). */}
       <Image
         alt="Richard MIlle Replica Watches Super Clone watches "
         className="hidden object-cover object-center md:block"
         fill
+        quality={STOREFRONT_IMAGE_QUALITY}
         sizes="100vw"
         src={HERO_IMAGE_SRC}
-        unoptimized
       />
       <Container>
         <div className="relative grid min-h-[520px] items-center py-8">

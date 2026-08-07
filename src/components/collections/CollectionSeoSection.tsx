@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { STOREFRONT_IMAGE_QUALITY } from "@/constants/image-quality";
 import { cn } from "@/lib/utils/cn";
 import type { Collection } from "@/types/collection";
 
@@ -21,9 +22,9 @@ export function CollectionSeoSection({ collection }: CollectionSeoSectionProps) 
               alt={image.alt}
               className={cn("object-contain", image.objectClassName)}
               fill
+              quality={STOREFRONT_IMAGE_QUALITY}
               sizes="(min-width: 1024px) 40vw, 100vw"
               src={image.url}
-              unoptimized
             />
           ) : null}
         </div>

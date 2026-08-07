@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { GalleryArrow } from "@/components/ecommerce/product-page/GalleryArrow";
+import { PRODUCT_DETAIL_IMAGE_QUALITY } from "@/constants/image-quality";
 import type { ProductImage } from "@/types/product";
 
 type ProductImageViewerProps = {
@@ -307,6 +308,7 @@ export function ProductImageViewer({
             // Matches the gallery's mobile `sizes`, so on phones this reuses the
             // image already in cache instead of fetching a new variant.
             priority
+            quality={PRODUCT_DETAIL_IMAGE_QUALITY}
             sizes="100vw"
             src={activeImage.url}
             style={{

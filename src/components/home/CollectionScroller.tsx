@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
+import { STOREFRONT_IMAGE_QUALITY } from "@/constants/image-quality";
 import type { Collection } from "@/types/collection";
 
 type CollectionScrollerProps = {
@@ -72,9 +73,9 @@ export function CollectionScroller({
                       alt={collection.image.alt}
                       className="object-contain"
                       fill
+                      quality={STOREFRONT_IMAGE_QUALITY}
                       sizes="(max-width: 1024px) 45vw, 15vw"
                       src={collection.image.url}
-                      unoptimized
                     />
                   </div>
                 </div>

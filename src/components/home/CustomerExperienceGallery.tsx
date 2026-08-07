@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { LinkButton } from "@/components/ui/LinkButton";
 import { ResponsiveGrid } from "@/components/ui/ResponsiveGrid";
+import { STOREFRONT_IMAGE_QUALITY } from "@/constants/image-quality";
 import { cn } from "@/lib/utils/cn";
 import type { CustomerReview } from "@/types/customer-review";
 
@@ -12,10 +13,6 @@ type CustomerExperienceGalleryProps = {
 };
 
 const customerAvatarFallback = "/images/placeholders/customer-avatar.svg";
-
-function isSupabaseMediaUrl(src: string) {
-  return src.includes("jolmyqqzsqvyapoixnqh.supabase.co/storage/");
-}
 
 function getReviewImageSrc(review: CustomerReview) {
   return review.reviewImage || review.productImage;
@@ -57,9 +54,9 @@ function ReviewCustomerAvatar({
         className="object-cover object-center"
         fill
         onError={() => setUseFallback(true)}
+        quality={STOREFRONT_IMAGE_QUALITY}
         sizes={`${size}px`}
         src={src}
-        unoptimized={isSupabaseMediaUrl(src)}
       />
     </span>
   );
@@ -110,9 +107,9 @@ function ReviewDetailPanel({
           alt={getReviewImageAlt(review)}
           className="object-cover"
           fill
+          quality={STOREFRONT_IMAGE_QUALITY}
           sizes="(max-width: 768px) 100vw, 50vw"
           src={getReviewImageSrc(review)}
-          unoptimized={isSupabaseMediaUrl(getReviewImageSrc(review))}
         />
       </div>
 
@@ -161,9 +158,9 @@ function ReviewDetailPanel({
                     alt={review.productName}
                     className="object-cover"
                     fill
+                    quality={STOREFRONT_IMAGE_QUALITY}
                     sizes="64px"
                     src={review.productImage}
-                    unoptimized={isSupabaseMediaUrl(review.productImage)}
                   />
                 </div>
                 <div className="grid gap-1">
@@ -230,9 +227,9 @@ export function CustomerExperienceGallery({
                 alt={getReviewImageAlt(review)}
                 className="object-cover transition duration-500 group-hover:scale-[1.03]"
                 fill
+                quality={STOREFRONT_IMAGE_QUALITY}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 src={getReviewImageSrc(review)}
-                unoptimized={isSupabaseMediaUrl(getReviewImageSrc(review))}
               />
             </button>
           </article>

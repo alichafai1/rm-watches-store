@@ -16,6 +16,7 @@ type ImageZoomTriggerProps = {
   className?: string;
   imageClassName?: string;
   sizes: string;
+  quality?: number;
   priority?: boolean;
   children?: ReactNode;
   /** Zoom scale on pointer devices when clicked. Default 2.4 */
@@ -62,6 +63,7 @@ export function ImageZoomTrigger({
   className = "",
   imageClassName = "",
   sizes,
+  quality,
   priority = false,
   children,
   zoomScale = 2.4,
@@ -207,6 +209,7 @@ export function ImageZoomTrigger({
           className={imageClassName}
           fill
           key={layers.outgoing}
+          quality={quality}
           sizes={sizes}
           src={layers.outgoing}
           style={zoomStyle}
@@ -222,6 +225,7 @@ export function ImageZoomTrigger({
         key={layers.current}
         onLoad={handleCurrentLoaded}
         priority={priority}
+        quality={quality}
         sizes={sizes}
         src={layers.current}
         style={zoomStyle}
