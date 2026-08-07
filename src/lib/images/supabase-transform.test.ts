@@ -41,6 +41,12 @@ describe("getStorefrontImageUrl", () => {
     expect(result).toContain("width=640");
     expect(result).toContain("quality=80");
   });
+
+  it("applies the reviewGrid preset for listing tiles", () => {
+    const result = getStorefrontImageUrl(objectUrl, "reviewGrid");
+    expect(result).toContain("width=480");
+    expect(result).toContain("quality=75");
+  });
 });
 
 describe("isSupabasePublicStorageUrl", () => {

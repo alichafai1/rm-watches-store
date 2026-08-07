@@ -26,6 +26,8 @@ export const STOREFRONT_IMAGE_PRESETS = {
   collectionSeo: { width: 960, quality: 80, resize: "contain" },
   hero: { width: 1920, quality: 80, resize: "contain" },
   review: { width: 900, quality: 80, resize: "contain" },
+  /** Homepage / listing review tiles — modal keeps `review`. */
+  reviewGrid: { width: 480, quality: 75, resize: "contain" },
   reviewThumb: { width: 160, quality: 75, resize: "contain" },
   avatar: { width: 96, height: 96, quality: 75, resize: "cover" },
   paymentIcon: { width: 96, quality: 80, resize: "contain" },

@@ -226,7 +226,7 @@ export function CustomerExperienceGallery({
                 alt={getReviewImageAlt(review)}
                 className="object-cover transition duration-500 group-hover:scale-[1.03]"
                 fill
-                preset="review"
+                preset="reviewGrid"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 src={getReviewImageSrc(review)}
               />
