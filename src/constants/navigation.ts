@@ -56,8 +56,6 @@ export const footerNavigationGroups: FooterNavigationGroup[] = [
       { label: "All Watches", href: "/shop" },
       { label: "New Arrivals", href: "/shop/new-arrivals" },
       { label: "Best Sellers", href: "/shop/best-sellers" },
-      { label: "Men", href: "/shop/men" },
-      { label: "Women", href: "/shop/women" },
     ],
   },
   {

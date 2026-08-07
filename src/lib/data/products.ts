@@ -48,11 +48,6 @@ export async function getHomepageNewArrivalProducts(limit = 4) {
   return products.slice(0, limit);
 }
 
-export async function getProductsByGender(gender: "men" | "women") {
-  const products = await getProducts();
-  return products.filter((product) => product.gender === gender);
-}
-
 export function getPrimaryProductCollection(product: Product) {
   return (
     getCollectionBySlug(product.collection.slug) ??

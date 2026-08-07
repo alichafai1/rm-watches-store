@@ -8,8 +8,6 @@ export const staticRoutes: RouteItem[] = [
   { label: "Shop", href: "/shop" },
   { label: "New Arrivals", href: "/shop/new-arrivals" },
   { label: "Best Sellers", href: "/shop/best-sellers" },
-  { label: "Men's Watches", href: "/shop/men" },
-  { label: "Women's Watches", href: "/shop/women" },
   { label: "Collections", href: "/collections" },
   { label: "New Arrival", href: "/new-arrival-collections" },
   { label: "Guides", href: "/guides" },

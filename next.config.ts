@@ -14,6 +14,8 @@ const nextConfig: NextConfig = {
         destination: "/terms-of-service",
         permanent: true,
       },
+      { source: "/shop/men", destination: "/shop", permanent: true },
+      { source: "/shop/women", destination: "/shop", permanent: true },
     ];
   },
   images: {
