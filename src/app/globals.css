@@ -56,6 +56,15 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/*
+ * Homepage: skip layout/paint of below-fold sections until near the viewport.
+ * Keeps the hero LCP text ("Made for Every Moment") from waiting on a large DOM.
+ */
+.home-below-fold {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 4000px;
+}
+
 a {
   color: inherit;
 }

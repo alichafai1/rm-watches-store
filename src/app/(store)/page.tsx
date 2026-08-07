@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import {
   BenefitsSection,
   EditorialSection,
@@ -32,7 +33,29 @@ export const metadata: Metadata = createPageMetadata({
 
 export const revalidate = 60;
 
-export default async function HomePage() {
+/**
+ * Hero is static and is the LCP element on mobile. Keep it outside any CMS
+ * awaits so it streams in the first paint; below-fold sections load in Suspense.
+ */
+export default function HomePage() {
+  return (
+    <>
+      <JsonLd data={createFaqPageSchema(homepageFaqItems)} />
+      <HeroSection />
+      <Suspense>
+        {/*
+          Defer style/layout of below-fold DOM so the hero LCP text can paint
+          immediately (homepage HTML is large once collections/products render).
+        */}
+        <div className="home-below-fold">
+          <HomePageBelowFold />
+        </div>
+      </Suspense>
+    </>
+  );
+}
+
+async function HomePageBelowFold() {
   const featuredCollections = getFeaturedCollections(20);
   const newArrivalCollections = getFeaturedNewArrivalCollections(20);
   const [bestSellerProducts, newArrivalProducts, featuredGuide, latestArticles] =
@@ -46,8 +69,6 @@ export default async function HomePage() {
 
   return (
     <>
-      <JsonLd data={createFaqPageSchema(homepageFaqItems)} />
-      <HeroSection />
       <FeaturedCollectionsSection collections={featuredCollections} />
       <ProductSection
         description="A focused selection of watches presented with clean imagery, concise details, and clear paths to explore more."

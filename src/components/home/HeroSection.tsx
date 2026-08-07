@@ -4,17 +4,30 @@ import { LinkButton } from "@/components/ui/LinkButton";
 import { Section } from "@/components/ui/Section";
 import { Typography } from "@/components/ui/Typography";
 
+const HERO_IMAGE_SRC =
+  "https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/Richard%20Mille%20Replica.webp";
+
 export function HeroSection() {
   return (
     <Section className="relative overflow-hidden bg-black text-white" spacing="sm">
+      {/*
+        Desktop-only preload: the art is `hidden` below md, and Next `priority`
+        would still preload it on mobile — competing with the text LCP.
+      */}
+      <link
+        rel="preload"
+        as="image"
+        href={HERO_IMAGE_SRC}
+        media="(min-width: 768px)"
+        fetchPriority="high"
+      />
       {/* Desktop/tablet: full hero image. Phone: solid black (left side of the art). */}
       <Image
         alt="Richard MIlle Replica Watches Super Clone watches "
         className="hidden object-cover object-center md:block"
         fill
-        priority
         sizes="100vw"
-        src="https://jolmyqqzsqvyapoixnqh.supabase.co/storage/v1/object/public/website-media/Richard%20Mille%20Replica.webp"
+        src={HERO_IMAGE_SRC}
         unoptimized
       />
       <Container>

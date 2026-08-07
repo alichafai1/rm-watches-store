@@ -35,6 +35,11 @@ const nextConfig: NextConfig = {
     ],
   },
   reactStrictMode: true,
+  // Inline critical CSS to cut render-blocking stylesheet delay (helps LCP
+  // element render delay for above-the-fold text).
+  experimental: {
+    inlineCss: true,
+  },
   // Next.js always imports polyfill-module into the client bundle; browserslist
   // alone does not strip it. Alias to a modern-only stub for Turbopack builds.
   turbopack: {
