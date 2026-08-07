@@ -62,7 +62,7 @@ body {
  */
 .home-below-fold {
   content-visibility: auto;
-  contain-intrinsic-size: auto 4000px;
+  contain-intrinsic-size: auto 13000px;
 }
 
 a {
