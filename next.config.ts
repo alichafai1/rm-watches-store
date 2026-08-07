@@ -1,4 +1,8 @@
 import type { NextConfig } from "next";
+import path from "node:path";
+
+/** Slim polyfill: drop legacy APIs already native in modern browsers. */
+const modernPolyfill = path.join(__dirname, "src/lib/modern-polyfill.js");
 
 const nextConfig: NextConfig = {
   async redirects() {
@@ -31,6 +35,23 @@ const nextConfig: NextConfig = {
     ],
   },
   reactStrictMode: true,
+  // Next.js always imports polyfill-module into the client bundle; browserslist
+  // alone does not strip it. Alias to a modern-only stub for Turbopack builds.
+  turbopack: {
+    resolveAlias: {
+      "../build/polyfills/polyfill-module": "./src/lib/modern-polyfill.js",
+      "next/dist/build/polyfills/polyfill-module": "./src/lib/modern-polyfill.js",
+    },
+  },
+  // Same alias for webpack (e.g. `next build --webpack`).
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "../build/polyfills/polyfill-module": modernPolyfill,
+      "next/dist/build/polyfills/polyfill-module": modernPolyfill,
+    };
+    return config;
+  },
 };
 
 export default nextConfig;
