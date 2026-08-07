@@ -43,12 +43,15 @@ export default function HomePage() {
       <JsonLd data={createFaqPageSchema(homepageFaqItems)} />
       <HeroSection />
       {/*
-        Keep .home-below-fold outside Suspense so contain-intrinsic-size reserves
-        space on first paint; otherwise Footer sits under the hero until the
-        below-fold RSC streams in (desktop CLS ~0.274).
+        Keep .home-below-fold outside Suspense so space is reserved on first paint.
+        Fallback spacer covers the empty boundary (mobile CLS) while content streams.
       */}
       <div className="home-below-fold">
-        <Suspense>
+        <Suspense
+          fallback={
+            <div aria-hidden="true" className="home-below-fold-fallback" />
+          }
+        >
           <HomePageBelowFold />
         </Suspense>
       </div>

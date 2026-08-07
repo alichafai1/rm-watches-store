@@ -65,9 +65,17 @@ body {
   contain-intrinsic-size: auto 13000px;
 }
 
+.home-below-fold-fallback {
+  height: 13000px;
+}
+
 @media (min-width: 768px) {
   .home-below-fold {
     contain-intrinsic-size: auto 6000px;
+  }
+
+  .home-below-fold-fallback {
+    height: 6000px;
   }
 }
 
