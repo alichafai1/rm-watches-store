@@ -10,6 +10,7 @@ import {
   parseAndSanitizeArticleBlocks,
   serializeArticleContent,
 } from "@/lib/utils/article-html";
+import { WEBSITE_MEDIA_CACHE_CONTROL } from "@/constants/storage-cache";
 import type { CmsArticleRecord, CmsProductRecord } from "@/types/cms";
 
 const statusSchema = z.enum(["draft", "published", "archived"]);
@@ -202,6 +203,7 @@ async function normalizeMainProductImage(
     );
 
     const { error } = await storage.upload(path, normalized.buffer, {
+      cacheControl: WEBSITE_MEDIA_CACHE_CONTROL,
       contentType,
       upsert: false,
     });
@@ -681,6 +683,7 @@ export async function uploadAdminImageAction(formData: FormData) {
     const { error } = await supabase.storage
       .from("website-media")
       .upload(path, buffer, {
+        cacheControl: WEBSITE_MEDIA_CACHE_CONTROL,
         contentType: file.type,
         upsert: false,
       });
