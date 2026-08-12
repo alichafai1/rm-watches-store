@@ -170,19 +170,8 @@ export function ArticleDetail({
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-neutral-600">
               {article.excerpt}
             </p>
-            {!isGuide ? (
-              <p className="mt-4 text-sm text-neutral-500">
-                By{" "}
-                <Link
-                  className="font-medium text-neutral-800 underline-offset-4 hover:text-neutral-950 hover:underline"
-                  href={siteAuthor.path}
-                >
-                  {siteAuthor.name}
-                </Link>
-              </p>
-            ) : null}
             {published ? (
-              <p className={`text-sm text-neutral-500 ${isGuide ? "mt-4" : "mt-2"}`}>
+              <p className="mt-4 text-sm text-neutral-500">
                 Published{" "}
                 <time dateTime={article.publishedAt}>{published}</time>
                 {isGuide && updated && article.updatedAt ? (
@@ -191,6 +180,17 @@ export function ArticleDetail({
                     <time dateTime={article.updatedAt}>{updated}</time>
                   </>
                 ) : null}
+              </p>
+            ) : null}
+            {!isGuide ? (
+              <p className={`text-sm text-neutral-500 ${published ? "mt-2" : "mt-4"}`}>
+                By{" "}
+                <Link
+                  className="font-medium text-neutral-800 underline-offset-4 hover:text-neutral-950 hover:underline"
+                  href={siteAuthor.path}
+                >
+                  {siteAuthor.name}
+                </Link>
               </p>
             ) : null}
           </header>
