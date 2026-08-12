@@ -47,7 +47,7 @@ export function Footer() {
 
           <div className="flex flex-col gap-3 text-sm text-neutral-600 sm:flex-row sm:items-center sm:justify-between">
             <p>
-              &copy; {currentYear} {siteConfig.name}. Placeholder copyright.
+              &copy; {currentYear} {siteConfig.name}.
             </p>
           </div>
         </div>
