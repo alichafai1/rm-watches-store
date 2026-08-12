@@ -49,9 +49,6 @@ export function Footer() {
             <p>
               &copy; {currentYear} {siteConfig.name}. Placeholder copyright.
             </p>
-            <p aria-label="Payment method placeholder">
-              Payment method area reserved for a later commerce phase.
-            </p>
           </div>
         </div>
       </Container>
