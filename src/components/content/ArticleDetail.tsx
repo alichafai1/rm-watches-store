@@ -185,7 +185,7 @@ export function ArticleDetail({
               <p className={`text-sm text-neutral-500 ${isGuide ? "mt-4" : "mt-2"}`}>
                 Published{" "}
                 <time dateTime={article.publishedAt}>{published}</time>
-                {updated && article.updatedAt ? (
+                {isGuide && updated && article.updatedAt ? (
                   <>
                     {" · Updated "}
                     <time dateTime={article.updatedAt}>{updated}</time>
