@@ -3,6 +3,7 @@ import { StorefrontImage } from "@/components/media/StorefrontImage";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
+import { siteAuthor } from "@/constants/author";
 import { isSupabasePublicStorageUrl } from "@/lib/images/supabase-transform";
 import {
   sanitizeArticleHtml,
@@ -169,8 +170,19 @@ export function ArticleDetail({
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-neutral-600">
               {article.excerpt}
             </p>
-            {published ? (
+            {!isGuide ? (
               <p className="mt-4 text-sm text-neutral-500">
+                By{" "}
+                <Link
+                  className="font-medium text-neutral-800 underline-offset-4 hover:text-neutral-950 hover:underline"
+                  href={siteAuthor.path}
+                >
+                  {siteAuthor.name}
+                </Link>
+              </p>
+            ) : null}
+            {published ? (
+              <p className={`text-sm text-neutral-500 ${isGuide ? "mt-4" : "mt-2"}`}>
                 Published{" "}
                 <time dateTime={article.publishedAt}>{published}</time>
                 {updated && article.updatedAt ? (

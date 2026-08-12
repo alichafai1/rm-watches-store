@@ -1,5 +1,6 @@
 import type { Article } from "@/types/article";
 import type { JsonLdObject } from "@/types/seo";
+import { siteAuthor } from "@/constants/author";
 import { siteConfig } from "@/constants/site";
 import { absoluteUrl } from "@/lib/seo/urls";
 import { articleHtmlToPlainText } from "@/lib/utils/article-html";
@@ -48,6 +49,14 @@ export function createArticleSchema(article: Article, url: string): JsonLdObject
     name: siteConfig.name,
     url: absoluteUrl("/"),
   };
+  const author =
+    article.type === "blog"
+      ? {
+          "@type": "Person",
+          name: siteAuthor.name,
+          url: absoluteUrl(siteAuthor.path),
+        }
+      : organization;
 
   return {
     "@context": "https://schema.org",
@@ -60,7 +69,7 @@ export function createArticleSchema(article: Article, url: string): JsonLdObject
     image: images.length > 0 ? images : undefined,
     mainEntityOfPage: url,
     wordCount: text ? text.split(/\s+/u).length : 0,
-    author: organization,
+    author,
     publisher: organization,
   };
 }

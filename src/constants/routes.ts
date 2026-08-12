@@ -13,6 +13,7 @@ export const staticRoutes: RouteItem[] = [
   { label: "Guides", href: "/guides" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
+  { label: "Author", href: "/author" },
   { label: "Contact", href: "/contact" },
   { label: "FAQ", href: "/faq" },
   { label: "Privacy Policy", href: "/privacy-policy" },
