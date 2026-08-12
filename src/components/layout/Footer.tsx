@@ -19,10 +19,26 @@ export function Footer() {
                   <Logo className="h-11" sizes="148px" />
                 </Link>
               </h2>
-              <p className="mt-3 text-sm leading-6 text-neutral-600">
-                A clean ecommerce foundation for watch catalog, collection,
-                guide, and customer-service experiences.
-              </p>
+              <div className="mt-3 grid gap-1 text-sm leading-6 text-neutral-600">
+                <p>
+                  Email us:{" "}
+                  <a
+                    className="text-neutral-800 underline-offset-2 hover:underline"
+                    href="mailto:contact@rm-replica.com"
+                  >
+                    contact@rm-replica.com
+                  </a>
+                </p>
+                <p>
+                  Call us:{" "}
+                  <a
+                    className="text-neutral-800 underline-offset-2 hover:underline"
+                    href="tel:+15732741076"
+                  >
+                    +1 573 274 1076
+                  </a>
+                </p>
+              </div>
             </section>
             <FooterNavigation />
           </div>
