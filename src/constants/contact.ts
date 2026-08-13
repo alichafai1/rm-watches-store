@@ -5,8 +5,8 @@ export const contactInfo = {
     "LAKEWOOD CO 80235",
     "US",
   ],
-  phone: "+8617815651713",
-  phoneHref: "tel:+8617815651713",
+  phone: "+1 573 274 1076",
+  phoneHref: "tel:+15732741076",
   email: "contact@rm-replica.com",
   emailHref: "mailto:contact@rm-replica.com",
   supportNote:

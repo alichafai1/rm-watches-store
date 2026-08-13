@@ -3,6 +3,7 @@ import { FooterNavigation } from "@/components/layout/FooterNavigation";
 import { Logo } from "@/components/layout/Logo";
 import { Container } from "@/components/ui/Container";
 import { Divider } from "@/components/ui/Divider";
+import { contactInfo } from "@/constants/contact";
 import { siteConfig } from "@/constants/site";
 
 export function Footer() {
@@ -24,18 +25,18 @@ export function Footer() {
                   Email us:{" "}
                   <a
                     className="text-neutral-800 underline-offset-2 hover:underline"
-                    href="mailto:contact@rm-replica.com"
+                    href={contactInfo.emailHref}
                   >
-                    contact@rm-replica.com
+                    {contactInfo.email}
                   </a>
                 </p>
                 <p>
                   Call us:{" "}
                   <a
                     className="text-neutral-800 underline-offset-2 hover:underline"
-                    href="tel:+15732741076"
+                    href={contactInfo.phoneHref}
                   >
-                    +1 573 274 1076
+                    {contactInfo.phone}
                   </a>
                 </p>
               </div>
