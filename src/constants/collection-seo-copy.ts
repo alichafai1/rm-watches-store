@@ -69,11 +69,11 @@ export const collectionSeoCopy: Record<string, CollectionSeoCopy> = {
   },
   "RM 67": {
     description:
-      "Shop RM 67-02 and RM 67 replica watches, including ultra-thin skeleton models in white and green.",
+      "Shop Richard Mille RM 67 replica watches with ultra-thin skeleton cases in white, green, and other colorways.",
     seoDescription:
-      "Shop RM 67-02 replica watches, RM67-02 and Richard Mille RM 67 02 watch options in an ultra-thin skeleton collection.",
+      "Shop Richard Mille RM 67 replica watches with ultra-thin skeleton cases, including white and green RM 67 variants.",
     about:
-      "This is the RM 67 family page, and the keyword files make the priority clear: rm 67-02, rm 67 02, rm67-02, richard mille rm 67 02, and richard mille rm 67 02 watch. Secondary terms include rm 67, rm67, 67-02, and richard mille 67-01. The collection exists for the ultra-thin extra-flat skeleton, not for Nadal or McLaren models. A strong RM 67-02 replica should feel flat on the wrist, keep the open movement readable, and hold colorways such as RM 67 white without looking thick. We list these as 1:1 watch and super clone Richard Mille options for buyers comparing rm 6702 price and finish. If you searched rm 67 or richard mille 67 02, stay here. Do not use this page for RM 16-02 extra-flat pieces; that model has its own collection so the two thin watches do not cannibalize each other.",
+      "This is the Richard Mille RM 67 collection: the ultra-thin extra-flat skeleton family, not a dedicated page for one later reference. Shoppers who type rm 67, rm67, or richard mille rm 67 should land here for the series as a whole, including colorways such as RM 67 white and RM 67 green. The brief is a flat tonneau, an open movement that stays readable, and a 1:1 watch that still feels light on the wrist. A super clone Richard Mille in this lineup should keep that extra-flat stance rather than looking like a thicker sports RM. Popular later pieces in the family, including the well-known 67-02, may appear as variants, but this URL stays on the broader RM 67 replica watch story so a more specific page can own those terms later. If you want the extra-flat automatic 16-02, use that collection. This one is for buyers comparing the RM 67 series, finish, and everyday wear.",
   },
   "RM 007": {
     description:
@@ -93,11 +93,11 @@ export const collectionSeoCopy: Record<string, CollectionSeoCopy> = {
   },
   "RM 38": {
     description:
-      "Shop Richard Mille RM 38-01 replica watches with racing-inspired skeleton cases and high-contrast finishing.",
+      "Shop Richard Mille RM 38 replica watches with racing-inspired skeleton cases and high-contrast finishing.",
     seoDescription:
-      "Shop Richard Mille RM 38 01 replica watches with racing-inspired skeleton cases and 1:1 super clone finishing.",
+      "Shop Richard Mille RM 38 replica watches with racing-inspired skeleton cases and 1:1 super clone finishing.",
     about:
-      "The RM 38 collection is built around richard mille rm 38 01, the racing-inspired skeleton that shows up in the competitor CSVs. This is not the Nadal 027 family and not a McLaren page. The 38-01 look is about performance color, an open movement, and a case that feels closer to a track watch than a dress skeleton. Our Richard Mille replica selection treats the RM 38-01 as a 1:1 watch category: check the bezel contrast, the way the bridges sit in the case, and whether the strap matches the sport brief. Super clone Richard Mille buyers should use this page when the search is specifically RM 38 or RM 38-01. Related racing pieces such as RM 40-01 Speedtail and RM 50-03 McLaren stay on their own collections so this one can rank for the 38-01 query without mixing partnerships.",
+      "The RM 38 collection is the racing-inspired skeleton family, written for shoppers who search rm 38 or richard mille rm 38. This is not the Nadal 027 line and not a McLaren page. The RM 38 look is about performance color, an open movement, and a case that feels closer to a track watch than a dress skeleton. A Richard Mille replica here should read as a 1:1 watch: check the bezel contrast, the way the bridges sit in the case, and whether the strap matches the sport brief. Later numbered pieces in the same family may show up as variants, but this URL stays on the broader RM 38 replica watch story so a more specific page can own those terms later. Super clone Richard Mille buyers should use this collection when they want the RM 38 series. Related racing pieces such as RM 40-01 Speedtail and RM 50-03 McLaren stay on their own collections so this one does not mix partnerships.",
   },
   "RM 027": {
     description:
