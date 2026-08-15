@@ -1,4 +1,5 @@
 import type { Collection } from "@/types/collection";
+import { getCollectionSeoCopy } from "@/constants/collection-seo-copy";
 import { createDefaultCollectionFaq } from "@/lib/data/collection-faq";
 import { slugifyText } from "@/lib/utils/text";
 
@@ -990,8 +991,15 @@ export const mockNewArrivalCollections: Collection[] = newArrivalNumbers.map(
 
     throw new Error(`Unexpected new arrival collection number: ${number}`);
   },
-).map((collection) => ({
-  ...collection,
-  slug: slugifyText(collection.name),
-  faq: collection.faq ?? createDefaultCollectionFaq(collection.name),
-}));
+).map((collection) => {
+  const seoCopy = getCollectionSeoCopy(collection.name);
+
+  return {
+    ...collection,
+    slug: slugifyText(collection.name),
+    description: seoCopy?.description ?? collection.description,
+    about: seoCopy?.about ?? collection.about,
+    seoDescription: seoCopy?.seoDescription ?? collection.seoDescription,
+    faq: collection.faq ?? createDefaultCollectionFaq(collection.name),
+  };
+});
