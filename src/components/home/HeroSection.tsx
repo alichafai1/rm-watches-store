@@ -34,11 +34,10 @@ export function HeroSection() {
                 className="max-w-lg text-white"
                 variant="display"
               >
-                <span className="block">Replica Watches</span>
-                <span className="block">Made for Every Moment</span>
+                Richard Mille Replica Watches & Super Clone RM Models
               </Typography>
               <Typography className="max-w-lg text-neutral-300" variant="body">
-                Premium replica watches, handcrafted detail.
+                Explore replica Richard Mille watches across popular RM collections, with detailed images, clear specifications, pricing, and new arrivals.
               </Typography>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">

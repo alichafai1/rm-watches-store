@@ -24,12 +24,20 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 import { createFaqPageSchema } from "@/lib/seo/schema/faq-page";
 import { homepageFaqItems } from "@/mock/homepage-faq";
 
-export const metadata: Metadata = createPageMetadata({
-  title: "Watches for Men and Women | Modern Watch Store",
-  description:
-    "Explore automatic, chronograph, dress, sports, and everyday watches through a clean and easy-to-use online watch store.",
-  pathname: "/",
-});
+const homepageTitle = "Richard Mille Replica Watches | Super Clone RM Watches";
+const homepageDescription =
+  "Shop Richard Mille replica watches and super clone RM models. Compare popular collections, new arrivals, specifications, prices, and product details.";
+
+export const metadata: Metadata = {
+  ...createPageMetadata({
+    title: homepageTitle,
+    description: homepageDescription,
+    pathname: "/",
+  }),
+  title: {
+    absolute: homepageTitle,
+  },
+};
 
 export const revalidate = 60;
 
