@@ -4,7 +4,7 @@ export const homepageFaqItems: FaqItem[] = [
   {
     question: "What makes your Richard Mille Super Clone Replica so high quality?",
     answer:
-      'A "Super Clone" is not just a copy—it\'s a meticulously engineered, high-quality replica. We don\'t settle for basic knockoffs. Our pieces are designed to be virtually indistinguishable from the original Swiss masterpiece, matching every minute detail: the texture of the dial, the precision of the movement, the perfect mirror polish on the case, and the flawless stitching of the strap. When you buy a Super Clone Watch from us, you are buying an authentic-looking piece that truly performs like the real thing!',
+      "Our super clone watches focus on detailed case finishing, dial design, strap construction, and clearly listed movement specifications. Quality and features vary by model, so we recommend reviewing the product photos, specifications, dimensions, and available quality options on each individual product page before ordering.",
   },
   {
     question: 'What defines a "high-quality" Richard Mille replica?',
@@ -14,24 +14,24 @@ export const homepageFaqItems: FaqItem[] = [
   {
     question: "How closely do these replicas match an authentic Richard Mille watch?",
     answer:
-      "Our watches meet or exceed the standards set by RM itself. While they offer incredible value compared to the retail price, our replica Richard Mille watches feature: high fidelity dial work with perfect printing and text; flawless case finishing with superior polishing and brushing techniques; and accurate movements that run with remarkable precision, providing a true luxury timepiece experience.",
+      "Our Richard Mille replica watches are inspired by the design and appearance of original RM models, but they are replica products and are not authentic Richard Mille watches. Materials, movements, dimensions, and finishing can vary by model and quality level. Each product page provides images and specifications so customers can compare the available options.",
   },
   {
     question:
       "Do you have special editions like the Iced Out or Yellow RM 67-02 replica?",
     answer:
-      "Absolutely! We pride ourselves on stocking every major style variation. Whether you are looking for a dazzling Iced Out Replica, the sleek Black and Red Richard Mille, or the sought-after Yellow Richard Mille, we have it. Our catalog features all your favorite models, including the legendary RM 67-02 replica.",
+      "Availability changes as new RM replica models and variations are added. Check our current collections and product listings for available RM 67-02 styles, colors, straps, and other special-edition-inspired designs.",
   },
   {
     question:
       "Why should I buy a high quality replica from you instead of another seller?",
     answer:
-      'Because we offer unmatched trust and guarantees! We eliminate the risk associated with buying "just a copy." Every watch comes with our 100% Authenticity Guarantee. You are getting premium craftsmanship, superior materials, and transparent pricing.',
+      "We focus on clear product information, detailed images, transparent pricing, secure checkout, worldwide shipping, and customer support. Each watch listing includes its available specifications and quality options so you can compare products before purchasing. Eligible orders can also be returned in accordance with our published 14-day return policy.",
   },
   {
     question: "What is your quality assurance policy on these replicas?",
     answer:
-      "We stand by every single piece. All our Super Clone Watches come with warranty coverage. If you receive a watch that doesn't meet the standard of high-quality replica, contact us immediately for a full refund, exchange, or repair—on us!",
+      "If you receive an incorrect or defective item, contact our support team as soon as possible so we can review the issue. Return requests may be submitted within 14 days of delivery, subject to the conditions in our Refund & Return Policy. Defective or incorrect-item claims should be reported within 48 hours of delivery.",
   },
   {
     question: "Where to buy replica Richard Mille watches online?",
