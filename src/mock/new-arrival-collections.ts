@@ -210,37 +210,35 @@ export const mockNewArrivalCollections: Collection[] = newArrivalNumbers.map(
         description:
           "Discover our curated selection of watches designed for style, precision, and everyday wear.",
         about:
-          "The Richard Mille RM 07-02 collection represents the pinnacle of haute horlogerie, celebrated for its ultra-thin profile and intricate skeleton dial. When searching for this iconic timepiece, it is crucial to avoid a fake richard mille or a richard mille superclone, as these compromise the exceptional craftsmanship and premium materials that define the brand. Unlike a 1:1 watch or mirror replica watches that lack genuine mechanical integrity, our curated selection features only authentic, meticulously inspected models. We do not have any richard mille replica for sale, ensuring your investment retains its true value and prestige. For collectors seeking a reliable alternative to a replica richard mille, the genuine RM 07-02 offers unparalleled precision, a free-sprung balance, and modern styling. Explore our authorized collection today to discover a true masterpiece that perfectly matches your sophisticated expectations.",
+          "Explore the RM 07-02 collection, featuring replica watches inspired by the distinctive transparent case design and feminine styling associated with the Richard Mille RM 07-02. This collection focuses on eye-catching details, skeleton-style dials, jewel-inspired accents, and modern color combinations designed for customers looking for the RM 07-02 aesthetic at a more accessible price point. Our Richard Mille RM 07-02 replica selection includes super clone RM 07-02 styles with detailed case finishing, automatic-style movements, and carefully matched straps and dial designs. Each product page provides its own specifications, images, pricing, and available features so customers can compare the options before purchasing. Browse the RM 07-02 replica watches currently available and choose the design, case style, and finishing that best matches your preference.",
         image: rm0702CollectionImage,
         faq: [
           {
-            question:
-              "What makes the authentic Richard Mille RM 07-02 different from a richard mille fake?",
+            question: "What is the RM 07-02 collection?",
             answer:
-              "The genuine Richard Mille RM 07-02 is a masterpiece of haute horlogerie, featuring a meticulously crafted skeleton dial and a true free sprung balance for unparalleled precision. In contrast, a richard mille fake or counterfeit lacks the advanced mechanical integrity, premium materials, and flawless finishing that define the brand.",
+              "The RM 07-02 collection includes replica watches inspired by the recognizable design of the Richard Mille RM 07-02, including transparent-style cases, skeleton-inspired dials, and feminine detailing.",
           },
           {
             question:
-              "How can I spot a fake richard mille before making a purchase?",
+              "What should I check before choosing an RM 07-02 replica?",
             answer:
-              "When evaluating a timepiece, examine the movement and materials closely. A genuine richard mille skeleton watch will exhibit perfect alignment, high-grade titanium or sapphire components, and intricate hand-finishing. A richard mille replica or richard mille superclone often reveals itself through cheap printing, misaligned markers, and a lack of the brand's signature complex mechanical architecture.",
+              "Review the individual product page for case material, dial design, movement type, strap, dimensions, images, and other specifications. Features can vary between different RM 07-02 replica models.",
           },
           {
             question:
-              "Are there any good alternatives if I am searching for watches like Richard Mille?",
+              "Are all RM 07-02 watches in this collection identical?",
             answer:
-              "Yes, if you are exploring a richard mille alternative, we recommend looking into authorized pre-owned markets or other high-end independent watchmakers that offer similar avant-garde designs. Investing in authentic watches similar to richard mille ensures you receive legitimate craftsmanship, warranty protection, and long-term value retention, unlike a 1:1 watch or mirror replica watches which hold zero resale value.",
+              "No. Different RM 07-02 replica watches may use different case colors, dial designs, decorative details, straps, and specifications. Check each product listing before ordering.",
           },
           {
-            question:
-              "Why is the RM 07-02 highly sought after compared to other rm models?",
+            question: "Where can I see the specifications and price?",
             answer:
-              "The RM 07-02 is celebrated as one of the thinnest richard mille timepieces ever created. Its ultra-slim profile, combined with a striking skeletonized movement and luxurious materials, makes it a highly desirable piece for collectors who appreciate both modern styling and traditional watchmaking excellence.",
+              "The current price, images, product details, and available specifications are listed on each individual RM 07-02 product page.",
           },
         ],
         seoTitle: "RM 07-02 | Watch Collection",
         seoDescription:
-          "Explore the authentic Richard Mille RM 07-02 collection featuring ultra-thin profiles, skeleton dials, and meticulously inspected haute horlogerie.",
+          "Explore the RM 07-02 collection of Richard Mille RM 07-02 replica watches with transparent-style cases and skeleton-inspired dials.",
       };
     }
 
