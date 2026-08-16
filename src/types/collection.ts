@@ -6,6 +6,7 @@ export type Collection = {
   name: string;
   slug: string;
   description: string;
+  cardDescription?: string;
   about?: string;
   image?: ProductImage;
   faq?: FaqItem[];

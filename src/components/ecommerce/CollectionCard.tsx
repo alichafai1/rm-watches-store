@@ -36,7 +36,9 @@ export function CollectionCard({
       <Heading className="text-base font-semibold">
         <Link href={`${basePath}/${collection.slug}`}>{collection.name}</Link>
       </Heading>
-      <p className="text-sm text-neutral-700">{collection.description}</p>
+      <p className="text-sm text-neutral-700">
+        {collection.cardDescription ?? collection.description}
+      </p>
     </CollectionCardBase>
   );
 }

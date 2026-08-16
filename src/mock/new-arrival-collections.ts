@@ -1,4 +1,5 @@
 import type { Collection } from "@/types/collection";
+import { getCollectionCardDescription } from "@/constants/collection-card-copy";
 import { slugifyText } from "@/lib/utils/text";
 
 const rm0701CollectionImage = {
@@ -982,4 +983,5 @@ export const mockNewArrivalCollections: Collection[] = newArrivalNumbers.map(
 ).map((collection) => ({
   ...collection,
   slug: slugifyText(collection.name),
+  cardDescription: getCollectionCardDescription(collection.name),
 }));
