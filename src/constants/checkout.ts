@@ -16,7 +16,7 @@ export const checkoutShippingOptions: CheckoutShippingOption[] = [
   {
     id: "free",
     label: "Free Shipping",
-    description: "Tracked delivery, expected in 2–3 business days",
+    description: "Tracked delivery. Delivery times vary by destination.",
     badge: "Free",
     price: 0,
   },

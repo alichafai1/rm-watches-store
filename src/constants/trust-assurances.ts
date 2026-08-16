@@ -12,16 +12,16 @@ export const trustAssurances: TrustAssurance[] = [
   {
     id: "free-shipping",
     title: "Free Shipping",
-    description: "Expected delivery between 2–3 days",
+    description: "Free shipping worldwide. Delivery times vary by destination.",
     iconSrc: `${websiteMediaBase}/free%20shipping%20icon.webp`,
     iconAlt: "Free shipping",
   },
   {
     id: "returns",
-    title: "30 Days Return",
-    description: "Return label included for easy returns",
+    title: "14-Day Returns",
+    description: "Return requests accepted within 14 days of delivery.",
     iconSrc: `${websiteMediaBase}/days%20moneyback.webp`,
-    iconAlt: "30 days return",
+    iconAlt: "14-day returns",
   },
   {
     id: "secure-checkout",
