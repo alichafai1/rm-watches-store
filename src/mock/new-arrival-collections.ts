@@ -1,5 +1,4 @@
 import type { Collection } from "@/types/collection";
-import { createDefaultCollectionFaq } from "@/lib/data/collection-faq";
 import { slugifyText } from "@/lib/utils/text";
 
 const rm0701CollectionImage = {
@@ -941,8 +940,6 @@ export const mockNewArrivalCollections: Collection[] = newArrivalNumbers.map(
           "Discover our curated selection of watches designed for style, precision, and everyday wear.",
         image: rm6101CollectionImage,
         seoTitle: "RM 61-01 | Watch Collection",
-        seoDescription:
-          "RM 61-01 placeholder page for the watch ecommerce collection system.",
       };
     }
 
@@ -955,8 +952,6 @@ export const mockNewArrivalCollections: Collection[] = newArrivalNumbers.map(
           "Discover our curated selection of watches designed for style, precision, and everyday wear.",
         image: rm6301CollectionImage,
         seoTitle: "RM 63-01 | Watch Collection",
-        seoDescription:
-          "RM 63-01 placeholder page for the watch ecommerce collection system.",
       };
     }
 
@@ -969,8 +964,6 @@ export const mockNewArrivalCollections: Collection[] = newArrivalNumbers.map(
           "Discover our curated selection of watches designed for style, precision, and everyday wear.",
         image: rm7001CollectionImage,
         seoTitle: "RM 70-01 | Watch Collection",
-        seoDescription:
-          "RM 70-01 placeholder page for the watch ecommerce collection system.",
       };
     }
 
@@ -983,8 +976,6 @@ export const mockNewArrivalCollections: Collection[] = newArrivalNumbers.map(
           "Discover our curated selection of watches designed for style, precision, and everyday wear.",
         image: rm2702CollectionImage,
         seoTitle: "RM 27-02 | Watch Collection",
-        seoDescription:
-          "RM 27-02 placeholder page for the watch ecommerce collection system.",
       };
     }
 
@@ -993,5 +984,4 @@ export const mockNewArrivalCollections: Collection[] = newArrivalNumbers.map(
 ).map((collection) => ({
   ...collection,
   slug: slugifyText(collection.name),
-  faq: collection.faq ?? createDefaultCollectionFaq(collection.name),
 }));

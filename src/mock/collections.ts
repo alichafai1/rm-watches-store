@@ -1,5 +1,4 @@
 import type { Collection } from "@/types/collection";
-import { createDefaultCollectionFaq } from "@/lib/data/collection-faq";
 import { slugifyText } from "@/lib/utils/text";
 
 const collectionNumbers = [
@@ -1108,5 +1107,4 @@ export const mockCollections: Collection[] = collectionNumbers.map((number): Col
 }).map((collection) => ({
   ...collection,
   slug: slugifyText(collection.name),
-  faq: collection.faq ?? createDefaultCollectionFaq(collection.name),
 }));
