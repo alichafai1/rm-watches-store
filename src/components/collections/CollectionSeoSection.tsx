@@ -35,8 +35,7 @@ export function CollectionSeoSection({ collection }: CollectionSeoSectionProps) 
             About {collection.name}
           </h1>
           <p className="mt-4 text-sm leading-7 text-neutral-700 sm:text-base">
-            {collection.about ??
-              `This short placeholder area is reserved for future SEO content about ${collection.name.toLowerCase()}. Use it to explain the collection style, common use cases, materials, movements, and buying guidance once final product data is connected.`}
+            {collection.about ?? collection.description}
           </p>
         </div>
       </div>
