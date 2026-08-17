@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ProductCard } from "@/components/ecommerce/ProductCard";
 import { PlaceholderPage } from "@/components/ui/PlaceholderPage";
 import { ResponsiveGrid } from "@/components/ui/ResponsiveGrid";
@@ -8,11 +9,22 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = createPageMetadata({
-  title: "Shop",
-  description: "Temporary shop index for future ecommerce product listings.",
-  pathname: "/shop",
-});
+const shopTitle = "Richard Mille Replica Watches for Sale | RM Super Clones";
+const shopDescription =
+  "Shop Richard Mille replica watches and RM super clones. Browse available models, compare specifications, designs, quality options, prices, and new arrivals.";
+const shopIntro =
+  "Shop Richard Mille replica watches across popular RM collections and newly added models. Compare super clone Richard Mille watches by design, case style, dial, strap, specifications, quality options, and price. Browse the available catalog below and open any watch for detailed product images, specifications, pricing, and ordering information.";
+
+export const metadata: Metadata = {
+  ...createPageMetadata({
+    title: shopTitle,
+    description: shopDescription,
+    pathname: "/shop",
+  }),
+  title: {
+    absolute: shopTitle,
+  },
+};
 
 export default async function ShopPage() {
   const products = await getProducts();
@@ -20,14 +32,47 @@ export default async function ShopPage() {
   return (
     <PlaceholderPage
       breadcrumbs={createBreadcrumbs([{ label: "Shop", href: "/shop" }])}
-      description="This route will become the primary product listing page when catalog data and filtering are introduced later."
-      title="Shop"
+      description={shopIntro}
+      title="Richard Mille Replica Watches"
     >
-      <ResponsiveGrid columns="product">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </ResponsiveGrid>
+      <div className="grid gap-10">
+        <ResponsiveGrid columns="product">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </ResponsiveGrid>
+        <p className="max-w-3xl text-sm leading-6 text-neutral-600">
+          Looking for a specific RM model?{" "}
+          <Link
+            className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900"
+            href="/collections"
+          >
+            Browse collections
+          </Link>{" "}
+          or{" "}
+          <Link
+            className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900"
+            href="/new-arrival-collections"
+          >
+            new arrival collections
+          </Link>
+          . You can also shop{" "}
+          <Link
+            className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900"
+            href="/shop/new-arrivals"
+          >
+            new arrivals
+          </Link>{" "}
+          and{" "}
+          <Link
+            className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900"
+            href="/shop/best-sellers"
+          >
+            best sellers
+          </Link>
+          .
+        </p>
+      </div>
     </PlaceholderPage>
   );
 }
