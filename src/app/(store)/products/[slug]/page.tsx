@@ -29,7 +29,7 @@ type ProductPageProps = {
 };
 
 export const revalidate = 60;
-/** ISR window for CMS product copy, including the RM 35-03 cluster. */
+/** ISR window for CMS product copy after the sitewide catalog cleanup. */
 
 export async function generateStaticParams() {
   const products = await getProducts();
