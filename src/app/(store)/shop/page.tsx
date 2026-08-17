@@ -41,37 +41,46 @@ export default async function ShopPage() {
             <ProductCard key={product.id} product={product} />
           ))}
         </ResponsiveGrid>
-        <p className="max-w-3xl text-sm leading-6 text-neutral-600">
-          Looking for a specific RM model?{" "}
-          <Link
-            className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900"
-            href="/collections"
-          >
-            Browse collections
-          </Link>{" "}
-          or{" "}
-          <Link
-            className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900"
-            href="/new-arrival-collections"
-          >
-            new arrival collections
-          </Link>
-          . You can also shop{" "}
-          <Link
-            className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900"
-            href="/shop/new-arrivals"
-          >
-            new arrivals
-          </Link>{" "}
-          and{" "}
-          <Link
-            className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900"
-            href="/shop/best-sellers"
-          >
-            best sellers
-          </Link>
-          .
-        </p>
+        <div className="grid max-w-2xl gap-1.5 text-sm leading-6 text-neutral-600">
+          <p className="flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
+            <span>Looking for a specific RM model?</span>
+            <Link
+              className="inline-flex whitespace-nowrap font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900"
+              href="/collections"
+            >
+              Browse collections
+            </Link>
+            <span>or</span>
+            <span className="inline-flex items-baseline whitespace-nowrap">
+              <Link
+                className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900"
+                href="/new-arrival-collections"
+              >
+                new arrival collections
+              </Link>
+              .
+            </span>
+          </p>
+          <p className="flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
+            <span>You can also shop</span>
+            <Link
+              className="inline-flex whitespace-nowrap font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900"
+              href="/shop/new-arrivals"
+            >
+              new arrivals
+            </Link>
+            <span>and</span>
+            <span className="inline-flex items-baseline whitespace-nowrap">
+              <Link
+                className="font-medium text-neutral-950 underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900"
+                href="/shop/best-sellers"
+              >
+                best sellers
+              </Link>
+              .
+            </span>
+          </p>
+        </div>
       </div>
     </PlaceholderPage>
   );
