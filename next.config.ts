@@ -7,6 +7,12 @@ const modernPolyfill = path.join(__dirname, "src/lib/modern-polyfill.js");
 const nextConfig: NextConfig = {
   async redirects() {
     return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "rm-watches-store-two.vercel.app" }],
+        destination: "https://www.rm-replica.com/:path*",
+        permanent: true,
+      },
       { source: "/shipping", destination: "/shipping-policy", permanent: true },
       {
         source: "/returns",
