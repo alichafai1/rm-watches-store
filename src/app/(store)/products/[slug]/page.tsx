@@ -29,6 +29,7 @@ type ProductPageProps = {
 };
 
 export const revalidate = 60;
+/** ISR window for CMS product copy (titles, specs, FAQs). */
 
 export async function generateStaticParams() {
   const products = await getProducts();
