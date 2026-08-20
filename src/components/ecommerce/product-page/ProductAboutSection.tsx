@@ -28,6 +28,7 @@ export function ProductAboutSection({ about }: ProductAboutSectionProps) {
             "[&_ul]:mb-4 [&_ul]:list-disc [&_ul]:pl-5",
             "[&_ol]:mb-4 [&_ol]:list-decimal [&_ol]:pl-5",
             "[&_li]:mb-1",
+            "[&_a]:font-medium [&_a]:text-neutral-950 [&_a]:underline [&_a]:underline-offset-4",
           ].join(" ")}
           dangerouslySetInnerHTML={{ __html: descriptionHtml }}
         />

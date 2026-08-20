@@ -8,7 +8,26 @@ const ALLOWED_TAGS = new Set([
   "ul",
   "ol",
   "li",
+  "a",
 ]);
+
+function isSafeInternalHref(href: string) {
+  const value = href.trim();
+  if (!value.startsWith("/") || value.startsWith("//")) {
+    return false;
+  }
+  if (/[<>"'`]/.test(value) || /\s/.test(value)) {
+    return false;
+  }
+  return true;
+}
+
+function readHrefAttribute(attributes: string) {
+  const match = attributes.match(
+    /\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i,
+  );
+  return (match?.[1] ?? match?.[2] ?? match?.[3] ?? "").trim();
+}
 
 function escapeHtml(value: string): string {
   return value
@@ -96,6 +115,14 @@ function serializeNode(node: Node, bold = false, italic = false): string {
     return `<p><strong>${children}</strong></p>`;
   }
 
+  if (tag === "a") {
+    const href = element.getAttribute("href") ?? "";
+    if (!isSafeInternalHref(href) || !children) {
+      return children;
+    }
+    return `<a href="${escapeHtml(href)}">${children}</a>`;
+  }
+
   return children;
 }
 
@@ -117,6 +144,14 @@ function sanitizeWithRegex(html: string): string {
     .replace(/ on[a-z]+='[^']*'/gi, "")
     .replace(/ javascript:/gi, "");
 
+  cleaned = cleaned.replace(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi, (full, attrs, inner) => {
+    const href = readHrefAttribute(String(attrs ?? ""));
+    if (!isSafeInternalHref(href)) {
+      return inner;
+    }
+    return `<a href="${escapeHtml(href)}">${inner}</a>`;
+  });
+
   cleaned = cleaned.replace(/<\/?([a-z0-9]+)(\s[^>]*)?>/gi, (match, rawTag) => {
     const tag = String(rawTag).toLowerCase();
     const isClosing = match.startsWith("</");
@@ -135,6 +170,12 @@ function sanitizeWithRegex(html: string): string {
 
     if (tag === "i") {
       return isClosing ? "</em>" : "<em>";
+    }
+
+    if (tag === "a") {
+      if (isClosing) return "</a>";
+      const href = readHrefAttribute(match);
+      return isSafeInternalHref(href) ? `<a href="${escapeHtml(href)}">` : "";
     }
 
     return isClosing ? `</${tag}>` : `<${tag}>`;
@@ -177,7 +218,7 @@ export function plainTextToAboutHtml(text: string): string {
     .join("");
 }
 
-/** Sanitize pasted/saved about HTML. Keeps paragraphs, line breaks, bold, italics, lists. */
+/** Sanitize pasted/saved about HTML. Keeps paragraphs, line breaks, bold, italics, lists, and internal links. */
 export function sanitizeAboutHtml(input: string): string {
   if (!input || typeof input !== "string") {
     return "";
