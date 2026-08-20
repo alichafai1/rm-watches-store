@@ -114,4 +114,94 @@ describe("selectRelatedProducts", () => {
 
     expect(selectRelatedProducts(current, catalog, 4)).toEqual([]);
   });
+
+  it("does not family-match RM 007 with RM 07-01, RM 07-02, or RM 07-03", () => {
+    const current = product(
+      "007",
+      "Luxury Replica Richard Mille RM 007 Ladies Diamond Set Watch",
+      "9",
+      "RM 007",
+      { label: "Model", value: "RM 007" },
+    );
+    const catalog = [
+      current,
+      product("0701", "Richard Mille RM 07-01 Super Clone", "na-1", "RM 07-01", {
+        label: "Range",
+        value: "RM 07-01",
+      }),
+      product("0702", "Super Clone Richard Mille RM 07-02", "na-2", "RM 07-02", {
+        label: "Range",
+        value: "RM 07-02",
+      }),
+      product("0703", "Richard Mille RM 07-03 Replica", "na-3", "RM 07-03", {
+        label: "Range",
+        value: "RM 07-03",
+      }),
+    ];
+
+    expect(selectRelatedProducts(current, catalog, 4)).toEqual([]);
+  });
+
+  it("still family-matches RM 07-01 with RM 07-02 and RM 07-03", () => {
+    const current = product("0701", "Richard Mille RM 07-01 Super Clone", "na-1", "RM 07-01", {
+      label: "Range",
+      value: "RM 07-01",
+    });
+    const catalog = [
+      current,
+      product("0701b", "Richard Mille RM 07-01 White Ceramic", "na-1", "RM 07-01", {
+        label: "Range",
+        value: "RM 07-01",
+      }),
+      product("0702", "Super Clone Richard Mille RM 07-02", "na-2", "RM 07-02", {
+        label: "Range",
+        value: "RM 07-02",
+      }),
+      product("0703", "Richard Mille RM 07-03 Replica", "na-3", "RM 07-03", {
+        label: "Range",
+        value: "RM 07-03",
+      }),
+      product("007", "Luxury Replica Richard Mille RM 007", "9", "RM 007", {
+        label: "Model",
+        value: "RM 007",
+      }),
+    ];
+
+    expect(selectRelatedProducts(current, catalog, 4).map((item) => item.id)).toEqual([
+      "0701b",
+      "0702",
+      "0703",
+    ]);
+  });
+
+  it("still family-matches neighboring references in the same series", () => {
+    const catalog = [
+      product("1104", "RM 11-04", "13", "RM 11-04", { label: "Range", value: "RM 11-04" }),
+      product("1102", "RM 11-02", "14", "RM 11-02", { label: "Model", value: "RM 11-02" }),
+      product("5201", "RM 52-01", "4", "RM 52-01", { label: "Range", value: "RM 52-01" }),
+      product("5206", "RM 52-06", "5", "RM 52-06", { label: "Range", value: "RM 52-06" }),
+      product("5101", "RM 51-01", "na-5", "RM 51-01", { label: "Range", value: "RM 51-01" }),
+      product("5102", "RM 51-02", "na-6", "RM 51-02", { label: "Range", value: "RM 51-02" }),
+      product("3501", "RM 35-01", "20", "RM 035", { label: "Range", value: "RM 35-01" }),
+      product("3502", "RM 35-02", "20", "RM 035", { label: "Range", value: "RM35-02" }),
+      product("2705", "RM 27-05", "12", "RM 027", { label: "Range", value: "RM 27-05" }),
+      product("2703", "RM 27-03", "12", "RM 027", { label: "Range", value: "RM 27-03" }),
+    ];
+
+    expect(selectRelatedProducts(catalog[0], catalog, 4).map((item) => item.id)).toEqual([
+      "1102",
+    ]);
+    expect(selectRelatedProducts(catalog[3], catalog, 4).map((item) => item.id)).toEqual([
+      "5201",
+    ]);
+    expect(selectRelatedProducts(catalog[4], catalog, 4).map((item) => item.id)).toEqual([
+      "5102",
+    ]);
+    expect(selectRelatedProducts(catalog[6], catalog, 4).map((item) => item.id)).toEqual([
+      "3502",
+    ]);
+    expect(selectRelatedProducts(catalog[8], catalog, 4).map((item) => item.id)).toEqual([
+      "2703",
+    ]);
+  });
 });

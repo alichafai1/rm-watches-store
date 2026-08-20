@@ -23,9 +23,23 @@ describe("parseRmModelRef", () => {
     expect(parseRmModelRef("RM 11-02")).toEqual({ exact: "11-02", family: "11" });
   });
 
-  it("does not treat RM 007 as the same exact model as RM 07-01", () => {
-    expect(parseRmModelRef("RM 007")).toEqual({ exact: "7", family: "7" });
+  it("keeps RM 007 in its own family, separate from RM 07-xx", () => {
+    expect(parseRmModelRef("RM 007")).toEqual({ exact: "007", family: "007" });
+    expect(parseRmModelRef("RM007")).toEqual({ exact: "007", family: "007" });
     expect(parseRmModelRef("RM 07-01")).toEqual({ exact: "7-01", family: "7" });
+    expect(parseRmModelRef("RM 07-02")).toEqual({ exact: "7-02", family: "7" });
+    expect(parseRmModelRef("RM 07-03")).toEqual({ exact: "7-03", family: "7" });
+  });
+
+  it("still family-matches RM 035 with RM 35-xx and RM 027 with RM 27-xx", () => {
+    expect(parseRmModelRef("RM 027")).toEqual({ exact: "27", family: "27" });
+    expect(parseRmModelRef("RM 27-05")).toEqual({ exact: "27-05", family: "27" });
+    expect(parseRmModelRef("RM 52-01").family).toBe(
+      parseRmModelRef("RM 52-06")?.family,
+    );
+    expect(parseRmModelRef("RM 51-01").family).toBe(
+      parseRmModelRef("RM 51-02")?.family,
+    );
   });
 });
 
