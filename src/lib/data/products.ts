@@ -4,6 +4,7 @@ import {
   getPublishedCmsProductBySlug,
   getPublishedCmsProducts,
 } from "@/lib/data/cms-products";
+import { selectRelatedProducts } from "@/lib/products/related-products";
 import type { Product } from "@/types/product";
 
 export function getProductCollectionPath(slug: string) {
@@ -58,21 +59,5 @@ export function getPrimaryProductCollection(product: Product) {
 
 export async function getRelatedProducts(product: Product, limit = 4) {
   const catalog = await getProducts();
-  const related = catalog.filter(
-    (candidate) =>
-      candidate.id !== product.id &&
-      candidate.collectionId === product.collectionId,
-  );
-
-  if (related.length >= limit) {
-    return related.slice(0, limit);
-  }
-
-  const fallback = catalog.filter(
-    (candidate) =>
-      candidate.id !== product.id &&
-      !related.some((relatedProduct) => relatedProduct.id === candidate.id),
-  );
-
-  return [...related, ...fallback].slice(0, limit);
+  return selectRelatedProducts(product, catalog, limit);
 }
