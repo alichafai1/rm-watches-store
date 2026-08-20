@@ -29,7 +29,7 @@ type ProductPageProps = {
 };
 
 export const revalidate = 60;
-/** ISR window for CMS product copy after the sitewide catalog cleanup. */
+/** ISR window for CMS product copy after reducing market-update product links. */
 
 export async function generateStaticParams() {
   const products = await getProducts();
