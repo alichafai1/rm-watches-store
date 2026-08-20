@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import {
   BenefitsSection,
   EditorialSection,
@@ -42,26 +41,17 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 /**
- * Hero is static and is the LCP element on mobile. Keep it outside any CMS
- * awaits so it streams in the first paint; below-fold sections load in Suspense.
+ * Do not wrap below-fold content in Suspense. Next.js streaming emits
+ * `<!--/$-->` markers and an inline `"/$"` script string that Googlebot
+ * treats as https://www.rm-replica.com/$ (GSC 404).
  */
-export default function HomePage() {
+export default async function HomePage() {
   return (
     <>
       <JsonLd data={createFaqPageSchema(homepageFaqItems)} />
       <HeroSection />
-      {/*
-        Keep .home-below-fold outside Suspense so space is reserved on first paint.
-        Fallback spacer covers the empty boundary (mobile CLS) while content streams.
-      */}
       <div className="home-below-fold">
-        <Suspense
-          fallback={
-            <div aria-hidden="true" className="home-below-fold-fallback" />
-          }
-        >
-          <HomePageBelowFold />
-        </Suspense>
+        <HomePageBelowFold />
       </div>
     </>
   );
