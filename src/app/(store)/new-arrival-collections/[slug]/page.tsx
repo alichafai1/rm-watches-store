@@ -4,10 +4,12 @@ import { CollectionFaq } from "@/components/collections/CollectionFaq";
 import { CollectionHeader } from "@/components/collections/CollectionHeader";
 import { CollectionProductGrid } from "@/components/collections/CollectionProductGrid";
 import { CollectionSeoSection } from "@/components/collections/CollectionSeoSection";
+import { RelatedCollections } from "@/components/collections/RelatedCollections";
 import { TrustAssurancesSection } from "@/components/ecommerce/TrustAssurancesSection";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
+import { getRelatedCollections } from "@/lib/collections/related-collections";
 import {
   getNewArrivalCollectionByLegacySlug,
   getNewArrivalCollectionBySlug,
@@ -64,6 +66,10 @@ export default async function NewArrivalCollectionDetailPage({
   }
 
   const products = await getNewArrivalCollectionProducts(collection);
+  const relatedCollections = getRelatedCollections(
+    "new-arrival",
+    collection.slug,
+  );
   const breadcrumbs = createBreadcrumbs([
     { label: "New Arrival", href: "/new-arrival-collections" },
     {
@@ -85,6 +91,7 @@ export default async function NewArrivalCollectionDetailPage({
             <CollectionProductGrid products={products} />
             <CollectionSeoSection collection={collection} />
             <CollectionFaq items={collection.faq ?? []} />
+            <RelatedCollections items={relatedCollections} />
           </div>
         </Container>
       </Section>
