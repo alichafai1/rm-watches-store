@@ -1,3 +1,5 @@
+import Link from "next/link";
+import type { ReactNode } from "react";
 import { StorefrontImage } from "@/components/media/StorefrontImage";
 import { cn } from "@/lib/utils/cn";
 import type { Collection } from "@/types/collection";
@@ -6,8 +8,42 @@ type CollectionSeoSectionProps = {
   collection: Collection;
 };
 
+const markdownLinkPattern = /\[([^\]]+)\]\((\/[^)\s]+)\)/g;
+
+function renderInlineLinks(text: string): ReactNode[] {
+  const nodes: ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let key = 0;
+
+  markdownLinkPattern.lastIndex = 0;
+  while ((match = markdownLinkPattern.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      nodes.push(text.slice(lastIndex, match.index));
+    }
+    nodes.push(
+      <Link
+        className="font-medium text-neutral-950 underline underline-offset-4"
+        href={match[2]}
+        key={`about-link-${key++}`}
+      >
+        {match[1]}
+      </Link>,
+    );
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    nodes.push(text.slice(lastIndex));
+  }
+
+  return nodes;
+}
+
 export function CollectionSeoSection({ collection }: CollectionSeoSectionProps) {
   const image = collection.image;
+  const aboutText = collection.about ?? collection.description;
+  const paragraphs = aboutText.split(/\n\n+/);
 
   return (
     <section
@@ -34,9 +70,16 @@ export function CollectionSeoSection({ collection }: CollectionSeoSectionProps) 
           >
             About {collection.name}
           </h1>
-          <p className="mt-4 text-sm leading-7 text-neutral-700 sm:text-base">
-            {collection.about ?? collection.description}
-          </p>
+          <div className="mt-4 grid gap-4">
+            {paragraphs.map((paragraph, index) => (
+              <p
+                className="text-sm leading-7 text-neutral-700 sm:text-base"
+                key={`about-p-${index}`}
+              >
+                {renderInlineLinks(paragraph)}
+              </p>
+            ))}
+          </div>
         </div>
       </div>
     </section>

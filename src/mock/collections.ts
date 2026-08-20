@@ -736,44 +736,42 @@ export const mockCollections: Collection[] = collectionNumbers.map((number): Col
         name: "RM 11-04",
         slug,
         description:
-          "Discover our curated selection of watches designed for style, precision, and everyday wear.",
+          "Shop Richard Mille RM 11-04 replica watches with listed case, dial, strap, and movement details.",
         about:
-          "The Richard Mille RM 11-04 collection represents the pinnacle of modern horology, seamlessly blending a striking skeleton dial with advanced materials and exceptional craftsmanship. For enthusiasts seeking a perfect replica of this iconic timepiece, our curated selection offers the ultimate Richard Mille replica experience. Each Richard Mille watch replica in this lineup is engineered as a 1:1 watch, capturing the intricate mechanical beauty and bold aesthetic of the original. As a premier destination for a Richard Mille super clone, we ensure our mirror replica watches deliver unmatched precision and luxury. Whether you are exploring Richard Mille style watches or searching for the best Richard Mille replica for sale, this collection guarantees remarkable attention to detail. Discover our Richard Mille RM 11-04 range today and experience a swiss made 1:1 timepiece that perfectly balances avant-garde design with everyday wearability.",
+          "This collection currently lists one Richard Mille RM 11-04 replica: a skeleton-dial sports watch with a blue rubber strap. These are replica watches inspired by the RM 11-04 design, not authentic Richard Mille watches.\n\nThe listing shows a tonneau (barrel) case in carbon TPT / NTPT carbon fiber, with a matching fixed carbon-fiber bezel. Listed case dimensions are 49.94mm × 44.50mm × 16.15mm. The dial is described as skeletonized black with luminous Arabic numerals, and the strap is durable blue rubber. The specification table lists a Swiss automatic movement (RMAC3 calibre), scratch-resistant sapphire crystal with double-sided anti-reflective coating, and water resistance of 50 meters.\n\nUse the product photos against those listed details before you buy. Check the case shape, strap color, open dial layout, and the movement and water-resistance rows on the product page. Quality options are shown on the listing so you can choose the version that matches the images.\n\nShop the [RM 11-04 replica with a skeleton dial and blue rubber strap](/products/richard-mille-rm-11-04-super-clone-replica-watch-skeleton-dial-luxury-sports-watch-with-blue-rubber-strap), browse [all collections](/collections), or continue to the [shop](/shop). For a broader overview of replica quality differences, see our [Richard Mille super clones guide](/guides/richard-mille-super-clones-guide). Eligible orders can be returned within 14 days of delivery, subject to the published return policy.",
         image: rm1104CollectionImage,
         faq: [
           {
-            question: "What is the best Richard Mille replica on the market?",
+            question:
+              "What distinguishes the RM 11-04 replica in this collection?",
             answer:
-              "The best Richard Mille replica combines premium materials, precise mechanics, and a true 1:1 watch design. Top-tier mirror replica watches accurately capture the intricate skeleton dial and lightweight case of iconic models like the RM 11-04, offering exceptional luxury aesthetics without the original price tag.",
+              "This collection currently lists one RM 11-04 replica: a men's sports watch with a tonneau carbon-fiber case, an open skeleton dial, and a blue rubber strap. It is sold as a replica, not as an authentic Richard Mille.",
           },
           {
             question:
-              "How does a Richard Mille super clone compare to the genuine article?",
+              "What case, dial, and strap details are listed for the available RM 11-04?",
             answer:
-              "A high-quality Richard Mille super clone is engineered to mimic the original's weight, finishing, and movement. When evaluating a Richard Mille replica vs original, premium 1:1 watches feature functional chronographs, sapphire crystal, and authentic detailing, making them nearly indistinguishable from genuine pieces.",
+              "The listed RM 11-04 replica watch uses a tonneau carbon TPT / NTPT carbon-fiber case and bezel, a skeletonized black dial with luminous Arabic numerals, and a blue rubber strap. Listed case size is 49.94mm × 44.50mm × 16.15mm.",
           },
           {
-            question:
-              "How can you spot a fake Richard Mille vs a real one?",
+            question: "What movement and specifications are listed?",
             answer:
-              "Spotting a fake Richard Mille vs real models typically involves checking the movement finish, engraving depth, and overall weight. However, top-grade Richard Mille watch replicas eliminate these common flaws, offering flawless craftsmanship, proper serial numbering, and high-grade materials that match genuine Richard Mille style watches.",
+              "The product specification table lists a Swiss automatic movement (RMAC3 calibre), scratch-resistant sapphire crystal, and water resistance of 50 meters. Compare those rows with the photos on the product page; we do not add movement guarantees beyond what is listed there.",
           },
           {
-            question:
-              "Where is the safest place to find a Richard Mille replica for sale?",
+            question: "What quality or version options are available?",
             answer:
-              "When searching for a Richard Mille replica for sale, prioritize specialized dealers who provide high-resolution photos, movement guarantees, and secure shipping. Trusted sellers of Richard Mille replicas offer transparent information about their 1:1 watch construction and reliable customer support.",
+              "Quality options are shown on the RM 11-04 product page. Choose the option that matches the case, dial, and strap you see in the listing photos.",
           },
           {
-            question:
-              "Do replica Richard Mille watches feature the same skeleton dial design?",
+            question: "What is the return policy?",
             answer:
-              "Yes, premium Richard Mille skeleton watch replicas faithfully reproduce the iconic open-worked dial. Whether you are seeking an RM 67-02 or an RM 11-04, the best Richard Mille fake alternatives showcase visible gears, premium carbon or titanium cases, and exceptional horological styling.",
+              "Eligible orders can be returned within 14 days of delivery, subject to our Refund & Return Policy. Report an incorrect or defective item within 48 hours of delivery.",
           },
         ],
-        seoTitle: "RM 11-04 | Watch Collection",
+        seoTitle: "Richard Mille RM 11-04 Replica Watches | RM 11-04 Collection",
         seoDescription:
-          "Explore the Richard Mille RM 11-04 replica collection featuring skeleton dials, advanced materials, and premium 1:1 super clone craftsmanship.",
+          "Shop RM 11-04 replica watches with detailed product images, specifications, pricing, case and strap information, and available quality options.",
       };
     }
 

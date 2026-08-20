@@ -28,7 +28,7 @@ export const collectionTaglines: Record<string, string> = {
   "RM 027":
     "Discover the best super clone Richard Mille RM 027 and shop the legendary Nadal collection.",
   "RM 11-04":
-    "Discover the best super clone Richard Mille RM 11-04 and master its chronograph-ready style.",
+    "Shop Richard Mille RM 11-04 replica watches here. The listed RM 11-04 replica watch has a tonneau carbon-fiber case, an open skeleton dial with luminous Arabic numerals, and a blue rubber strap. Compare the photos, listed specifications, and quality options before you order.",
   "RM 11-02":
     "Discover the best super clone Richard Mille RM 11-02 and enjoy bold modern flyback design.",
   "RM 022":
